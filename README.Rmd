@@ -42,7 +42,7 @@ x$packages[x$packages$package %in% c("MSAT", "psychTestR"), ]
 
 4. Install the MSAT:
 
-`devtools::install_github('rhake/MSAT')`
+`devtools::install_github('rhake14/MSAT')`
 
 ## Usage
 
@@ -91,47 +91,9 @@ see http://psychtestr.com/.
 
 The MSAT currently supports English (en), German (de),
 You can select one of these languages by passing a language code as 
-an argument to `MSAT_standalone()`, e.g. `MSAT_standalone(languages = "de")`,
+an argument to `MSAT_standalone()`, e.g. `MSAT_standalone(languages = "en")`,
 or alternatively by passing it as a URL parameter to the test browser,
 eg. http://127.0.0.1:4412/?language=DE (note that the `p_id` argument must be empty).
-
-## Installation instructions (Shiny Server)
-
-1. Complete the installation instructions described under 'Local use'.
-2. If not already installed, install Shiny Server Open Source:
-https://www.rstudio.com/products/shiny/download-server/
-3. Navigate to the Shiny Server app directory.
-
-`cd /srv/shiny-server`
-
-4. Make a folder to contain your new Shiny app.
-The name of this folder will correspond to the URL.
-
-`sudo mkdir MSAT`
-
-5. Make a text file in this folder called `app.R`
-specifying the R code to run the app.
-
-- To open the text editor: `sudo nano MSAT/app.R`
-- Write the following in the text file:
-
-``` r
-library(MSAT)
-MSAT_standalone(admin_password = "put-your-password-here")
-```
-
-- Save the file (CTRL-O).
-
-6. Change the permissions of your app directory so that `psychTestR`
-can write its temporary files there.
-
-`sudo chown -R shiny MSAT`
-
-where `shiny` is the username for the Shiny process user
-(this is the usual default).
-
-7. Navigate to your new shiny app, with a URL that looks like this:
-`http://my-web-page.org:3838/MSAT
 
 ## Implementation notes
 
@@ -146,4 +108,4 @@ This makes the test better suited to testing with diverse participant groups
 
 - The MSAT runs in your web browser.
 - By default, image files are hosted online on our servers.
-The test therefore requires internet connectivity.
+  The test therefore requires internet connectivity.

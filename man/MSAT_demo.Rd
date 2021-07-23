@@ -7,10 +7,14 @@
 MSAT_demo(
   num_items = 3L,
   feedback = MSAT::MSAT_feedback_with_score(),
-  admin_password = "test123",
-  researcher_email = "robin.hake@uni-oldenburg.de",
+  admin_password = "password",
+  researcher_email = "example@e-mail.com",
   dict = MSAT::MSAT_dict,
   language = "en",
+  WiT = "random",
+  TargetIns = "random",
+  Complexity = "random",
+  LVL = "random",
   ...
 )
 }
@@ -34,6 +38,22 @@ the email address of this package's developer.}
 \item{language}{The language you want to run your demo in.
 Possible languages include English (\code{"en"}), German (\code{"de"})).
 The first language is selected by default}
+
+\item{WiT}{(Character scalar) Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items for this variable,
+and ("random") =  pick items randomly; Default to "random"}
+
+\item{TargetIns}{(Character scalar) Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items for this variable,
+and ("random") =  pick items randomly; Default to "random"}
+
+\item{Complexity}{(Character scalar) Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items for this variable,
+and ("random") =  pick items randomly; Default to "random"}
+
+\item{LVL}{(Character scalar) Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items for this variable,
+and ("random") =  pick items randomly; Default to "random"}
 
 \item{...}{Further arguments to be passed to \code{\link{MSAT}()}.}
 }

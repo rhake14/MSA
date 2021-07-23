@@ -1,7 +1,7 @@
 Package: MSAT
 Type: Package
-Title: Musical Scene Analysis Test
-Version: 0.3.2
+Title: Musical Scene Analysis Test (MSAT)
+Version: 0.3.3
 Author: Robin Hake
 Maintainer: Robin Hake <robin.hake@uni-oldenburg.de>
 Description: Implementation of a musical scene anylsis test.
@@ -20,12 +20,13 @@ Imports:
     purrr,
     tibble,
     ggplot2,
-    plotly
+    plotly,
+    schoolmath
 Suggests:
     codetools,
     devtools (>= 1.13.6),
     knitr,
     rmarkdown
-Remotes: pmcharrison/psychTestR
+Remotes: rhake14/psychTestR
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr

@@ -7,25 +7,54 @@
 MSAT(
   num_items = 18L,
   with_welcome = TRUE,
+  take_training = FALSE,
   with_finish = TRUE,
-  label = "MSAT",
-  feedback = MSAT_feedback_with_score(),
-  dict = MSAT::MSAT_dict
+  unique_songs_only = FALSE,
+  label = "MSAT_results",
+  feedback = MSAT::MSAT_feedback_with_score(),
+  dict = MSAT::MSAT_dict,
+  WiT = "balanced",
+  TargetIns = "random",
+  Complexity = "random",
+  LVL = "random"
 )
 }
 \arguments{
-\item{num_items}{(Integer scalar) Number of items in the test.}
+\item{num_items}{(Scalar integer) Number of items to be administered.}
 
-\item{with_welcome}{(Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to  TRUE}
+\item{with_welcome}{(Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE}
 
-\item{with_finish}{(Scalar boolean) Indicates, if a finish (not final!) page shall be displayed. Defaults to  TRUE}
+\item{take_training}{(Scalar boolean) Enable practice session before the actual session. Defaults to FALSE}
 
-\item{label}{(Character scalar) Label to give the MSAT results in the output file.}
+\item{with_finish}{(Scalar boolean) Indicates, if a finish (not final!) page shall be displayed. Defaults to TRUE}
 
-\item{feedback}{(Function) Defines the feedback to give the participant
-at the end of the test.}
+\item{unique_songs_only}{(Scalar boolean) Set to 'TRUE' if each song (base track) should play once in the dataset.
+Please be aware, that the item pool only consists of 98 different base tracks. Defaults to FALSE}
+
+\item{label}{(Scalar character) Label to give the MSAT results in the output file.}
+
+\item{feedback}{(Function) Defines the feedback to give the participant at the end of the test.}
 
 \item{dict}{The psychTestR dictionary used for internationalisation.}
+
+\item{WiT}{(Character scalar) With target in the mixture (WiT): Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items 'with target' and 'without target' in the mixture are in the item pool;
+and ("random") = pick items randomly for this variable; Default to "balanced".}
+
+\item{TargetIns}{(Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass')
+are selected for the item pool;
+and ("random") = pick items randomly for this variable; Default to "random"}
+
+\item{Complexity}{(Character scalar) Musical Complexity (i.e., Number of instruments within the mixture):
+Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items with 'three' and 'six' instruments playing in the mixture
+are selected for the item pool,
+and ("random") =  pick items randomly for this variable; Default to "random"}
+
+\item{LVL}{(Character scalar) Level-ratio between target and the mixture (LVL): Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items with '0', '-5', '-10', '-15' level-ratios are selected for the item pool,
+and ("random") =  pick items randomly for this variable; Default to "random"}
 }
 \description{
 This function defines a MSAT  module for incorporation into a
@@ -38,4 +67,5 @@ pages to your test timeline.
 For demoing the MSAT, consider using \code{\link{MSAT_demo}()}.
 For a standalone implementation of the MSAT,
 consider using \code{\link{MSAT_standalone}()}.
+This can be used for data collection, either in the laboratory or online.
 }

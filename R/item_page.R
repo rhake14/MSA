@@ -93,58 +93,74 @@ audio_NAFC_page_flex <- function(label,
                                  prompt,
                                  choices,
                                  audio_url,
+                                 correct_answer,
+                                 # adaptive = adaptive,
                                  save_answer = TRUE,
+                                 get_answer = NULL,
                                  on_complete = NULL,
                                  admin_ui = NULL) {
   stopifnot(purrr::is_scalar_character(label))
-  #audio_ui <- get_audio_ui(audio_url, wait = T, loop = F)
   audio_ui <- get_audio_ui(audio_url, wait = T, loop = F, width = 200)
-  #audio_ui <- get_audio_element(audio_url, autoplay = T, wait = T, width = 50)
-
   style <- NULL
   ui <- shiny::div(
     tagify(prompt),
     audio_ui,
     psychTestR::make_ui_NAFC(choices,
-                 labels = choices,
-                 hide = TRUE,
-                 arrange_vertically = FALSE,
-                 id = "response_ui")
-    )
-  get_answer <- function(input, ...) {
-    answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
-    correct <- MSAT::MSAT_item_bank[MSAT::MSAT_item_bank$item_number == label,]$correct == answer
-    tibble(answer = answer,
-         label = label,
-         correct = correct)
-
-  }
-  validate <- function(answer, ...) !is.null(answer)
-  #printf("[audio_NAFC_page_with_img] left")
-  psychTestR::page(ui = ui, label = label,  get_answer = get_answer, save_answer = save_answer,
-                   validate = validate, on_complete = on_complete, final = FALSE,
+                             labels = choices,
+                             hide = TRUE,
+                             arrange_vertically = FALSE,
+                             id = "response_ui")
+  )
+  # if (adaptive){
+  #   if(is.null(get_answer)){
+  #     get_answer <- function(input, ...) {
+  #       answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
+  #     }
+  #     validate <- function(answer, ...) !is.null(answer)
+  #   }
+  # }
+  # else {
+    get_answer <- function(input, ...) {
+      answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
+      correct <- MSAT::MSAT_item_bank[MSAT::MSAT_item_bank$item_number == label,]$correct == answer
+      tibble(answer = answer,
+             label = label,
+             correct = correct)
+    }
+    validate <- function(answer, ...) !is.null(answer)
+  # }
+  psychTestR::page(ui = ui, label = label,
+                   get_answer = get_answer, save_answer = save_answer,
+                   validate = validate, on_complete = on_complete,
+                   final = FALSE,
                    admin_ui = admin_ui)
 }
 
+
 MSAT_item <- function(label = "",
-                     correct_answer,
-                     prompt = "",
-                     audio_file,
-                     audio_dir = "",
-                     save_answer = TRUE,
-                     on_complete = NULL
-                     ){
-
+                      audio_file,
+                      correct_answer,
+                      prompt = "",
+                      audio_dir = "",
+                      # adaptive = adaptive,
+                      save_answer = TRUE,
+                      on_complete = NULL,
+                      get_answer = NULL,
+                      instruction_page = FALSE
+){
   page_prompt <- shiny::div(prompt)
-  #printf("MSAT item_called for  %s", label)
-
-  choices <- c("Yes", "No")
+  # printf("MSAT called for item: %s", label) # print what item is called into the item pool
+  choices <- c("1", "2")
   audio_url <- file.path(audio_dir, audio_file)
   audio_NAFC_page_flex(label = label,
                        prompt = page_prompt,
                        audio_url = audio_url,
                        choices = choices,
+                       correct_answer = correct_answer,
                        save_answer = save_answer,
-                       on_complete = on_complete)
+                       get_answer = get_answer,
+                       on_complete = on_complete,
+                       # adaptive = adaptive
+                       )
 }
 

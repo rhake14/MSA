@@ -10,11 +10,17 @@ MSAT_standalone(
   with_id = TRUE,
   with_feedback = FALSE,
   with_welcome = TRUE,
-  admin_password = "test123",
-  researcher_email = "robin.hake@uni-oldenburg.de",
+  take_training = FALSE,
+  unique_songs_only = FALSE,
+  admin_password = "password",
+  researcher_email = "put.your.email-adress@here",
   languages = c("en", "de"),
   dict = MSAT::MSAT_dict,
   validate_id = "auto",
+  WiT = "balanced",
+  TargetIns = "random",
+  Complexity = "random",
+  LVL = "random",
   ...
 )
 }
@@ -27,7 +33,12 @@ MSAT_standalone(
 
 \item{with_feedback}{(Scalar boolean) Indicates if performance feedback will be given at the end of the test. Defaults to  FALSE}
 
-\item{with_welcome}{(Scalar boolean) Indicates, if a welcome page shall be displayed.  Defaults to  TRUE}
+\item{with_welcome}{(Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE}
+
+\item{take_training}{(Scalar boolean) Enable practice session before the actual session. Defaults to FALSE}
+
+\item{unique_songs_only}{(Scalar boolean) Set to 'TRUE' if each song (base track) should play once in the dataset.
+Please be aware, that the item pool only consists of 98 different base tracks. Defaults to FALSE}
 
 \item{admin_password}{(Scalar character) Password for accessing the admin panel.}
 
@@ -37,14 +48,32 @@ at the bottom of the screen so that online participants can ask for help.}
 
 \item{languages}{(Character vector)
 Determines the languages available to participants.
-Possible languages include English (\code{"en"}),
-German (\code{"de"}),  Russian (\code{"ru"}), and Nederlands (\code{"nl"}).
+Possible languages include English (\code{"en"}) and German (\code{"de"}).
 The first language is selected by default}
 
 \item{dict}{The psychTestR dictionary used for internationalisation.}
 
 \item{validate_id}{(Character scalar or closure) Function for validating IDs or string "auto" for default validation
 which means ID should consist only of  alphanumeric characters.}
+
+\item{WiT}{(Character scalar) With target in the mixture (WiT): Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items 'with target' and 'without target' in the mixture are in the item pool;
+and ("random") = pick items randomly for this variable; Default to "balanced".}
+
+\item{TargetIns}{(Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass')
+are selected for the item pool;
+and ("random") = pick items randomly for this variable; Default to "random"}
+
+\item{Complexity}{(Character scalar) Musical Complexity (i.e., Number of instruments within the mixture):
+Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items with 'three' and 'six' instruments playing in the mixture
+are selected for the item pool,
+and ("random") =  pick items randomly for this variable; Default to "random"}
+
+\item{LVL}{(Character scalar) Level-ratio between target and the mixture (LVL): Indicates how items are selected from the item pool.
+Possible values are ("balanced") = equal proportion of items with '0', '-5', '-10', '-15' level-ratios are selected for the item pool,
+and ("random") =  pick items randomly for this variable; Default to "random"}
 
 \item{...}{Further arguments to be passed to \code{\link{MSAT}()}.}
 }
