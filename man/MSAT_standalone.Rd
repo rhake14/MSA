@@ -17,10 +17,10 @@ MSAT_standalone(
   languages = c("en", "de"),
   dict = MSAT::MSAT_dict,
   validate_id = "auto",
-  WiT = "balanced",
-  TargetIns = "random",
-  Complexity = "random",
-  LVL = "random",
+  with_target_in_mix = "balanced",
+  target_instrument = "random",
+  complexity = "random",
+  level = "random",
   ...
 )
 }
@@ -56,22 +56,22 @@ The first language is selected by default}
 \item{validate_id}{(Character scalar or closure) Function for validating IDs or string "auto" for default validation
 which means ID should consist only of  alphanumeric characters.}
 
-\item{WiT}{(Character scalar) With target in the mixture (WiT): Indicates how items are selected from the item pool.
+\item{with_target_in_mix}{(Character scalar) With target in the mixture (with_target_in_mix): Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items 'with target' and 'without target' in the mixture are in the item pool;
 and ("random") = pick items randomly for this variable; Default to "balanced".}
 
-\item{TargetIns}{(Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
+\item{target_instrument}{(Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass')
 are selected for the item pool;
 and ("random") = pick items randomly for this variable; Default to "random"}
 
-\item{Complexity}{(Character scalar) Musical Complexity (i.e., Number of instruments within the mixture):
+\item{complexity}{(Character scalar) Musical complexity (i.e., Number of instruments within the mixture):
 Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items with 'three' and 'six' instruments playing in the mixture
 are selected for the item pool,
 and ("random") =  pick items randomly for this variable; Default to "random"}
 
-\item{LVL}{(Character scalar) Level-ratio between target and the mixture (LVL): Indicates how items are selected from the item pool.
+\item{level}{(Character scalar) Level-ratio between target and the mixture (level): Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items with '0', '-5', '-10', '-15' level-ratios are selected for the item pool,
 and ("random") =  pick items randomly for this variable; Default to "random"}
 

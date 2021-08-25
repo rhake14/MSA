@@ -11,10 +11,10 @@ MSAT_demo(
   researcher_email = "example@e-mail.com",
   dict = MSAT::MSAT_dict,
   language = "en",
-  WiT = "random",
-  TargetIns = "random",
-  Complexity = "random",
-  LVL = "random",
+  with_target_in_mix = "random",
+  target_instrument = "random",
+  complexity = "random",
+  level = "random",
   ...
 )
 }
@@ -39,19 +39,19 @@ the email address of this package's developer.}
 Possible languages include English (\code{"en"}), German (\code{"de"})).
 The first language is selected by default}
 
-\item{WiT}{(Character scalar) Indicates how items are selected from the item pool.
+\item{with_target_in_mix}{(Character scalar) Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items for this variable,
 and ("random") =  pick items randomly; Default to "random"}
 
-\item{TargetIns}{(Character scalar) Indicates how items are selected from the item pool.
+\item{target_instrument}{(Character scalar) Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items for this variable,
 and ("random") =  pick items randomly; Default to "random"}
 
-\item{Complexity}{(Character scalar) Indicates how items are selected from the item pool.
+\item{complexity}{(Character scalar) Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items for this variable,
 and ("random") =  pick items randomly; Default to "random"}
 
-\item{LVL}{(Character scalar) Indicates how items are selected from the item pool.
+\item{level}{(Character scalar) Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items for this variable,
 and ("random") =  pick items randomly; Default to "random"}
 

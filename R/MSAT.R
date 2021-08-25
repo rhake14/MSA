@@ -55,6 +55,7 @@ MSAT <- function(num_items = 18L,
                 Complexity = "random",
                 LVL = "random") {
   audio_dir <- "https://media.gold-msi.org/test_materials/MSAT"
+  # audio_dir <- "https://media.gold-msi.org/MSAT"
   stopifnot(purrr::is_scalar_character(label),
             purrr::is_scalar_integer(num_items) || purrr::is_scalar_double(num_items),
             purrr::is_scalar_character(audio_dir),

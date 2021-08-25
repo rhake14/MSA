@@ -16,16 +16,16 @@
 #' @param language The language you want to run your demo in.
 #' Possible languages include English (\code{"en"}), German (\code{"de"})).
 #' The first language is selected by default
-#' @param WiT (Character scalar) Indicates how items are selected from the item pool.
+#' @param with_target_in_mix (Character scalar) Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items for this variable,
 #' and ("random") =  pick items randomly; Default to "random"
-#' @param TargetIns (Character scalar) Indicates how items are selected from the item pool.
+#' @param target_instrument (Character scalar) Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items for this variable,
 #' and ("random") =  pick items randomly; Default to "random"
-#' @param Complexity (Character scalar) Indicates how items are selected from the item pool.
+#' @param complexity (Character scalar) Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items for this variable,
 #' and ("random") =  pick items randomly; Default to "random"
-#' @param LVL (Character scalar) Indicates how items are selected from the item pool.
+#' @param level (Character scalar) Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items for this variable,
 #' and ("random") =  pick items randomly; Default to "random"
 #' @param ... Further arguments to be passed to \code{\link{MSAT}()}.
@@ -37,10 +37,10 @@ MSAT_demo <- function(num_items = 3L,
                      researcher_email = "example@e-mail.com",
                      dict = MSAT::MSAT_dict,
                      language = "en",
-                     WiT = "random",
-                     TargetIns = "random",
-                     Complexity = "random",
-                     LVL = "random",
+                     with_target_in_mix = "random",
+                     target_instrument = "random",
+                     complexity = "random",
+                     level = "random",
                      ...) {
   elts <- psychTestR::join(
     MSAT_welcome_page(dict = dict),
@@ -48,10 +48,10 @@ MSAT_demo <- function(num_items = 3L,
              with_welcome = FALSE,
              feedback = feedback,
              dict = dict,
-             WiT = WiT,
-             TargetIns = TargetIns,
-             Complexity = Complexity,
-             LVL = LVL,
+             with_target_in_mix = with_target_in_mix,
+             target_instrument = target_instrument,
+             complexity = complexity,
+             level = level,
              ...),
       MSAT_final_page(dict = dict)
   )

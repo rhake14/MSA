@@ -13,10 +13,10 @@ MSAT(
   label = "MSAT_results",
   feedback = MSAT::MSAT_feedback_with_score(),
   dict = MSAT::MSAT_dict,
-  WiT = "balanced",
-  TargetIns = "random",
-  Complexity = "random",
-  LVL = "random"
+  with_target_in_mix = "balanced",
+  target_instrument = "random",
+  complexity = "random",
+  level = "random"
 )
 }
 \arguments{
@@ -37,22 +37,22 @@ Please be aware, that the item pool only consists of 98 different base tracks. D
 
 \item{dict}{The psychTestR dictionary used for internationalisation.}
 
-\item{WiT}{(Character scalar) With target in the mixture (WiT): Indicates how items are selected from the item pool.
+\item{with_target_in_mix}{(Character scalar) With target in the mixture (with_target_in_mix): Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items 'with target' and 'without target' in the mixture are in the item pool;
 and ("random") = pick items randomly for this variable; Default to "balanced".}
 
-\item{TargetIns}{(Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
+\item{target_instrument}{(Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass')
 are selected for the item pool;
 and ("random") = pick items randomly for this variable; Default to "random"}
 
-\item{Complexity}{(Character scalar) Musical Complexity (i.e., Number of instruments within the mixture):
+\item{complexity}{(Character scalar) Musical complexity (i.e., Number of instruments within the mixture):
 Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items with 'three' and 'six' instruments playing in the mixture
 are selected for the item pool,
 and ("random") =  pick items randomly for this variable; Default to "random"}
 
-\item{LVL}{(Character scalar) Level-ratio between target and the mixture (LVL): Indicates how items are selected from the item pool.
+\item{level}{(Character scalar) Level-ratio between target and the mixture (level): Indicates how items are selected from the item pool.
 Possible values are ("balanced") = equal proportion of items with '0', '-5', '-10', '-15' level-ratios are selected for the item pool,
 and ("random") =  pick items randomly for this variable; Default to "random"}
 }

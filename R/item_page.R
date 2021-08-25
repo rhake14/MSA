@@ -149,7 +149,7 @@ MSAT_item <- function(label = "",
                       instruction_page = FALSE
 ){
   page_prompt <- shiny::div(prompt)
-  # printf("MSAT called for item: %s", label) # print what item is called into the item pool
+  printf("MSAT called for item: %s", label) # print what item is called into the item pool
   choices <- c("1", "2")
   audio_url <- file.path(audio_dir, audio_file)
   audio_NAFC_page_flex(label = label,

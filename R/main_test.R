@@ -141,7 +141,7 @@ main_test <- function(label,
   }
   #### BRBB
   if(WiT == "balanced" && TargetIns == "random" && Complexity == "balanced" && LVL == "balanced"){
-    tmp_num_cond <- length(unique(item_bank$WiT)) * length(unique(item_bank$LVL))
+    tmp_num_cond <- length(unique(item_bank$WiT)) * length(unique(item_bank$LVL)) *
       length(unique(item_bank$Comp))
     tmp_num_per_subgroup <- num_items/tmp_num_cond
     # make sure we have enough items for a balanced design
@@ -159,6 +159,27 @@ main_test <- function(label,
       group_by(WiT, Comp, LVL) %>% slice_sample(n = tmp_num_per_subgroup)
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number) # get the correct indexes for the item sequence
   }
+
+  #### BRBR
+  if(WiT == "balanced" && TargetIns == "random" && Complexity == "balanced" && LVL == "random"){
+    tmp_num_cond <- length(unique(item_bank$WiT)) * length(unique(item_bank$Comp))
+    tmp_num_per_subgroup <- num_items/tmp_num_cond
+    # make sure we have enough items for a balanced design
+    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
+      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
+               As a consequence, the number of items in the test have been upscaled.")
+      message("The number of conditions are: ",tmp_num_cond)
+      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
+      num_items <- tmp_num_per_subgroup * tmp_num_cond
+      message("The number of items in the test are: ", num_items)
+    }
+
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    tmp_item_bank <- tmp_item_bank %>%
+      group_by(WiT, Comp) %>% slice_sample(n = tmp_num_per_subgroup)
+    item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number) # get the correct indexes for the item sequence
+  }
+
   #### BRRB
   if(WiT == "balanced" && TargetIns == "random" && Complexity == "random" && LVL == "balanced"){
     item_bank <- MSAT::MSAT_item_bank

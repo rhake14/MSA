@@ -26,19 +26,19 @@ debug_locally <- !grepl("shiny-server", getwd())
 #' @param dict The psychTestR dictionary used for internationalisation.
 #' @param validate_id (Character scalar or closure) Function for validating IDs or string "auto" for default validation
 #' which means ID should consist only of  alphanumeric characters.
-#' @param WiT (Character scalar) With target in the mixture (WiT): Indicates how items are selected from the item pool.
+#' @param with_target_in_mix (Character scalar) With target in the mixture (with_target_in_mix): Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items 'with target' and 'without target' in the mixture are in the item pool;
 #' and ("random") = pick items randomly for this variable; Default to "balanced".
-#' @param TargetIns (Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
+#' @param target_instrument (Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass')
 #' are selected for the item pool;
 #' and ("random") = pick items randomly for this variable; Default to "random"
-#' @param Complexity (Character scalar) Musical Complexity (i.e., Number of instruments within the mixture):
+#' @param complexity (Character scalar) Musical complexity (i.e., Number of instruments within the mixture):
 #' Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items with 'three' and 'six' instruments playing in the mixture
 #' are selected for the item pool,
 #' and ("random") =  pick items randomly for this variable; Default to "random"
-#' @param LVL (Character scalar) Level-ratio between target and the mixture (LVL): Indicates how items are selected from the item pool.
+#' @param level (Character scalar) Level-ratio between target and the mixture (level): Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items with '0', '-5', '-10', '-15' level-ratios are selected for the item pool,
 #' and ("random") =  pick items randomly for this variable; Default to "random"
 #' @param ... Further arguments to be passed to \code{\link{MSAT}()}.
@@ -58,10 +58,10 @@ MSAT_standalone  <- function(title = NULL,
                            languages = c("en", "de"),
                            dict = MSAT::MSAT_dict,
                            validate_id = "auto",
-                           WiT = "balanced",
-                           TargetIns = "random",
-                           Complexity = "random",
-                           LVL = "random",
+                           with_target_in_mix = "balanced",
+                           target_instrument = "random",
+                           complexity = "random",
+                           level = "random",
                            ...) {
   feedback <- NULL
   # key <- NULL
@@ -83,10 +83,10 @@ MSAT_standalone  <- function(title = NULL,
                feedback = feedback,
                dict = dict,
                take_training = TRUE,
-               WiT = WiT,
-               TargetIns = TargetIns,
-               Complexity = Complexity,
-               LVL = LVL,
+               with_target_in_mix = with_target_in_mix,
+               target_instrument = target_instrument,
+               complexity = complexity,
+               level = level,
                # adaptive = adaptive, ## future proof
                ...)
     else
@@ -98,10 +98,10 @@ MSAT_standalone  <- function(title = NULL,
       dict = dict,
       unique_songs_only = unique_songs_only,
       take_training = take_training, # this was FALSE before
-      WiT = WiT,
-      TargetIns = TargetIns,
-      Complexity = Complexity,
-      LVL = LVL,
+      with_target_in_mix = with_target_in_mix,
+      target_instrument = target_instrument,
+      complexity = complexity,
+      level = level,
       ...),
     psychTestR::elt_save_results_to_disk(complete = TRUE),
     MSAT_final_page(dict = dict)
