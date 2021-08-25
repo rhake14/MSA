@@ -1,3 +1,3 @@
-# MSAT 0.1.0
+# MSA 1..0
 
 * First release

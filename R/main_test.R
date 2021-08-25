@@ -5,8 +5,8 @@ scoring <- function(){
                                        complete = FALSE,
                                        add_session_info = FALSE) %>% as.list()
     # browser() # use browser to debug
-    sum_score <- sum(purrr::map_lgl(results$MSAT, function(x) x$correct))
-    num_question <- length(results$MSAT)
+    sum_score <- sum(purrr::map_lgl(results$MSA, function(x) x$correct))
+    num_question <- length(results$MSA)
     perc_correct <- sum_score/num_question
     psychTestR::save_result(place = state,
                  label = "score",
@@ -18,46 +18,46 @@ scoring <- function(){
   }
 
 ## for the adaptive test
-# get_eligible_first_items_MSAT <- function(){
-#   lower_sd <- mean(MSAT::MSATa_item_bank$difficulty) - stats::sd(MSAT::MSATa_item_bank$difficulty)
-#   upper_sd <- mean(MSAT::MSATa_item_bank$difficulty) + stats::sd(MSAT::MSATa_item_bank$difficulty)
-#   which(MSAT::MSATa_item_bank$difficulty >= lower_sd  &
-#           MSAT::MSATa_item_bank$difficulty <= upper_sd)
+# get_eligible_first_items_MSA <- function(){
+#   lower_sd <- mean(MSA::MSAa_item_bank$difficulty) - stats::sd(MSA::MSAa_item_bank$difficulty)
+#   upper_sd <- mean(MSA::MSAa_item_bank$difficulty) + stats::sd(MSA::MSAa_item_bank$difficulty)
+#   which(MSA::MSAa_item_bank$difficulty >= lower_sd  &
+#           MSA::MSAa_item_bank$difficulty <= upper_sd)
 # }
 
 main_test <- function(label,
                       num_items,
                       audio_dir,
-                      WiT = "balanced",
-                      TargetIns = "balanced",
-                      Complexity = "balanced",
-                      LVL = "balanced",
+                      with_target_in_mix = "balanced",
+                      target_instrument = "balanced",
+                      complexity = "balanced",
+                      level = "balanced",
                       unique_songs_only = TRUE,
-                      dict = MSAT::MSAT_dict) {
+                      dict = MSA::MSA_dict) {
   elts <- c()
-  item_bank <- MSAT::MSAT_item_bank # load whole item ban
+  item_bank <- MSA::MSA_item_bank # load whole item ban
   tmp_item_bank <- item_bank
 #### ** go through most used cases (still fishy code) -----------
 ##
-  #### RRRR --> WiT == "random" && TargetIns == "random" && Complexity == "random" && LVL == "random"
-  if(WiT == "random" && TargetIns == "random" && Complexity == "random" && LVL == "random"){
+  #### RRRR --> with_target_in_mix == "random" && target_instrument == "random" && complexity == "random" && level == "random"
+  if(with_target_in_mix == "random" && target_instrument == "random" && complexity == "random" && level == "random"){
     # # count number of unique values of the item_bank for debugging ----
     # browser()
     # item_bank %>%
     #   as.tibble() %>%
-    #   count(SongNr)
+    #   count(song_nr)
     # tmp_item_bank %>%
     #   as.tibble() %>%
-    #   count(SongNr)
+    #   count(song_nr)
     #  end of debugging ------
     # if one want each song played max. once
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     item_sequence <- sample(1:nrow(tmp_item_bank), num_items)
   }
   #### RBBB
-  if(WiT == "random" && TargetIns == "balanced" && Complexity == "balanced" && LVL == "balanced"){
-    tmp_num_cond <- length(unique(item_bank$TargetIns)) *
-      length(unique(item_bank$Comp)) * length(unique(item_bank$LVL))
+  if(with_target_in_mix == "random" && target_instrument == "balanced" && complexity == "balanced" && level == "balanced"){
+    tmp_num_cond <- length(unique(item_bank$target_instrument)) *
+      length(unique(item_bank$complexity)) * length(unique(item_bank$level))
     tmp_num_per_subgroup <- num_items/tmp_num_cond
 
     # make sure we have enough items for a balanced design
@@ -70,16 +70,17 @@ main_test <- function(label,
       message("The number of items in the test are: ", num_items)
     }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     tmp_item_bank <- tmp_item_bank %>%
-      group_by(TargetIns, Comp, LVL) %>% slice_sample(n = tmp_num_per_subgroup)
+      group_by(target_instrument, complexity, level) %>% slice_sample(n = tmp_num_per_subgroup)
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number)
+    item_sequence <- item_sequence[sample(1:length(item_sequence))] # now we need to randomize the sequence
   }
   #### BBBB
-  if(WiT == "balanced" && TargetIns == "balanced" && Complexity == "balanced" && LVL == "balanced"){
-    item_bank <- MSAT::MSAT_item_bank
-    tmp_num_cond <- length(unique(item_bank$WiT)) * length(unique(item_bank$TargetIns)) *
-      length(unique(item_bank$Comp)) * length(unique(item_bank$LVL))
+  if(with_target_in_mix == "balanced" && target_instrument == "balanced" && complexity == "balanced" && level == "balanced"){
+    item_bank <- MSA::MSA_item_bank
+    tmp_num_cond <- length(unique(item_bank$with_target_in_mix)) * length(unique(item_bank$target_instrument)) *
+      length(unique(item_bank$complexity)) * length(unique(item_bank$level))
     tmp_num_per_subgroup <- num_items/tmp_num_cond
 
     # make sure we have enough items for a balanced design
@@ -92,15 +93,16 @@ main_test <- function(label,
       message("The number of items in the test are: ", num_items)
     }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     tmp_item_bank <- tmp_item_bank %>%
-      group_by(WiT, TargetIns, Comp, LVL) %>% slice_sample(n = tmp_num_per_subgroup)
+      group_by(with_target_in_mix, target_instrument, complexity, level) %>% slice_sample(n = tmp_num_per_subgroup)
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number)
+    item_sequence <- item_sequence[sample(1:length(item_sequence))] # now we need to randomize the sequence
   }
   #### BBBR
-  if(WiT == "balanced" && TargetIns == "balanced" && Complexity == "balanced" && LVL == "random"){
-    tmp_num_cond <- length(unique(item_bank$WiT)) *
-      length(unique(item_bank$TargetIns)) * length(unique(item_bank$Comp))
+  if(with_target_in_mix == "balanced" && target_instrument == "balanced" && complexity == "balanced" && level == "random"){
+    tmp_num_cond <- length(unique(item_bank$with_target_in_mix)) *
+      length(unique(item_bank$target_instrument)) * length(unique(item_bank$complexity))
     tmp_num_per_subgroup <- num_items/tmp_num_cond
 
     # make sure we have enough items for a balanced design
@@ -113,15 +115,16 @@ main_test <- function(label,
       message("The number of items in the test are: ", num_items)
     }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     tmp_item_bank <- tmp_item_bank %>%
-      group_by(WiT, TargetIns, Comp) %>%  slice_sample(n = tmp_num_per_subgroup)
+      group_by(with_target_in_mix, target_instrument, complexity) %>%  slice_sample(n = tmp_num_per_subgroup)
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number)
+    item_sequence <- item_sequence[sample(1:length(item_sequence))] # now we need to randomize the sequence
   }
   #### BBRR
-  if(WiT == "balanced" && TargetIns == "balanced" && Complexity == "random" && LVL == "random"){
-    tmp_num_cond <- length(unique(item_bank$WiT)) *
-      length(unique(item_bank$TargetIns))
+  if(with_target_in_mix == "balanced" && target_instrument == "balanced" && complexity == "random" && level == "random"){
+    tmp_num_cond <- length(unique(item_bank$with_target_in_mix)) *
+      length(unique(item_bank$target_instrument))
     tmp_num_per_subgroup <- num_items/tmp_num_cond
 
     # make sure we have enough items for a balanced design
@@ -134,15 +137,16 @@ main_test <- function(label,
       message("The number of items in the test are: ", num_items)
     }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     tmp_item_bank <- tmp_item_bank %>%
-      group_by(WiT, TargetIns) %>% slice_sample(n = tmp_num_per_subgroup)
+      group_by(with_target_in_mix, target_instrument) %>% slice_sample(n = tmp_num_per_subgroup)
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number) # get the correct indexes for the item sequence
+    item_sequence <- item_sequence[sample(1:length(item_sequence))] # now we need to randomize the sequence
   }
   #### BRBB
-  if(WiT == "balanced" && TargetIns == "random" && Complexity == "balanced" && LVL == "balanced"){
-    tmp_num_cond <- length(unique(item_bank$WiT)) * length(unique(item_bank$LVL)) *
-      length(unique(item_bank$Comp))
+  if(with_target_in_mix == "balanced" && target_instrument == "random" && complexity == "balanced" && level == "balanced"){
+    tmp_num_cond <- length(unique(item_bank$with_target_in_mix)) * length(unique(item_bank$level)) *
+      length(unique(item_bank$complexity))
     tmp_num_per_subgroup <- num_items/tmp_num_cond
     # make sure we have enough items for a balanced design
     if(schoolmath::is.decimal(tmp_num_per_subgroup)){
@@ -154,15 +158,16 @@ main_test <- function(label,
       message("The number of items in the test are: ", num_items)
     }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     tmp_item_bank <- tmp_item_bank %>%
-      group_by(WiT, Comp, LVL) %>% slice_sample(n = tmp_num_per_subgroup)
+      group_by(with_target_in_mix, complexity, level) %>% slice_sample(n = tmp_num_per_subgroup)
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number) # get the correct indexes for the item sequence
+    item_sequence <- item_sequence[sample(1:length(item_sequence))] # now we need to randomize the sequence
   }
 
   #### BRBR
-  if(WiT == "balanced" && TargetIns == "random" && Complexity == "balanced" && LVL == "random"){
-    tmp_num_cond <- length(unique(item_bank$WiT)) * length(unique(item_bank$Comp))
+  if(with_target_in_mix == "balanced" && target_instrument == "random" && complexity == "balanced" && level == "random"){
+    tmp_num_cond <- length(unique(item_bank$with_target_in_mix)) * length(unique(item_bank$complexity))
     tmp_num_per_subgroup <- num_items/tmp_num_cond
     # make sure we have enough items for a balanced design
     if(schoolmath::is.decimal(tmp_num_per_subgroup)){
@@ -174,16 +179,17 @@ main_test <- function(label,
       message("The number of items in the test are: ", num_items)
     }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     tmp_item_bank <- tmp_item_bank %>%
-      group_by(WiT, Comp) %>% slice_sample(n = tmp_num_per_subgroup)
+      group_by(with_target_in_mix, complexity) %>% slice_sample(n = tmp_num_per_subgroup)
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number) # get the correct indexes for the item sequence
+    item_sequence <- item_sequence[sample(1:length(item_sequence))] # now we need to randomize the sequence
   }
 
   #### BRRB
-  if(WiT == "balanced" && TargetIns == "random" && Complexity == "random" && LVL == "balanced"){
-    item_bank <- MSAT::MSAT_item_bank
-    tmp_num_cond <- length(unique(item_bank$WiT)) * length(unique(item_bank$LVL))
+  if(with_target_in_mix == "balanced" && target_instrument == "random" && complexity == "random" && level == "balanced"){
+    item_bank <- MSA::MSA_item_bank
+    tmp_num_cond <- length(unique(item_bank$with_target_in_mix)) * length(unique(item_bank$level))
     tmp_num_per_subgroup <- num_items/tmp_num_cond
     # make sure we have enough items for a balanced design
     if(schoolmath::is.decimal(tmp_num_per_subgroup)){
@@ -195,14 +201,16 @@ main_test <- function(label,
       message("The number of items in the test are: ", num_items)
     }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     tmp_item_bank <- tmp_item_bank %>%
-      group_by(WiT, LVL) %>% slice_sample(n = tmp_num_per_subgroup)
+      group_by(with_target_in_mix, level) %>% slice_sample(n = tmp_num_per_subgroup)
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number)
+    item_sequence <- item_sequence[sample(1:length(item_sequence))] # now we need to randomize the sequence
   }
   #### BRRR
-  if(WiT == "balanced" && TargetIns == "random" && Complexity == "random" && LVL == "random"){
-    tmp_num_cond <- length(unique(item_bank$WiT)) # number of conditions
+  if(with_target_in_mix == "balanced" && target_instrument == "random" && complexity == "random" && level == "random"){
+    # browser()
+    tmp_num_cond <- length(unique(item_bank$with_target_in_mix)) # number of conditions
     tmp_num_per_subgroup <- num_items/tmp_num_cond # calculate how many items per subgroups should be randomly selected
 
     # make sure we have enough items for a balanced design
@@ -215,12 +223,13 @@ main_test <- function(label,
       message("The number of items in the test are: ", num_items)
     }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(SongNr) %>% slice_sample(n = 1)}
+    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% slice_sample(n = 1)}
     tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(WiT) %>% # selecting the subgroups as specified; number of subgroups = number of conditions
+      dplyr::group_by(with_target_in_mix) %>% # selecting the subgroups as specified; number of subgroups = number of conditions
       dplyr::slice_sample(n = tmp_num_per_subgroup) # specify how many items per subgroup should be extracted
     item_sequence <- charmatch(tmp_item_bank$item_number, item_bank$item_number) # get the correct indexes for the item sequence
-  }
+    item_sequence <- item_sequence[sample(1:length(item_sequence))] # now we need to randomize the sequence
+    }
   # delete temporarily data
   tmp_num_cond <-  NULL
   tmp_num_per_subgroup <-  NULL
@@ -229,11 +238,11 @@ main_test <- function(label,
 # browser()
 
   for(i in 1:length(item_sequence)){
-    item <- MSAT::MSAT_item_bank[item_sequence[i],]
+    item <- MSA::MSA_item_bank[item_sequence[i],]
     # emotion <- psychTestR::i18n(item[1,]$emotion_i18)
     #printf("Emotion %s ", emotion)
     item_page <-
-      MSAT_item(label = item$item_number[1],
+      MSA_item(label = item$item_number[1],
                 correct_answer = item$correct[1],
                 prompt = get_prompt(i, num_items),
                 audio_file = item$audio_file[1],
@@ -245,10 +254,10 @@ main_test <- function(label,
 }
 
 
-item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSAT::MSAT_dict) {
-  item <- MSAT::MSAT_item_bank %>% filter(item_number == item_id) %>% as.data.frame()
+item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MSA_dict) {
+  item <- MSA::MSA_item_bank %>% filter(item_number == item_id) %>% as.data.frame()
   # emotion <- psychTestR::i18n(item[1,]$emotion_i18)
-  MSAT_item(label = item_id,
+  MSA_item(label = item_id,
            correct_answer = item$correct[1],
            prompt = get_prompt(item_number, num_items),
            audio_file = item$audio_file[1],
@@ -260,7 +269,7 @@ item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSAT::M
   #                url = file.path(audio_dir, item$audio_file[1]))
 }
 
-get_prompt <- function(item_number, num_items, dict = MSAT::MSAT_dict) {
+get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {
   shiny::div(
     shiny::h4(
       psychTestR::i18n(
@@ -277,7 +286,7 @@ get_prompt <- function(item_number, num_items, dict = MSAT::MSAT_dict) {
     )
 }
 
-MSAT_welcome_page <- function(dict = MSAT::MSAT_dict){
+MSA_welcome_page <- function(dict = MSA::MSA_dict){
   psychTestR::new_timeline(
     psychTestR::one_button_page(
     body = shiny::div(
@@ -289,7 +298,7 @@ MSAT_welcome_page <- function(dict = MSAT::MSAT_dict){
   ), dict = dict)
 }
 
-MSAT_finished_page <- function(dict = MSAT::MSAT_dict){
+MSA_finished_page <- function(dict = MSA::MSA_dict){
   psychTestR::new_timeline(
     psychTestR::one_button_page(
       body =  shiny::div(
@@ -299,7 +308,7 @@ MSAT_finished_page <- function(dict = MSAT::MSAT_dict){
       button_text = psychTestR::i18n("CONTINUE")
     ), dict = dict)
 }
-MSAT_final_page <- function(dict = MSAT::MSAT_dict){
+MSA_final_page <- function(dict = MSA::MSA_dict){
   psychTestR::new_timeline(
     psychTestR::final_page(
       body = shiny::div(
@@ -317,7 +326,7 @@ show_item <- function(audio_dir) {
     item_number <- psychTestRCAT::get_item_number(item)
     num_items <- psychTestRCAT::get_num_items_in_test(item)
     messagef("Showing item %s", item_number)
-    MSAT_item(
+    MSA_item(
       label = paste0("q", item_number),
       audio_file = item$audio_file,
       correct_answer = item$answer,

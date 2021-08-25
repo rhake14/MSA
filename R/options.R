@@ -1,8 +1,8 @@
-MSAT_options <- function() {
+MSA_options <- function() {
 
 }
 ## for the adaptive test:
-# MSAT_options <- function(next_item.criterion,
+# MSA_options <- function(next_item.criterion,
 #                         next_item.estimator,
 #                         next_item.prior_dist = next_item.prior_dist,
 #                         next_item.prior_par = next_item.prior_par,

@@ -1,11 +1,11 @@
-#source("R/MSAT.R")
+#source("R/MSA.R")
 options(shiny.error = browser)
 debug_locally <- !grepl("shiny-server", getwd())
 
 
-#' Standalone MSAT
+#' Standalone MSA
 #'
-#' This function launches a standalone testing session for the MSAT.
+#' This function launches a standalone testing session for the MSA.
 #' This can be used for data collection, either in the laboratory or online.
 #' @param title (Scalar character) Title to display during testing.
 #' @param num_items (Scalar integer) Number of items to be adminstered.
@@ -41,12 +41,12 @@ debug_locally <- !grepl("shiny-server", getwd())
 #' @param level (Character scalar) Level-ratio between target and the mixture (level): Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items with '0', '-5', '-10', '-15' level-ratios are selected for the item pool,
 #' and ("random") =  pick items randomly for this variable; Default to "random"
-#' @param ... Further arguments to be passed to \code{\link{MSAT}()}.
+#' @param ... Further arguments to be passed to \code{\link{MSA}()}.
 #' @export
 
 
 
-MSAT_standalone  <- function(title = NULL,
+MSA_standalone  <- function(title = NULL,
                            num_items = 18L,
                            with_id = TRUE,
                            with_feedback = FALSE,
@@ -56,7 +56,7 @@ MSAT_standalone  <- function(title = NULL,
                            admin_password = "password",
                            researcher_email = "put.your.email-adress@here",
                            languages = c("en", "de"),
-                           dict = MSAT::MSAT_dict,
+                           dict = MSA::MSA_dict,
                            validate_id = "auto",
                            with_target_in_mix = "balanced",
                            target_instrument = "random",
@@ -66,8 +66,8 @@ MSAT_standalone  <- function(title = NULL,
   feedback <- NULL
   # key <- NULL
   if(with_feedback) {
-    # feedback <- MSAT::MSAT_feedback_with_graph()
-    feedback <- MSAT::MSAT_feedback_with_score()
+    # feedback <- MSA::MSA_feedback_with_graph()
+    feedback <- MSA::MSA_feedback_with_score()
   }
   elts <- psychTestR::join(
     if(with_id)
@@ -77,7 +77,7 @@ MSAT_standalone  <- function(title = NULL,
                              validate = validate_id),
         dict = dict),
     if(take_training)
-      MSAT::MSAT(num_items = num_items,
+      MSA::MSA(num_items = num_items,
                with_welcome =  FALSE,
                with_finish = FALSE,
                feedback = feedback,
@@ -90,9 +90,9 @@ MSAT_standalone  <- function(title = NULL,
                # adaptive = adaptive, ## future proof
                ...)
     else
-    # if(with_welcome) MSAT_welcome_page(dict = dict),
-    MSAT::MSAT(num_items = num_items,
-      with_welcome =  FALSE,
+    # if(with_welcome) MSA_welcome_page(dict = dict),
+    MSA::MSA(num_items = num_items,
+      with_welcome =  with_welcome,
       with_finish = FALSE,
       feedback = feedback,
       dict = dict,
@@ -104,12 +104,12 @@ MSAT_standalone  <- function(title = NULL,
       level = level,
       ...),
     psychTestR::elt_save_results_to_disk(complete = TRUE),
-    MSAT_final_page(dict = dict)
+    MSA_final_page(dict = dict)
   )
   if(is.null(title)){
     #extract title as named vector from dictionary
     title <-
-      MSAT::MSAT_dict  %>%
+      MSA::MSA_dict  %>%
       as.data.frame() %>%
       dplyr::filter(key == "TESTNAME") %>%
       dplyr::select(-key) %>%

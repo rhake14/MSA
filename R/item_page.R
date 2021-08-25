@@ -122,7 +122,7 @@ audio_NAFC_page_flex <- function(label,
   # else {
     get_answer <- function(input, ...) {
       answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
-      correct <- MSAT::MSAT_item_bank[MSAT::MSAT_item_bank$item_number == label,]$correct == answer
+      correct <- MSA::MSA_item_bank[MSA::MSA_item_bank$item_number == label,]$correct == answer
       tibble(answer = answer,
              label = label,
              correct = correct)
@@ -137,7 +137,7 @@ audio_NAFC_page_flex <- function(label,
 }
 
 
-MSAT_item <- function(label = "",
+MSA_item <- function(label = "",
                       audio_file,
                       correct_answer,
                       prompt = "",
@@ -149,7 +149,7 @@ MSAT_item <- function(label = "",
                       instruction_page = FALSE
 ){
   page_prompt <- shiny::div(prompt)
-  printf("MSAT called for item: %s", label) # print what item is called into the item pool
+  printf("MSA called for item: %s", label) # print what item is called into the item pool
   choices <- c("1", "2")
   audio_url <- file.path(audio_dir, audio_file)
   audio_NAFC_page_flex(label = label,

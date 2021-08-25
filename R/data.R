@@ -1,14 +1,14 @@
-#' MSAT  dictionary
+#' MSA  dictionary
 #'
-#' The default internationalisation dictionary used by the MSAT.
-#' @name MSAT_dict
+#' The default internationalisation dictionary used by the MSA.
+#' @name MSA_dict
 #' @docType data
 NULL
 
-#' MSAT item bank
+#' MSA item bank
 #'
-#' The MSAT's item bank
-#' @name MSAT_item_bank
+#' The MSA's item bank
+#' @name MSA_item_bank
 #' @docType data
 NULL
 

@@ -1,4 +1,4 @@
-#' Demo MSAT
+#' Demo MSA
 #'
 #' This function launches a demo for the RAT.
 #'
@@ -28,14 +28,14 @@
 #' @param level (Character scalar) Indicates how items are selected from the item pool.
 #' Possible values are ("balanced") = equal proportion of items for this variable,
 #' and ("random") =  pick items randomly; Default to "random"
-#' @param ... Further arguments to be passed to \code{\link{MSAT}()}.
+#' @param ... Further arguments to be passed to \code{\link{MSA}()}.
 #' @export
 #'
-MSAT_demo <- function(num_items = 3L,
-                     feedback = MSAT::MSAT_feedback_with_score(),
+MSA_demo <- function(num_items = 3L,
+                     feedback = MSA::MSA_feedback_with_score(),
                      admin_password = "password",
                      researcher_email = "example@e-mail.com",
-                     dict = MSAT::MSAT_dict,
+                     dict = MSA::MSA_dict,
                      language = "en",
                      with_target_in_mix = "random",
                      target_instrument = "random",
@@ -43,8 +43,8 @@ MSAT_demo <- function(num_items = 3L,
                      level = "random",
                      ...) {
   elts <- psychTestR::join(
-    MSAT_welcome_page(dict = dict),
-    MSAT::MSAT(num_items = num_items,
+    MSA_welcome_page(dict = dict),
+    MSA::MSA(num_items = num_items,
              with_welcome = FALSE,
              feedback = feedback,
              dict = dict,
@@ -53,7 +53,7 @@ MSAT_demo <- function(num_items = 3L,
              complexity = complexity,
              level = level,
              ...),
-      MSAT_final_page(dict = dict)
+      MSA_final_page(dict = dict)
   )
 
   psychTestR::make_test(

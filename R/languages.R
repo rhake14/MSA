@@ -1,7 +1,7 @@
-#' MSAT languages
+#' MSA languages
 #'
 #' Lists the languages available for MSAT implementations.
 #' @export
-MSAT_languages <- function() {
+MSA_languages <- function() {
   c("en", "de")
 }

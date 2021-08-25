@@ -24,3 +24,4 @@ NULL
 
 #' @importFrom methods "is"
 NULL
+

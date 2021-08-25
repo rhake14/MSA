@@ -22,8 +22,8 @@ instructions <- function(audio_dir) {
 }
 
 show_sample_page <- function(audio_dir){
-  demo_sample <- "Demo-1"
-  audio_url <- file.path(audio_dir, sprintf("i7.mp3", demo_sample))
+  demo_sample1 <- "p_item238_set021_wit_lvl-15_comp3_t122_song12.wav"
+  audio_url <- file.path(audio_dir, sprintf(demo_sample1))
   # audio_url <- file.path(audio_dir, sprintf("%s.mp3", demo_sample))
   audio <- get_audio_element(url = audio_url, autoplay = F)
   body <- shiny::div(
@@ -40,8 +40,8 @@ show_sample_page <- function(audio_dir){
 }
 
 show_second_sample_page <- function(audio_dir){
-  demo_sample <- "Demo-1"
-  audio_url <- file.path(audio_dir, sprintf("i9.mp3", demo_sample))
+  demo_sample2 <- "voc_item9_set003_wot_lvl0_comp4_t68_song85.wav"
+  audio_url <- file.path(audio_dir, sprintf(demo_sample2))
   # audio_url <- file.path(audio_dir, sprintf("%s.mp3", demo_sample))
   audio <- get_audio_element(url = audio_url, autoplay = F)
   body <- shiny::div(
