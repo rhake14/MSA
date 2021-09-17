@@ -100,16 +100,22 @@ audio_NAFC_page_flex <- function(label,
                                  on_complete = NULL,
                                  admin_ui = NULL) {
   stopifnot(purrr::is_scalar_character(label))
-  audio_ui <- get_audio_ui(audio_url, wait = T, loop = F, width = 200)
+  audio_ui <-
+    get_audio_ui(audio_url,
+                 wait = T,
+                 loop = F,
+                 width = 200)
   style <- NULL
   ui <- shiny::div(
     tagify(prompt),
     audio_ui,
-    psychTestR::make_ui_NAFC(choices,
-                             labels = choices,
-                             hide = TRUE,
-                             arrange_vertically = FALSE,
-                             id = "response_ui")
+    psychTestR::make_ui_NAFC(
+      choices,
+      labels = choices,
+      hide = TRUE,
+      arrange_vertically = FALSE,
+      id = "response_ui"
+    )
   )
   # if (adaptive){
   #   if(is.null(get_answer)){
@@ -123,15 +129,20 @@ audio_NAFC_page_flex <- function(label,
     get_answer <- function(input, ...) {
       answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
       correct <- MSA::MSA_item_bank[MSA::MSA_item_bank$item_number == label,]$correct == answer
+      # browser()
       tibble(answer = answer,
              label = label,
-             correct = correct)
+             correct = correct
+             )
     }
     validate <- function(answer, ...) !is.null(answer)
   # }
-  psychTestR::page(ui = ui, label = label,
-                   get_answer = get_answer, save_answer = save_answer,
-                   validate = validate, on_complete = on_complete,
+  psychTestR::page(ui = ui,
+                   label = label,
+                   get_answer = get_answer,
+                   save_answer = save_answer,
+                   validate = validate,
+                   on_complete = on_complete,
                    final = FALSE,
                    admin_ui = admin_ui)
 }
@@ -149,7 +160,7 @@ MSA_item <- function(label = "",
                       instruction_page = FALSE
 ){
   page_prompt <- shiny::div(prompt)
-  printf("MSA called for item: %s", label) # print what item is called into the item pool
+  # printf("MSA called for item: %s", label) # print what item is called into the item pool
   choices <- c("1", "2")
   audio_url <- file.path(audio_dir, audio_file)
   audio_NAFC_page_flex(label = label,

@@ -49,7 +49,7 @@ debug_locally <- !grepl("shiny-server", getwd())
 MSA_standalone  <- function(title = NULL,
                            num_items = 18L,
                            with_id = TRUE,
-                           with_feedback = FALSE,
+                           with_feedback = TRUE,
                            with_welcome = TRUE,
                            take_training = FALSE,
                            unique_songs_only = FALSE,

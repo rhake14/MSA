@@ -4,6 +4,13 @@ info_page <- function(id, style = "text-align:justify; margin-left:20%;margin-ri
                               button_text = psychTestR::i18n("CONTINUE"))
 }
 
+# two audio examples for instructions
+# DE:"In diesem Beispiel spielt das Zielinstrument (Hauptstimme) in der Instrumentenmixtur!"
+demo_sample1 <- "voc_Item2436_set462_wit_lvl0_comp3_t350_song5.wav"
+# DE:"In diesem Musikausschnitt spielt das Zielinstrument (Hauptstimme) nicht in der Mixtur."
+demo_sample2 <- "voc_Item3403_set877_wot_lvl0_comp4_t62_song94.wav"
+
+
 instructions <- function(audio_dir) {
   c(
     psychTestR::code_block(function(state, ...) {
@@ -22,7 +29,6 @@ instructions <- function(audio_dir) {
 }
 
 show_sample_page <- function(audio_dir){
-  demo_sample1 <- "p_item238_set021_wit_lvl-15_comp3_t122_song12.wav"
   audio_url <- file.path(audio_dir, sprintf(demo_sample1))
   # audio_url <- file.path(audio_dir, sprintf("%s.mp3", demo_sample))
   audio <- get_audio_element(url = audio_url, autoplay = F)
@@ -40,7 +46,6 @@ show_sample_page <- function(audio_dir){
 }
 
 show_second_sample_page <- function(audio_dir){
-  demo_sample2 <- "voc_item9_set003_wot_lvl0_comp4_t68_song85.wav"
   audio_url <- file.path(audio_dir, sprintf(demo_sample2))
   # audio_url <- file.path(audio_dir, sprintf("%s.mp3", demo_sample))
   audio <- get_audio_element(url = audio_url, autoplay = F)

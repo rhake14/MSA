@@ -1,9 +1,6 @@
 library(tidyverse)
 library(psychTestR)
 
-
-#printf   <- function(...) print(sprintf(...))
-#messagef <- function(...) message(sprintf(...))
 #' MSA
 #'
 #' This function defines a MSA  module for incorporation into a

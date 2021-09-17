@@ -4,7 +4,16 @@ NULL
 #' @importFrom dplyr "mutate"
 NULL
 
+#' @importFrom dplyr "slice_sample"
+NULL
+
+#' @importFrom dplyr "group_by"
+NULL
+
 #' @importFrom dplyr "filter"
+NULL
+
+#' @importFrom schoolmath "is.decimal"
 NULL
 
 #' @importFrom dplyr "pull"
