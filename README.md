@@ -15,7 +15,7 @@ instrument is currently in development (expected early 2022).
 ## Citation
 
 We also advise mentioning the software versions you used, in particular
-the versions of the `MSAT` and `psychTestR` packages. You can find these
+the versions of the `MSA` and `psychTestR` packages. You can find these
 version numbers from R by running the following commands:
 
 ``` r
@@ -79,13 +79,14 @@ function, and a new participation session will begin.
 
 You can retrieve your data by starting up a participation session,
 entering the admin panel using your admin password, and downloading your
-data. For more details on the psychTestR interface, see
-<http://psychtestr.com/>.
+data (.rds file is recommended). For more details on the psychTestR
+interface, see <http://psychtestr.com/>.
 
-The MSA currently supports English (en), German (de), You can select one
-of these languages by passing a language code as an argument to
-`MSA_standalone()`, e.g. `MSA_standalone(languages = "en")`, or
-alternatively by passing it as a URL parameter to the test browser, eg.
+The MSA currently supports English (en), German (de) - more languages
+follow soon. You can select one of these languages by passing a language
+code as an argument to `MSA_standalone()`,
+e.g. `MSA_standalone(languages = "en")`, or alternatively by passing it
+as a URL parameter to the test browser, eg.
 <http://127.0.0.1:4412/?language=DE> (note that the `p_id` argument must
 be empty).
 

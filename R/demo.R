@@ -16,31 +16,15 @@
 #' @param language The language you want to run your demo in.
 #' Possible languages include English (\code{"en"}), German (\code{"de"})).
 #' The first language is selected by default
-#' @param with_target_in_mix (Character scalar) Indicates how items are selected from the item pool.
-#' Possible values are ("balanced") = equal proportion of items for this variable,
-#' and ("random") =  pick items randomly; Default to "random"
-#' @param target_instrument (Character scalar) Indicates how items are selected from the item pool.
-#' Possible values are ("balanced") = equal proportion of items for this variable,
-#' and ("random") =  pick items randomly; Default to "random"
-#' @param complexity (Character scalar) Indicates how items are selected from the item pool.
-#' Possible values are ("balanced") = equal proportion of items for this variable,
-#' and ("random") =  pick items randomly; Default to "random"
-#' @param level (Character scalar) Indicates how items are selected from the item pool.
-#' Possible values are ("balanced") = equal proportion of items for this variable,
-#' and ("random") =  pick items randomly; Default to "random"
 #' @param ... Further arguments to be passed to \code{\link{MSA}()}.
 #' @export
 #'
-MSA_demo <- function(num_items = 3L,
+MSA_demo <- function(num_items = 4L,
                      feedback = MSA::MSA_feedback_with_score(),
                      admin_password = "password",
                      researcher_email = "example@e-mail.com",
                      dict = MSA::MSA_dict,
                      language = "en",
-                     with_target_in_mix = "random",
-                     target_instrument = "random",
-                     complexity = "random",
-                     level = "random",
                      ...) {
   elts <- psychTestR::join(
     MSA_welcome_page(dict = dict),
@@ -48,10 +32,6 @@ MSA_demo <- function(num_items = 3L,
              with_welcome = FALSE,
              feedback = feedback,
              dict = dict,
-             with_target_in_mix = with_target_in_mix,
-             target_instrument = target_instrument,
-             complexity = complexity,
-             level = level,
              ...),
       MSA_final_page(dict = dict)
   )

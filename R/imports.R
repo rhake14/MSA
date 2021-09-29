@@ -13,13 +13,22 @@ NULL
 #' @importFrom dplyr "filter"
 NULL
 
-#' @importFrom schoolmath "is.decimal"
+#' @importFrom dplyr "n_distinct"
 NULL
 
 #' @importFrom dplyr "pull"
 NULL
 
+#' @importFrom plyr "count"
+NULL
+
 #' @importFrom tibble "tibble"
+NULL
+
+#' @importFrom tibble "as_tibble"
+NULL
+
+#' @importFrom tidyr "unnest"
 NULL
 
 #' @importFrom purrr "is_scalar_double"
@@ -29,6 +38,9 @@ NULL
 NULL
 
 #' @importFrom purrr "is_scalar_character"
+NULL
+
+#' @importFrom methods "is"
 NULL
 
 #' @importFrom methods "is"

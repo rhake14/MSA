@@ -5,16 +5,12 @@
 \title{Demo MSA}
 \usage{
 MSA_demo(
-  num_items = 3L,
+  num_items = 4L,
   feedback = MSA::MSA_feedback_with_score(),
   admin_password = "password",
   researcher_email = "example@e-mail.com",
   dict = MSA::MSA_dict,
   language = "en",
-  with_target_in_mix = "random",
-  target_instrument = "random",
-  complexity = "random",
-  level = "random",
   ...
 )
 }
@@ -38,22 +34,6 @@ the email address of this package's developer.}
 \item{language}{The language you want to run your demo in.
 Possible languages include English (\code{"en"}), German (\code{"de"})).
 The first language is selected by default}
-
-\item{with_target_in_mix}{(Character scalar) Indicates how items are selected from the item pool.
-Possible values are ("balanced") = equal proportion of items for this variable,
-and ("random") =  pick items randomly; Default to "random"}
-
-\item{target_instrument}{(Character scalar) Indicates how items are selected from the item pool.
-Possible values are ("balanced") = equal proportion of items for this variable,
-and ("random") =  pick items randomly; Default to "random"}
-
-\item{complexity}{(Character scalar) Indicates how items are selected from the item pool.
-Possible values are ("balanced") = equal proportion of items for this variable,
-and ("random") =  pick items randomly; Default to "random"}
-
-\item{level}{(Character scalar) Indicates how items are selected from the item pool.
-Possible values are ("balanced") = equal proportion of items for this variable,
-and ("random") =  pick items randomly; Default to "random"}
 
 \item{...}{Further arguments to be passed to \code{\link{MSA}()}.}
 }

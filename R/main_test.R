@@ -25,213 +25,194 @@ scoring <- function(){
 #           MSA::MSAa_item_bank$difficulty <= upper_sd)
 # }
 
+
 main_test <- function(label,
                       num_items,
                       audio_dir,
-                      with_target_in_mix = "balanced",
-                      target_instrument = "balanced",
-                      complexity = "balanced",
-                      level = "balanced",
-                      unique_songs_only = TRUE,
-                      dict = MSA::MSA_dict) {
+                      balance_over = c("target_instrument", "complexity", "level"),
+                      # balance_over,
+                      dict = MSA::MSA_dict
+                      ) {
   elts <- c()
-  item_bank <- MSA::MSA_item_bank # load whole item ban
-  tmp_item_bank <- item_bank %>% filter(practice_item == "no") # exclude practice items
 
-#### ** build item sequence & go through most used cases (still fishy code) -----------
-##
-  #### RRRR --> with_target_in_mix == "random" && target_instrument == "random" && complexity == "random" && level == "random"
-  if(with_target_in_mix == "random" && target_instrument == "random" && complexity == "random" && level == "random"){
-    # # count number of unique values of the tmp_item_bank for debugging ----
-    # tmp_item_bank %>%
-    #   as.tibble() %>%
-    #   count(song_nr)
-    # tmp_item_bank %>%
-    #   as.tibble() %>%
-    #   count(song_nr)
-    #  end of debugging ------
-    # if one want each song played max. once
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% dplyr::group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    item_sequence <- sample(1:nrow(tmp_item_bank), num_items)
-  }
-  #### RBBB
-  if(with_target_in_mix == "random" && target_instrument == "balanced" && complexity == "balanced" && level == "balanced"){
-    tmp_num_cond <- length(unique(tmp_item_bank$target_instrument)) *
-      length(unique(tmp_item_bank$complexity)) * length(unique(tmp_item_bank$level))
-    tmp_num_per_subgroup <- num_items/tmp_num_cond
-    # make sure we have enough items for a balanced design
-    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
-      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
-               As a consequence, the number of items in the test have been upscaled.")
-      message("The number of conditions are: ",tmp_num_cond)
-      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
-      num_items <- tmp_num_per_subgroup * tmp_num_cond
-      message("The number of items in the test are: ", num_items)
-    }
+  ### load whole item bank and exclude practice items
+  item_bank <- MSA::MSA_item_bank
+  tmp_item_bank <- item_bank %>% dplyr::filter(practice_item == "no")
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% dplyr::group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(target_instrument, complexity, level) %>% dplyr::slice_sample(n = tmp_num_per_subgroup)
+      ### some warnings for the user ----------------
+      tmp_balance_over <-
+        intersect(balance_over, c("target_instrument", "complexity", "level"))
 
-  }
-  #### BBBB
-  if(with_target_in_mix == "balanced" && target_instrument == "balanced" && complexity == "balanced" && level == "balanced"){
-      tmp_num_cond <- length(unique(tmp_item_bank$with_target_in_mix)) * length(unique(tmp_item_bank$target_instrument)) *
-      length(unique(tmp_item_bank$complexity)) * length(unique(tmp_item_bank$level))
-    tmp_num_per_subgroup <- num_items/tmp_num_cond
+      if (length(tmp_balance_over) != length(balance_over)) {
+        warning("Found invalid balancing conditions: ",
+                setdiff(balance_over, c("target_instrument", "complexity", "level")))
+      }
 
-    # make sure we have enough items for a balanced design
-    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
-      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
-               As a consequence, the number of items in the test have been upscaled.")
-      message("The number of conditions are: ",tmp_num_cond)
-      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
-      num_items <- tmp_num_per_subgroup * tmp_num_cond
-      message("The number of items in the test are: ", num_items)
-    }
+      if (length(tmp_balance_over) == 0) {
+        tmp_num_items <- max(1L, min(nrow(tmp_item_bank), num_items))
+        if (nrow(tmp_item_bank) != num_items) {
+          warning(sprintf(
+            "%d items requested, could only retrieve %d",
+            num_items,
+            tmp_num_items
+          ))
+        }
+        return(sample(1:nrow(tmp_item_bank), tmp_num_items))
+      }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% dplyr::group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(with_target_in_mix, target_instrument, complexity, level) %>% dplyr::slice_sample(n = tmp_num_per_subgroup)
+      num_cond <- purrr::reduce(
+        tmp_balance_over,
+        .f = function(x, y) {
+          x * dplyr::n_distinct(tmp_item_bank[[y]])
+        },
+        .init = 1L
+      )
 
-  }
-  #### BBBR
-  if(with_target_in_mix == "balanced" && target_instrument == "balanced" && complexity == "balanced" && level == "random"){
-    tmp_num_cond <- length(unique(tmp_item_bank$with_target_in_mix)) *
-      length(unique(tmp_item_bank$target_instrument)) * length(unique(tmp_item_bank$complexity))
-    tmp_num_per_subgroup <- num_items/tmp_num_cond
+      message(sprintf(
+        "Found %d conditions for balancing variables: %s",
+        num_cond,
+        paste(tmp_balance_over, collapse = ", ")
+      ))
 
-    # make sure we have enough items for a balanced design
-    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
-      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
-               As a consequence, the number of items in the test have been upscaled.")
-      message("The number of conditions are: ",tmp_num_cond)
-      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
-      num_items <- tmp_num_per_subgroup * tmp_num_cond
-      message("The number of items in the test are: ", num_items)
-    }
+      num_per_subgroup <- num_items / num_cond
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(with_target_in_mix, target_instrument, complexity) %>%  dplyr::slice_sample(n = tmp_num_per_subgroup)
+      if (num_per_subgroup != ceiling(num_per_subgroup)) {
+        # warning("Number of items does not fit subggroups, scaling up.")
+        num_per_subgroup <- ceiling(num_per_subgroup)
+      }
 
-  }
-  #### BBRR
-  if(with_target_in_mix == "balanced" && target_instrument == "balanced" && complexity == "random" && level == "random"){
-    tmp_num_cond <- length(unique(tmp_item_bank$with_target_in_mix)) *
-      length(unique(tmp_item_bank$target_instrument))
-    tmp_num_per_subgroup <- num_items/tmp_num_cond
+      if (num_items < 63 &  length(tmp_balance_over) == 3) {
+        warning("At least 64 items must be selected for a fully balanced design.
+Nevertheless, items are selected as evenly as possible with respect to the selected balancing parameters.")
+      }
 
-    # make sure we have enough items for a balanced design
-    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
-      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
-               As a consequence, the number of items in the test have been upscaled.")
-      message("The number of conditions are: ",tmp_num_cond)
-      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
-      num_items <- tmp_num_per_subgroup * tmp_num_cond
-      message("The number of items in the test are: ", num_items)
-    }
+      ### get the item sequence ---------------
+      ### preparations for the WoT item_sequence (target is not in the mix)
+      if (((num_items / 2) + 6) / dplyr::n_distinct(tmp_item_bank %>% dplyr::filter(with_target_in_mix == "no")) <= .10) {
+        probability <-  .10 # slice does not work properly for probabilities below .1
+      } else {
+        probability <- ((num_items / 2) + 6) / dplyr::n_distinct(tmp_item_bank %>%
+                                                                   dplyr::filter(with_target_in_mix == "no"))
+      }
+        # for loop to get a suitable item sequence
+        item_sequence_list <- NULL
+        for (i in 1:100) {
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% dplyr::group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(with_target_in_mix, target_instrument) %>% dplyr::slice_sample(n = tmp_num_per_subgroup)
+          item_sequence_wit <- tmp_item_bank %>%
+            dplyr::filter(with_target_in_mix == "yes") %>%
+            dplyr::group_by(item_nr) %>%
+            dplyr::slice_sample(n = 1) %>%
+            dplyr::ungroup() %>%
+            dplyr::group_by(across(tmp_balance_over)) %>%
+            dplyr::slice_sample(prop = 100) %>% # reorder the item_bank
+            # dplyr::slice_sample(prop = probability) %>%
+            dplyr::slice_sample(n = num_per_subgroup) %>%
+            dplyr::ungroup() %>%
+            dplyr::slice_sample(n = (num_items / 2))
 
-  }
-  #### BRBB
-  if(with_target_in_mix == "balanced" && target_instrument == "random" && complexity == "balanced" && level == "balanced"){
-    tmp_num_cond <- length(unique(tmp_item_bank$with_target_in_mix)) * length(unique(tmp_item_bank$level)) *
-      length(unique(tmp_item_bank$complexity))
-    tmp_num_per_subgroup <- num_items/tmp_num_cond
-    # make sure we have enough items for a balanced design
-    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
-      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
-               As a consequence, the number of items in the test have been upscaled.")
-      message("The number of conditions are: ",tmp_num_cond)
-      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
-      num_items <- tmp_num_per_subgroup * tmp_num_cond
-      message("The number of items in the test are: ", num_items)
-    }
+          # difference song & item (which basically is setnumber)
+          dif_song_nr <- dplyr::n_distinct(item_sequence_wit$song_nr) - num_items/2
+          dif_item_nr <- dplyr::n_distinct(item_sequence_wit$item_nr) - num_items/2
+          # difference conditions (alle thre conditions)
+          dif_max_per_cond <- max(plyr::count(item_sequence_wit$condition)$freq)
+          dif_cond_sum <- sum(plyr::count(item_sequence_wit$condition)$freq)
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% dplyr::group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(with_target_in_mix, complexity, level) %>% dplyr::slice_sample(n = tmp_num_per_subgroup)
+          # difference level ratio
+          dif_lvl_0 <- length(which(0 == item_sequence_wit$level)) - num_items / 8
+          dif_lvl_5 <- length(which(-5 == item_sequence_wit$level)) - num_items / 8
+          dif_lvl_10 <- length(which(-10 == item_sequence_wit$level)) - num_items / 8
+          dif_lvl_15 <- length(which(-15 == item_sequence_wit$level)) - num_items / 8
+          dif_lvl_sum <- sum(abs(dif_lvl_0),abs(dif_lvl_5),abs(dif_lvl_10),abs(dif_lvl_15))
+          # difference acoustic complexity
+          dif_comp_3 <- length(which(3 == item_sequence_wit$complexity)) - num_items / 4
+          dif_comp_6 <- length(which(3 == item_sequence_wit$complexity)) - num_items / 4
+          dif_comp_sum <- sum(abs(dif_comp_3),abs(dif_comp_6))
+          # difference target instrument
+          dif_target_lead <- length(which("Lead" == item_sequence_wit$target_instrument)) - num_items / 8
+          dif_target_bass <- length(which("Bass" == item_sequence_wit$target_instrument)) - num_items / 8
+          dif_target_guitar <- length(which("Guitar" == item_sequence_wit$target_instrument)) - num_items / 8
+          dif_target_piano <- length(which("Piano" == item_sequence_wit$target_instrument)) - num_items / 8
+          dif_target_sum <- sum(abs(dif_target_lead),abs(dif_target_bass),abs(dif_target_guitar),abs(dif_target_piano))
+          # calculate overall sum & put into magical loop memory
+          dif_overall_sum <- sum(dif_target_sum, dif_comp_sum, dif_lvl_sum)
 
-  }
+          # store the output
+          item_sequence_list[[i]] <-
+            list(
+              item_sequence_wit = item_sequence_wit,
+              dif_item_nr = dif_item_nr,
+              dif_song_nr = dif_song_nr,
+              dif_overall_sum = dif_overall_sum
+            )
 
-  #### BRBR
-  if(with_target_in_mix == "balanced" && target_instrument == "random" && complexity == "balanced" && level == "random"){
-    tmp_num_cond <- length(unique(tmp_item_bank$with_target_in_mix)) * length(unique(tmp_item_bank$complexity))
-    tmp_num_per_subgroup <- num_items/tmp_num_cond
-    # make sure we have enough items for a balanced design
-    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
-      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
-               As a consequence, the number of items in the test have been upscaled.")
-      message("The number of conditions are: ",tmp_num_cond)
-      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
-      num_items <- tmp_num_per_subgroup * tmp_num_cond
-      message("The number of items in the test are: ", num_items)
-    }
+          # magicalize stuff:
+          # put(
+          #   item_sequence_wit,
+          #   dif_song_nr,
+          #   dif_item_nr,
+          #   dif_overall_sum,
+          #   dif_max_per_cond
+          # )
+        }
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% dplyr::group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(with_target_in_mix, complexity) %>% dplyr::slice_sample(n = tmp_num_per_subgroup)
+        ### extract the output from the loop
+        item_sequence_wit <- tibble::as_tibble(do.call(rbind, item_sequence_list))
+        item_sequence_wit <- item_sequence_wit %>%
+          tidyr::unnest(c(dif_item_nr,dif_song_nr,dif_overall_sum))
 
-  }
+        ### choose the best of the generated item sequences
+        item_sequence_wit <- item_sequence_wit %>%
+          dplyr::slice_max(dif_item_nr, n = 1) %>%
+          dplyr::slice_min(dif_overall_sum, n = 2) %>%
+          dplyr::slice_max(dif_song_nr, n = 2) %>%
+          dplyr::slice_head(n = 1)
 
-  #### BRRB
-  if(with_target_in_mix == "balanced" && target_instrument == "random" && complexity == "random" && level == "balanced"){
-    tmp_num_cond <- length(unique(tmp_item_bank$with_target_in_mix)) * length(unique(tmp_item_bank$level))
-    tmp_num_per_subgroup <- num_items/tmp_num_cond
-    # make sure we have enough items for a balanced design
-    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
-      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
-               As a consequence, the number of items in the test have been upscaled.")
-      message("The number of conditions are: ",tmp_num_cond)
-      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
-      num_items <- tmp_num_per_subgroup * tmp_num_cond
-      message("The number of items in the test are: ", num_items)
-    }
+        ### get item sequence
+        item_sequence_wit <- item_sequence_wit$item_sequence_wit[[1]]
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% dplyr::group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(with_target_in_mix, level) %>% dplyr::slice_sample(n = tmp_num_per_subgroup)
-  }
-  #### BRRR
-  if(with_target_in_mix == "balanced" && target_instrument == "random" && complexity == "random" && level == "random"){
-    tmp_num_cond <- length(unique(tmp_item_bank$with_target_in_mix)) # number of conditions
-    tmp_num_per_subgroup <- num_items/tmp_num_cond # calculate how many items per subgroups should be randomly selected
-    # make sure we have enough items for a balanced design
-    if(schoolmath::is.decimal(tmp_num_per_subgroup)){
-      warning("In order to have a balanced design, the number of items in the test need be a multiple integral of the number of conditions.\n
-               As a consequence, the number of items in the test have been upscaled.")
-      message("The number of conditions are: ",tmp_num_cond)
-      tmp_num_per_subgroup <- ceiling(tmp_num_per_subgroup)
-      num_items <- tmp_num_per_subgroup * tmp_num_cond
-      message("The number of items in the test are: ", num_items)
-    }
+        ### WoT: item_sequence target is not in the mix
+        item_sequence_wot <- tmp_item_bank %>%
+          dplyr::filter(with_target_in_mix == "no") %>%
+          dplyr::group_by(condition) %>%
+          dplyr::slice_sample(prop = 100) %>% # just for rearrangement of the item_bank to prevent
+          dplyr::slice_sample(prop = probability) %>%
+          dplyr::ungroup() %>%
+          dplyr::slice_sample(n = (num_items / 2))
 
-    if(unique_songs_only) {tmp_item_bank <- tmp_item_bank %>% dplyr::group_by(song_nr) %>% dplyr::slice_sample(n = 1)}
-    tmp_item_bank <- tmp_item_bank %>%
-      dplyr::group_by(with_target_in_mix) %>% # selecting the subgroups as specified; number of subgroups = number of conditions
-      dplyr::slice_sample(n = tmp_num_per_subgroup) # specify how many items per subgroup should be extracted
-    }
+        ### reassemble the item sequence
+        item_sequence_test <- rbind(item_sequence_wot,item_sequence_wit)
+        item_sequence <- item_sequence_test %>% dplyr::pull(item_number)
 
-  # set the item sequence
-  item_sequence <-
-    charmatch(tmp_item_bank$item_number, item_bank$item_number) # get the correct indexes for the item sequence
-  item_sequence <-
-    item_sequence[sample(1:length(item_sequence))] # randomize the sequence
+        ### for fast debugging
+        # print(sprintf("Number of items input: %d", num_items))
+        # print(sprintf("Number of items output: %d", nrow(item_sequence_test)))
+        # item_sequence_wot %>% janitor::tabyl(condition) %>% print()
+        # item_sequence_wit %>% janitor::tabyl(condition) %>% print()
+        # print(sprintf("Number of unique songs in the test: %d", n_distinct(item_sequence_test$song_nr)))
+        # print(sprintf("Number of unique items in the test: %d", n_distinct(item_sequence_test$item_nr)))
+        # print(sprintf("Number of different items in item_sequence_wot: %d", n_distinct(item_sequence_wot$item_nr)))
+        # print(sprintf("Number of different items in item_sequence_wit: %d", n_distinct(item_sequence_wit$item_nr)))
+        # item_sequence_test %>% janitor::tabyl(item_nr) %>% print()
+      # } # this is the else bracket
 
-  # delete temporarily data
-  tmp_num_cond <-  NULL
-  tmp_num_per_subgroup <-  NULL
-  tmp_item_bank <-  NULL
+      if (length(item_sequence) != num_items) {
+        warning(sprintf(
+          "%d items requested, could only retrieve %d",
+          num_items,
+          length(item_sequence)
+        ))
+      }
 
-# now loop through all items within the pool / item sequence--------
+  ### get the correct indexes for the item sequence & randomize the sequence order
+  item_sequence <- charmatch(item_sequence, item_bank$item_number)
+  item_sequence <- item_sequence[sample(1:length(item_sequence))]
+
+  ### delete temporarily data
+  # remove(tmp_num_cond, tmp_num_per_subgroup, probability, tmp_balance_over)
+
+### loop through all items within the pool / item sequence--------
 #
-
-
-  for(i in 1:length(item_sequence)){
+  for (i in 1:length(item_sequence)) {
     item <- MSA::MSA_item_bank[item_sequence[i],]
     item_page <-
       MSA_item(label = item$item_number[1],

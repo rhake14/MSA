@@ -11,16 +11,12 @@ MSA_standalone(
   with_feedback = TRUE,
   with_welcome = TRUE,
   take_training = FALSE,
-  unique_songs_only = FALSE,
   admin_password = "password",
   researcher_email = "put.your.email-adress@here",
   languages = c("en", "de"),
   dict = MSA::MSA_dict,
   validate_id = "auto",
-  with_target_in_mix = "balanced",
-  target_instrument = "random",
-  complexity = "random",
-  level = "random",
+  balance_over = c("target_instrument", "complexity", "level"),
   ...
 )
 }
@@ -36,9 +32,6 @@ MSA_standalone(
 \item{with_welcome}{(Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE}
 
 \item{take_training}{(Scalar boolean) Enable practice session before the actual session. Defaults to FALSE}
-
-\item{unique_songs_only}{(Scalar boolean) Set to 'TRUE' if each song (base track) should play once in the dataset.
-Please be aware, that the item pool only consists of 98 different base tracks. Defaults to FALSE}
 
 \item{admin_password}{(Scalar character) Password for accessing the admin panel.}
 
@@ -56,24 +49,13 @@ The first language is selected by default}
 \item{validate_id}{(Character scalar or closure) Function for validating IDs or string "auto" for default validation
 which means ID should consist only of  alphanumeric characters.}
 
-\item{with_target_in_mix}{(Character scalar) With target in the mixture (with_target_in_mix): Indicates how items are selected from the item pool.
-Possible values are ("balanced") = equal proportion of items 'with target' and 'without target' in the mixture are in the item pool;
-and ("random") = pick items randomly for this variable; Default to "balanced".}
-
-\item{target_instrument}{(Character scalar) Target Instruments (TargetIns): Indicates how items are selected from the item pool.
-Possible values are ("balanced") = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass')
-are selected for the item pool;
-and ("random") = pick items randomly for this variable; Default to "random"}
-
-\item{complexity}{(Character scalar) Musical complexity (i.e., Number of instruments within the mixture):
-Indicates how items are selected from the item pool.
-Possible values are ("balanced") = equal proportion of items with 'three' and 'six' instruments playing in the mixture
-are selected for the item pool,
-and ("random") =  pick items randomly for this variable; Default to "random"}
-
-\item{level}{(Character scalar) Level-ratio between target and the mixture (level): Indicates how items are selected from the item pool.
-Possible values are ("balanced") = equal proportion of items with '0', '-5', '-10', '-15' level-ratios are selected for the item pool,
-and ("random") =  pick items randomly for this variable; Default to "random"}
+\item{balance_over}{(Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
+Possible parameters are
+"target_instrument": the target instrument; balancing = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass').
+"complexity": the musical complexity, i.e. number of instruments within the mixture; balancing = equal proportion of items with 'three' and 'six' instruments playing in the mixture.
+"level": the level-ratio between target and the mixture; balancing = equal proportion of items with '0', '-5', '-10', '-15' level-ratios.
+Default is a fully balanced design: c("target_instrument", "complexity", "level").
+Note: By default, there is always an equal proportion of "with target instrument" and "without target" items in the pool.}
 
 \item{...}{Further arguments to be passed to \code{\link{MSA}()}.}
 }

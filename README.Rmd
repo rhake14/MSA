@@ -25,7 +25,7 @@ The MSA is an non-adaptive instrument to test musical scene analysis abilities a
 ## Citation
 
 We also advise mentioning the software versions you used,
-in particular the versions of the `MSAT` and `psychTestR` packages.
+in particular the versions of the `MSA` and `psychTestR` packages.
 You can find these version numbers from R by running the following commands:
 
 ``` r
@@ -88,11 +88,11 @@ and a new participation session will begin.
 
 You can retrieve your data by starting up a participation session,
 entering the admin panel using your admin password,
-and downloading your data.
+and downloading your data (.rds file is recommended).
 For more details on the psychTestR interface, 
 see http://psychtestr.com/.
 
-The MSA currently supports English (en), German (de),
+The MSA currently supports English (en), German (de) - more languages follow soon.
 You can select one of these languages by passing a language code as 
 an argument to `MSA_standalone()`, e.g. `MSA_standalone(languages = "en")`,
 or alternatively by passing it as a URL parameter to the test browser,
@@ -100,7 +100,7 @@ eg. http://127.0.0.1:4412/?language=DE (note that the `p_id` argument must be em
 
 ## Implementation notes
 
-By default, the MSA  implementation always estimates participant abilities
+By default, the MSA implementation always estimates participant abilities
 using weighted-likelihood estimation.
 We adopt weighted-likelihood estimation for this release 
 because this technique makes fewer assumptions about the participant group being tested.
