@@ -29,7 +29,7 @@ scoring <- function(){
 main_test <- function(label,
                       num_items,
                       audio_dir,
-                      balance_over = c("target_instrument", "complexity", "level"),
+                      balance_over = balance_over,
                       # balance_over,
                       dict = MSA::MSA_dict
                       ) {
@@ -37,7 +37,9 @@ main_test <- function(label,
 
   ### load whole item bank and exclude practice items
   item_bank <- MSA::MSA_item_bank
-  tmp_item_bank <- item_bank %>% dplyr::filter(practice_item == "no")
+  tmp_item_bank <- item_bank %>%
+    dplyr::filter(practice_item == "no") %>%
+    dplyr::select(-c("old_audio_file_name", "practice_item", "time_song", "set_nr"))
 
       ### some warnings for the user ----------------
       tmp_balance_over <-
