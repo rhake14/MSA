@@ -59,6 +59,7 @@ MSA <- function(num_items = 18L,
                 num_items = num_items,
                 audio_dir = audio_dir,
                 dict = dict,
+                balance_over = balance_over
                 )
     }, dict = dict),
     scoring(),
