@@ -105,7 +105,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
             dplyr::group_by(item_nr) %>%
             dplyr::slice_sample(n = 1) %>%
             dplyr::ungroup() %>%
-            dplyr::group_by(across(tmp_balance_over)) %>%
+            dplyr::group_by(dplyr::across(tmp_balance_over)) %>%
             dplyr::slice_sample(prop = 100) %>% # reorder the item_bank
             # dplyr::slice_sample(prop = probability) %>%
             dplyr::slice_sample(n = num_per_subgroup) %>%

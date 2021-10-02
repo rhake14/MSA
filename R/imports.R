@@ -19,6 +19,9 @@ NULL
 #' @importFrom dplyr "pull"
 NULL
 
+#' @importFrom dplyr "across"
+NULL
+
 #' @importFrom plyr "count"
 NULL
 
