@@ -126,15 +126,31 @@ audio_NAFC_page_flex <- function(label,
   #   }
   # }
   # else {
-    get_answer <- function(input, ...) {
-      answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
-      correct <- MSA::MSA_item_bank[MSA::MSA_item_bank$item_number == label,]$correct == answer
-      # browser()
-      tibble(answer = answer,
-             label = label,
-             correct = correct
-             )
+
+
+  get_answer <- function(state, input, ...) {
+    item_number <- psychTestR::get_local(key = "i_row", state = state)
+    psychTestR::set_local(key = "i_row", value = i_row + 1L , state = state)
+    messagef("Set item number: %d", i_row + 1L)
+    answer <- input$last_btn_pressed
+    if(is.null(answer)){
+      answer <- NA
     }
+    answer
+  }
+
+
+
+  # # old code
+  #   get_answer <- function(input, ...) {
+  #     answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
+  #     correct <- MSA::MSA_item_bank[MSA::MSA_item_bank$item_number == label,]$correct == answer
+  #     # browser()
+  #     tibble(answer = answer,
+  #            label = label,
+  #            correct = correct
+  #            )
+  #   }
     validate <- function(answer, ...) !is.null(answer)
   # }
   psychTestR::page(ui = ui,

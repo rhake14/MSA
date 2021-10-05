@@ -33,14 +33,21 @@ main_test <- function(label,
                       # balance_over,
                       dict = MSA::MSA_dict
                       ) {
-  elts <- c()
-
   ### load whole item bank and exclude practice items
   item_bank <- MSA::MSA_item_bank
   tmp_item_bank <- item_bank %>%
     dplyr::filter(practice_item == "no") %>%
     dplyr::select(-c("old_audio_file_name", "practice_item", "time_song", "set_nr"))
 
+  # elts <- c()
+  elts <- psychTestR::code_block(function(state, ...){
+    #browser()
+    seed <-  psychTestR::get_session_info(state, complete = F)$p_id %>%
+      digest::sha1() %>%
+      charToRaw() %>%
+      as.integer() %>%
+      sum()
+    messagef("Code block, seed %d", seed)
       ### some warnings for the user ----------------
       tmp_balance_over <-
         intersect(balance_over, c("target_instrument", "complexity", "level"))
@@ -209,23 +216,52 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
   item_sequence <- charmatch(item_sequence, item_bank$item_number)
   item_sequence <- item_sequence[sample(1:length(item_sequence))]
 
+
+  psychTestR::set_local(key = "item_sequence", value = item_sequence[1:num_items], state = state)
+  psychTestR::set_local(key = "i_row", value = 1L, state = state)
+
+  })
   ### delete temporarily data
   # remove(tmp_num_cond, tmp_num_per_subgroup, probability, tmp_balance_over)
 
 ### loop through all items within the pool / item sequence--------
 #
-  for (i in 1:length(item_sequence)) {
-    item <- MSA::MSA_item_bank[item_sequence[i],]
-    item_page <-
-      MSA_item(label = item$item_number[1],
-               correct_answer = item$correct[1],
+  for (i_row in 1:length(item_sequence)) {
+
+
+    item <- psychTestR::reactive_page(function(state, ...) {
+      #browser()
+      item_sequence <- psychTestR::get_local("item_sequence", state)
+      i_row <- psychTestR::get_local("i_row", state)
+      item_number <- item_sequence[i_row]
+      messagef("Called reactive page, i_row %d, item_number: %d", i_row, item_number)
+      MSA_item(label = item$item_number[i_row],
+               i_row,
+               correct_answer = item$correct[i_row],
                prompt = get_prompt(i, num_items),
-               audio_file = item$audio_file[1],
+               audio_file = item$audio_file[i_row],
                audio_dir = audio_dir,
-               save_answer = TRUE)
-    elts <- psychTestR::join(elts, item_page)
+               save_answer = TRUE,
+               item_number,
+               dict = dict
+               )
+    })
+    elts <- c(elts,item)
+    # elts <- psychTestR::join(elts, item) # vllt das hier
+
+    # old code:
+    # item <- MSA::MSA_item_bank[item_sequence[i],]
+    # item_page <-
+    #   MSA_item(label = item$item_number[1],
+    #            correct_answer = item$correct[1],
+    #            prompt = get_prompt(i, num_items),
+    #            audio_file = item$audio_file[1],
+    #            audio_dir = audio_dir,
+    #            save_answer = TRUE)
+    # elts <- psychTestR::join(elts, item_page)
   }
   elts
+  # elts <- psychTestR::join(elts, SRS_scoring(label) # vllt das hier
 }
 
 item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MSA_dict) {
