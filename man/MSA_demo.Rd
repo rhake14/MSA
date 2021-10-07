@@ -26,7 +26,7 @@ Defaults to \code{"demo"}.}
 \item{researcher_email}{(Scalar character)
 If not \code{NULL}, this researcher's email address is displayed
 at the bottom of the screen so that online participants can ask for help.
-Defaults to \email{longgold@gold.uc.ak},
+Defaults to \email{robin.hake@uni-oldenburg.de},
 the email address of this package's developer.}
 
 \item{dict}{The psychTestR dictionary used for internationalisation.}
