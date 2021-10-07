@@ -21,7 +21,7 @@ sample_data <- list(
       "voc_Item3228_set786_wot_lvl0_comp4_t32_song16.wav"
     ),
   sample_audios_answers = c(1, 1, 1, 1, 1, 2)
-) %>% as.data.frame() %>% dplyr::slice_sample(n = 6) %>%
+) %>% as_tibble() %>% dplyr::slice_sample(n = 6) %>%
   as.list() # randomize list
 
 

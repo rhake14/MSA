@@ -1,8 +1,8 @@
 Package: MSA
 Type: Package
 Title: Musical Scene Analysis Test (MSA)
-Version: 1.2
-Author: Robin Hake, Michel Bürgel, Daniel Müllensiefen, Kai Siedenburg, Klaus Frieler
+Version: 1.3
+Author: Robin Hake, Michel Bürgel, Daniel Müllensiefen, Klaus Frieler, Kai Siedenburg
 Maintainer: Robin Hake <robin.hake@uni-oldenburg.de>
 Description: Implementation of a musical scene anylsis test.
 License: MIT + file LICENSE

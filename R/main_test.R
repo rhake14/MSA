@@ -190,6 +190,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
 
         ### reassemble the item sequence
         item_sequence_test <- rbind(item_sequence_wot,item_sequence_wit)
+        # print(item_sequence_test)
         item_sequence <- item_sequence_test %>% dplyr::pull(item_number)
 
         ### for fast debugging
@@ -214,9 +215,9 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
 
   ### get the correct indexes for the item sequence & randomize the sequence order
   item_sequence <- charmatch(item_sequence, item_bank$item_number)
+  print(item_sequence)
   item_sequence <- item_sequence[sample(1:length(item_sequence))]
-
-
+  print(item_sequence)
   psychTestR::set_local(key = "item_sequence", value = item_sequence[1:num_items], state = state)
   psychTestR::set_local(key = "i_row", value = 1L, state = state)
 
@@ -226,39 +227,23 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
 
 ### loop through all items within the pool / item sequence--------
 #
-  for (i_row in 1:length(item_sequence)) {
-
-
+  for (i_row in 1:num_items) {
     item <- psychTestR::reactive_page(function(state, ...) {
-      #browser()
       item_sequence <- psychTestR::get_local("item_sequence", state)
       i_row <- psychTestR::get_local("i_row", state)
-      item_number <- item_sequence[i_row]
-      messagef("Called reactive page, i_row %d, item_number: %d", i_row, item_number)
-      MSA_item(label = item$item_number[i_row],
-               i_row,
-               correct_answer = item$correct[i_row],
-               prompt = get_prompt(i, num_items),
-               audio_file = item$audio_file[i_row],
+      # item_number <- item_sequence[i_row]
+      # browser()
+      # messagef("Called reactive page, i_row %d, item_number: %d", i_row, item_sequence[i_row])
+      MSA_item(label = item_bank$item_number[item_sequence[i_row]],
+               correct_answer = item_bank$correct[item_sequence[i_row]],
+               prompt = get_prompt(i_row, num_items),
+               audio_file = item_bank$audio_file[item_sequence[i_row]],
                audio_dir = audio_dir,
                save_answer = TRUE,
-               item_number,
-               dict = dict
+               #item_number
                )
     })
     elts <- c(elts,item)
-    # elts <- psychTestR::join(elts, item) # vllt das hier
-
-    # old code:
-    # item <- MSA::MSA_item_bank[item_sequence[i],]
-    # item_page <-
-    #   MSA_item(label = item$item_number[1],
-    #            correct_answer = item$correct[1],
-    #            prompt = get_prompt(i, num_items),
-    #            audio_file = item$audio_file[1],
-    #            audio_dir = audio_dir,
-    #            save_answer = TRUE)
-    # elts <- psychTestR::join(elts, item_page)
   }
   elts
   # elts <- psychTestR::join(elts, SRS_scoring(label) # vllt das hier
@@ -266,13 +251,15 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
 
 item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MSA_dict) {
   item <- MSA::MSA_item_bank %>% filter(item_number == item_id) %>% as.data.frame()
+  browser()
   MSA_item(label = item_id,
            correct_answer = item$correct[1],
            prompt = get_prompt(item_number, num_items),
            audio_file = item$audio_file[1],
            audio_dir = audio_dir,
            save_answer = TRUE)
-}
+  browser()
+  }
 
 get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {
   shiny::div(

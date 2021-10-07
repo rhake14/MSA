@@ -89,8 +89,7 @@ and a new participation session will begin.
 You can retrieve your data by starting up a participation session,
 entering the admin panel using your admin password,
 and downloading your data (.rds file is recommended).
-For more details on the psychTestR interface, 
-see http://psychtestr.com/.
+For more details on the psychTestR interface, see http://psychtestr.com/.
 
 The MSA currently supports English (en), German (de) - more languages follow soon.
 You can select one of these languages by passing a language code as 
@@ -98,17 +97,60 @@ an argument to `MSA_standalone()`, e.g. `MSA_standalone(languages = "en")`,
 or alternatively by passing it as a URL parameter to the test browser,
 eg. http://127.0.0.1:4412/?language=DE (note that the `p_id` argument must be empty).
 
-## Implementation notes
+## Item / Stimuli construction 
 
-By default, the MSA implementation always estimates participant abilities
-using weighted-likelihood estimation.
-We adopt weighted-likelihood estimation for this release 
-because this technique makes fewer assumptions about the participant group being tested.
-This makes the test better suited to testing with diverse participant groups
-(e.g. children, clinical populations).
+The stimulus material was drawn from an open-source database 
+("MedleyDB", see Bittner et al., 2014; 2016), which comprises recorded
+real-world multitrack music excerpts representing a range of popular music
+genres (e.g., classical, rock, world/folk, fusion, jazz, pop, rap, etc.). 
+
+Excerpts were generated semi-automatically in the programming environment
+MATLAB (Mathworks, 2020) and consisted of a 2-sec clip of a single instrument
+or voice (the target), followed by a 1-sec gap of silence, and a 2-sec clip
+with multiple instruments (mixture) – each varying in terms of (1) the choice
+of the target instrument (lead voice, guitar, bass, or piano), (2) the acoustic
+complexity (three instruments vs. six instruments in the mixture), and (3) the
+energy level-ratio of the target in comparison with the mixture
+(0, -5, -10, -15 dB). 
+In order to investigate potential candidates for the test excerpts, instruments
+in the database were first categorized as lead vocals, backing vocals, bass,
+drums, guitars, keys, piano, percussion, strings, winds and others. Secondly,
+sound levels were analysed and calculated based on the root-mean-square average
+over 500ms long time windows for the full duration of the song. If one
+instrument in the target category and two to six additional instruments had
+sound levels above -20 dB relative to the instrument’s maximum sound level,
+they qualified as potential candidate. To avoid click artefacts caused by the
+extraction at random timepoints, a logarithmic fade-in and fade-out with a 
+duration of 200 ms was applied to the beginning and end of the signals.
+Furthermore, the mixes has been readjusted by a professional musician. 
+
+Signals from the candidate list were extracted pseudo-randomly, using the same
+song as infrequently as possible, with the target instruments
+(1) lead vocal, (2) guitar, (3) bass and (4) piano being evenly balanced.
+In half of the mixes, the target instrument was not part of the 
+mixture - in this case, excerpts with four or seven instruments were chosen
+(to ensure three and six instrument signals in the mixture, respectively).
+
+More information about the stimuli used can be found in the github repository  (https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv).
 
 ## Usage notes
 
 - The MSA runs in your web browser.
-- By default, image files are hosted online on our servers.
+- By default, image files are hosted online on our servers 
+  (http://testing.musikpsychologie.de/dots_home/).
   The test therefore requires internet connectivity.
+  An offline alternative would be to download the entire 
+  repository to your local computer. 
+  
+## Citations
+
+Bittner, R., Salamon, J., Tierney, M., Mauch, M., Cannam, C.,
+& Bello, J. P. (2014). MedleyDB: A Multitrack Dataset for Annotation-Intensive
+MIR Research. In 15th International Society for 
+Music Information Retrieval Conference, Taipei, Taiwan.
+
+Bittner, R., Wilkins, J., Yip, H., & Bello, J. (2016). 
+MedleyDB 2.0: New Data and a System for Sustainable Data Collection.
+International Conference on Music Information Retrieval (ISMIR-16),
+New York, NY, USA.
+
