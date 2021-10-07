@@ -44,6 +44,11 @@ psychTestR timeline.
 Use this function if you want to include the MSA in a
 battery of other tests, or if you want to add custom psychTestR
 pages to your test timeline.
+The MSA is an non-adaptive instrument to test musical scene analysis
+abilities among very diverse populations. An adaptive version of this
+instrument is currently in development (expected early 2022).
+The test is based on a two-alternative-forced-choice task - for a more
+detailed description take a look into the README file.
 }
 \details{
 For demoing the MSA, consider using \code{\link{MSA_demo}()}.

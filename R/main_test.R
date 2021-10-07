@@ -215,9 +215,8 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
 
   ### get the correct indexes for the item sequence & randomize the sequence order
   item_sequence <- charmatch(item_sequence, item_bank$item_number)
-  print(item_sequence)
   item_sequence <- item_sequence[sample(1:length(item_sequence))]
-  print(item_sequence)
+
   psychTestR::set_local(key = "item_sequence", value = item_sequence[1:num_items], state = state)
   psychTestR::set_local(key = "i_row", value = 1L, state = state)
 

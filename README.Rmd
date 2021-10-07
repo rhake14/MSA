@@ -122,11 +122,12 @@ sound levels above -20 dB relative to the instrument’s maximum sound level,
 they qualified as potential candidate. To avoid click artefacts caused by the
 extraction at random timepoints, a logarithmic fade-in and fade-out with a 
 duration of 200 ms was applied to the beginning and end of the signals.
-Furthermore, the mixes has been readjusted by a professional musician. 
-
+Furthermore, the mixes has been readjusted by a professional musician.
 Signals from the candidate list were extracted pseudo-randomly, using the same
 song as infrequently as possible, with the target instruments
 (1) lead vocal, (2) guitar, (3) bass and (4) piano being evenly balanced.
+
+In total, 160 excerpts were generated based on 98 different base tracks (songs). 
 In half of the mixes, the target instrument was not part of the 
 mixture - in this case, excerpts with four or seven instruments were chosen
 (to ensure three and six instrument signals in the mixture, respectively).
