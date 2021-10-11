@@ -39,10 +39,12 @@ MSA <- function(num_items = 18L,
                 take_training = FALSE,
                 with_finish = TRUE,
                 label = "MSA_results",
+                with_feedback = TRUE,
                 feedback = MSA::MSA_feedback_with_score(),
                 dict = MSA::MSA_dict,
                 balance_over = c("target_instrument", "complexity", "level")
                 ) {
+
   audio_dir <- "https://media.gold-msi.org/test_materials/MSAT"
   # audio_dir <- "https://media.gold-msi.org/MSAT"
   stopifnot(purrr::is_scalar_character(label),
@@ -69,7 +71,7 @@ MSA <- function(num_items = 18L,
     }, dict = dict),
     scoring(),
     psychTestR::elt_save_results_to_disk(complete = TRUE),
-    feedback,
+    if (with_feedback) feedback,
     if (with_finish) MSA_finished_page(),
     psychTestR::end_module())
 }

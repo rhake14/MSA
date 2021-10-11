@@ -10,6 +10,7 @@ MSA(
   take_training = FALSE,
   with_finish = TRUE,
   label = "MSA_results",
+  with_feedback = TRUE,
   feedback = MSA::MSA_feedback_with_score(),
   dict = MSA::MSA_dict,
   balance_over = c("target_instrument", "complexity", "level")

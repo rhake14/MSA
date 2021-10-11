@@ -53,6 +53,7 @@ MSA_standalone  <- function(title = NULL,
   if (with_feedback) {
     # feedback <- MSA::MSA_feedback_with_graph()
     feedback <- MSA::MSA_feedback_with_score()
+    # feedback <- MSA::MSA_feedback_graph_normal_curve()
   }
   elts <- psychTestR::join(
     if (with_id)
@@ -67,20 +68,22 @@ MSA_standalone  <- function(title = NULL,
                with_finish = FALSE,
                feedback = feedback,
                dict = dict,
+               with_feedback = with_feedback,
                take_training = TRUE,
                balance_over = balance_over,
                # adaptive = adaptive, ## future proof
                ...)
     else
-    # if(with_welcome) MSA_welcome_page(dict = dict),
-    MSA::MSA(num_items = num_items,
-      with_welcome =  with_welcome,
-      with_finish = FALSE,
-      feedback = feedback,
-      dict = dict,
-      take_training = FALSE, # this was FALSE before
-      balance_over = balance_over,
-      ...),
+      # if(with_welcome) MSA_welcome_page(dict = dict),
+      MSA::MSA(num_items = num_items,
+               with_welcome =  with_welcome,
+               with_finish = FALSE,
+               feedback = feedback,
+               with_feedback = with_feedback,
+               dict = dict,
+               take_training = FALSE,
+               balance_over = balance_over,
+               ...),
     psychTestR::elt_save_results_to_disk(complete = TRUE),
     MSA_final_page(dict = dict)
   )
