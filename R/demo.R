@@ -1,6 +1,6 @@
 #' Demo MSA
 #'
-#' This function launches a demo for the RAT.
+#' This function launches a demo for the MSA.
 #'
 #' @param num_items (Integer scalar) Number of items in the test.
 #' @param feedback (Function) Defines the feedback to give the participant

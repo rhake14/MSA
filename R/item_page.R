@@ -111,7 +111,8 @@ audio_NAFC_page_flex <- function(label,
     audio_ui,
     psychTestR::make_ui_NAFC(
       choices,
-      labels = choices,
+      # labels = choices,
+      labels = c("Yes","No"),
       hide = TRUE,
       arrange_vertically = FALSE,
       id = "response_ui"
@@ -157,6 +158,7 @@ MSA_item <- function(label = "",
   page_prompt <- shiny::div(prompt)
   # printf("MSA called for item: %s", label) # print what item is called into the item pool
   choices <- c("1", "2")
+  # choices <- c("Yes", "No")
   audio_url <- file.path(audio_dir, audio_file)
   audio_NAFC_page_flex(label = label,
                        prompt = page_prompt,

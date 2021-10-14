@@ -33,6 +33,7 @@ MSA_feedback_with_score <- function(dict = MSA::MSA_dict) {
                                       html = TRUE,
                                       sub = list(num_question = num_question,
                                                  num_correct = num_correct))
+
       psychTestR::page(
         ui = shiny::div(
           shiny::p(text_finish)

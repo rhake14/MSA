@@ -75,15 +75,17 @@ MSA_standalone  <- function(title = NULL,
                ...)
     else
       # if(with_welcome) MSA_welcome_page(dict = dict),
-      MSA::MSA(num_items = num_items,
-               with_welcome =  with_welcome,
-               with_finish = FALSE,
-               feedback = feedback,
-               with_feedback = with_feedback,
-               dict = dict,
-               take_training = FALSE,
-               balance_over = balance_over,
-               ...),
+      MSA::MSA(
+        num_items = num_items,
+        with_welcome =  with_welcome,
+        with_finish = FALSE,
+        feedback = feedback,
+        with_feedback = with_feedback,
+        dict = dict,
+        take_training = FALSE,
+        balance_over = balance_over,
+        ...
+      ),
     psychTestR::elt_save_results_to_disk(complete = TRUE),
     MSA_final_page(dict = dict)
   )

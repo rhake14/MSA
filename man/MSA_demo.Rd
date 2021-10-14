@@ -38,5 +38,5 @@ The first language is selected by default}
 \item{...}{Further arguments to be passed to \code{\link{MSA}()}.}
 }
 \description{
-This function launches a demo for the RAT.
+This function launches a demo for the MSA.
 }

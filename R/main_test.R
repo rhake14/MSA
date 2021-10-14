@@ -304,7 +304,7 @@ MSA_final_page <- function(dict = MSA::MSA_dict){
     psychTestR::final_page(
       body = shiny::div(
         shiny::h4(psychTestR::i18n("THANKS")),
-        shiny::div(psychTestR::i18n("SUCCESS"),
+        shiny::div(psychTestR::i18n("FINAL_P"),
                    style = "margin-left:0%;display:block"),
         button_text = psychTestR::i18n("CONTINUE")
       )
