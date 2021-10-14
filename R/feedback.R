@@ -36,7 +36,8 @@ MSA_feedback_with_score <- function(dict = MSA::MSA_dict) {
 
       psychTestR::page(
         ui = shiny::div(
-          shiny::p(text_finish)
+          shiny::p(text_finish),
+          shiny::p(psychTestR::trigger_button("next", psychTestR::i18n("CONTINUE")))
         )
       )
     }
