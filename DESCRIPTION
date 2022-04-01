@@ -12,6 +12,7 @@ Depends:
     R (>= 3.5.0),
 Imports:
     psychTestR (>= 2.21.2),
+    psychTestRCAT,
     shiny (>= 1.2.0),
     methods,
     htmltools (>= 0.3.6),
@@ -22,7 +23,8 @@ Imports:
     purrr,
     tibble,
     ggplot2,
-    plotly
+    plotly,
+    digest
 Suggests:
     codetools,
     devtools (>= 1.13.6),

@@ -49,3 +49,5 @@ NULL
 #' @importFrom methods "is"
 NULL
 
+#' @importFrom digest "sha1"
+NULL

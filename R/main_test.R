@@ -25,23 +25,46 @@ scoring <- function(){
 #           MSA::MSAa_item_bank$difficulty <= upper_sd)
 # }
 
-
 main_test <- function(label,
                       num_items,
                       audio_dir,
                       balance_over = balance_over,
                       # balance_over,
                       dict = MSA::MSA_dict
+                      # adaptive stuff
+                      # next_item.criterion,
+                      # next_item.estimator,
+                      # next_item.prior_dist = next_item.prior_dist,
+                      # next_item.prior_par = next_item.prior_par,
+                      # final_ability.estimator,
+                      # constrain_answers
                       ) {
   ### load whole item bank and exclude practice items
   item_bank <- MSA::MSA_item_bank
+
+  # if (adapt = TRUE) {
+  #   psychTestRCAT::adapt_test(
+  #     label = label,
+  #     item_bank = item_bank,
+  #     show_item = show_item(audio_dir),
+  #     stopping_rule = psychTestRCAT::stopping_rule.num_items(n = num_items),
+  #     opt = mpt.options(next_item.criterion = next_item.criterion,
+  #                       next_item.estimator = next_item.estimator,
+  #                       next_item.prior_dist = next_item.prior_dist,
+  #                       next_item.prior_par = next_item.prior_par,
+  #                       final_ability.estimator = final_ability.estimator,
+  #                       constrain_answers = constrain_answers,
+  #                       item_bank = item_bank)
+  #   )
+  # }
+
   tmp_item_bank <- item_bank %>%
     dplyr::filter(practice_item == "no") %>%
     dplyr::select(-c("old_audio_file_name", "practice_item", "time_song", "set_nr"))
 
   # elts <- c()
   elts <- psychTestR::code_block(function(state, ...){
-    #browser()
+    # browser()
     seed <-  psychTestR::get_session_info(state, complete = F)$p_id %>%
       digest::sha1() %>%
       charToRaw() %>%
@@ -97,32 +120,51 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
 
       ### get the item sequence ---------------
       ### preparations for the WoT item_sequence (target is not in the mix)
-      if (((num_items / 2) + 6) / dplyr::n_distinct(tmp_item_bank %>% dplyr::filter(with_target_in_mix == "no")) <= .10) {
+      if (((num_items / 2) + 10) / dplyr::n_distinct(tmp_item_bank %>% dplyr::filter(with_target_in_mix == "no")) <= .10) {
         probability <-  .10 # slice does not work properly for probabilities below .1
-      } else {
-        probability <- ((num_items / 2) + 6) / dplyr::n_distinct(tmp_item_bank %>%
+      }
+      else if (((num_items / 2) + 10) / dplyr::n_distinct(tmp_item_bank %>% dplyr::filter(with_target_in_mix == "no")) >= 1) {
+        probability <-  1 # slice does not work properly for probabilities over 1
+      }
+      else {
+        probability <- ((num_items / 2) + 10) / dplyr::n_distinct(tmp_item_bank %>%
                                                                    dplyr::filter(with_target_in_mix == "no"))
       }
         # for loop to get a suitable item sequence
         item_sequence_list <- NULL
+        # browser()
         for (i in 1:100) {
 
+          # # FIX THIS!!! Still is not working properly
           item_sequence_wit <- tmp_item_bank %>%
             dplyr::filter(with_target_in_mix == "yes") %>%
+            dplyr::ungroup() %>%
+            dplyr::group_by(dplyr::across(tmp_balance_over)) %>%
+            dplyr::slice_sample(prop = 1) %>% # reorder the item_bank
+            dplyr::slice_sample(n = num_per_subgroup * 2) %>%
+            dplyr::ungroup() %>%
             dplyr::group_by(item_nr) %>%
             dplyr::slice_sample(n = 1) %>%
             dplyr::ungroup() %>%
-            dplyr::group_by(dplyr::across(tmp_balance_over)) %>%
-            dplyr::slice_sample(prop = 100) %>% # reorder the item_bank
-            # dplyr::slice_sample(prop = probability) %>%
-            dplyr::slice_sample(n = num_per_subgroup) %>%
-            dplyr::ungroup() %>%
             dplyr::slice_sample(n = (num_items / 2))
+
+          # # FIX THIS!!! Still is not working properly
+          # item_sequence_wit <- tmp_item_bank %>%
+          #   dplyr::filter(with_target_in_mix == "yes") %>%
+          #   dplyr::group_by(item_nr) %>%
+          #   dplyr::slice_sample(n = 1) %>%
+          #   dplyr::ungroup() %>%
+          #   dplyr::group_by(dplyr::across(tmp_balance_over)) %>%
+          #   dplyr::slice_sample(prop = 1) %>% # reorder the item_bank
+          #   # dplyr::slice_sample(prop = probability) %>%
+          #   dplyr::slice_sample(n = num_per_subgroup) %>%
+          #   dplyr::ungroup() %>%
+          #   dplyr::slice_sample(n = (num_items / 2))
 
           # difference song & item (which basically is setnumber)
           dif_song_nr <- dplyr::n_distinct(item_sequence_wit$song_nr) - num_items/2
           dif_item_nr <- dplyr::n_distinct(item_sequence_wit$item_nr) - num_items/2
-          # difference conditions (alle thre conditions)
+          # difference conditions (all three conditions)
           dif_max_per_cond <- max(plyr::count(item_sequence_wit$condition)$freq)
           dif_cond_sum <- sum(plyr::count(item_sequence_wit$condition)$freq)
 
@@ -134,7 +176,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
           dif_lvl_sum <- sum(abs(dif_lvl_0),abs(dif_lvl_5),abs(dif_lvl_10),abs(dif_lvl_15))
           # difference acoustic complexity
           dif_comp_3 <- length(which(3 == item_sequence_wit$complexity)) - num_items / 4
-          dif_comp_6 <- length(which(3 == item_sequence_wit$complexity)) - num_items / 4
+          dif_comp_6 <- length(which(6 == item_sequence_wit$complexity)) - num_items / 4
           dif_comp_sum <- sum(abs(dif_comp_3),abs(dif_comp_6))
           # difference target instrument
           dif_target_lead <- length(which("Lead" == item_sequence_wit$target_instrument)) - num_items / 8
@@ -163,7 +205,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
           #   dif_max_per_cond
           # )
         }
-
+        # browser()
         ### extract the output from the loop
         item_sequence_wit <- tibble::as_tibble(do.call(rbind, item_sequence_list))
         item_sequence_wit <- item_sequence_wit %>%
@@ -178,15 +220,24 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
 
         ### get item sequence
         item_sequence_wit <- item_sequence_wit$item_sequence_wit[[1]]
-
+        # browser()
         ### WoT: item_sequence target is not in the mix
+        ### FIX THIS: there is still no equal proportion between conditions
+        ### maybe while loop to fish conditions successively
         item_sequence_wot <- tmp_item_bank %>%
           dplyr::filter(with_target_in_mix == "no") %>%
           dplyr::group_by(condition) %>%
-          dplyr::slice_sample(prop = 100) %>% # just for rearrangement of the item_bank to prevent
+          dplyr::slice_sample(prop = 1) %>% # just for rearrangement of the item_bank to prevent
           dplyr::slice_sample(prop = probability) %>%
           dplyr::ungroup() %>%
+          # dplyr::group_by(with_target_in_mix) %>%
+          # dplyr::slice_sample(n = (num_items)) %>%
+          # dplyr::ungroup() %>%
+          # dplyr::slice_sample(prop = probability) %>%
           dplyr::slice_sample(n = (num_items / 2))
+
+        # # get the max of equal conditions
+        # dif_overall_sum <- max(plyr::count(item_sequence_wot$condition)$freq)
 
         ### reassemble the item sequence
         item_sequence_test <- rbind(item_sequence_wot,item_sequence_wit)
@@ -250,14 +301,14 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
 
 item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MSA_dict) {
   item <- MSA::MSA_item_bank %>% filter(item_number == item_id) %>% as.data.frame()
-  browser()
+  # browser()
   MSA_item(label = item_id,
            correct_answer = item$correct[1],
            prompt = get_prompt(item_number, num_items),
            audio_file = item$audio_file[1],
            audio_dir = audio_dir,
            save_answer = TRUE)
-  browser()
+  # browser()
   }
 
 get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {

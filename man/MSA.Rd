@@ -27,6 +27,8 @@ MSA(
 
 \item{label}{(Scalar character) Label to give the MSA results in the output file.}
 
+\item{with_feedback}{(Scalar boolean) Defines whether the test person receives feedback at the end of the task.}
+
 \item{feedback}{(Function) Defines the feedback to give the participant at the end of the test.}
 
 \item{dict}{The psychTestR dictionary used for internationalisation.}

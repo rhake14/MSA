@@ -1,5 +1,6 @@
 library(tidyverse)
 library(psychTestR)
+library(psychTestRCAT)
 
 #' MSA
 #'
@@ -25,6 +26,7 @@ library(psychTestR)
 #' @param with_finish (Scalar boolean) Indicates, if a finish (not final!) page shall be displayed. Defaults to TRUE
 #' @param label (Scalar character) Label to give the MSA results in the output file.
 #' @param feedback (Function) Defines the feedback to give the participant at the end of the test.
+#' @param with_feedback (Scalar boolean) Defines whether the test person receives feedback at the end of the task.
 #' @param dict The psychTestR dictionary used for internationalisation.
 #' @param balance_over (Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
 #' Possible parameters are
@@ -43,6 +45,14 @@ MSA <- function(num_items = 18L,
                 feedback = MSA::MSA_feedback_with_score(),
                 dict = MSA::MSA_dict,
                 balance_over = c("target_instrument", "complexity", "level")
+                # # adaptive stuff
+                # adaptive = TRUE,
+                # next_item.criterion = "bOpt",
+                # next_item.estimator = "BM",
+                # next_item.prior_dist = "norm",
+                # next_item.prior_par = c(0, 1),
+                # final_ability.estimator = "WL",
+                # constrain_answers = FALSE
                 ) {
 
   audio_dir <- "https://media.gold-msi.org/test_materials/MSAT"
@@ -66,7 +76,15 @@ MSA <- function(num_items = 18L,
                 num_items = num_items,
                 audio_dir = audio_dir,
                 dict = dict,
-                balance_over = balance_over
+                balance_over = balance_over,
+                # adaptive stuff
+                # next_item.criterion = next_item.criterion,
+                # next_item.estimator = next_item.estimator,
+                # next_item.prior_dist = next_item.prior_dist,
+                # next_item.prior_par = next_item.prior_par,
+                # final_ability.estimator = final_ability.estimator,
+                # constrain_answers = constrain_answers,
+                # adaptive = adaptive
                 )
     }, dict = dict),
     scoring(),
