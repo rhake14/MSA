@@ -2,8 +2,6 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -62,7 +60,8 @@ library(MSA)
 # Run a demo test, with feedback as you progress through the test,
 # and not saving your data
 MSA_demo()
-# Run a demo test, skipping the training phase, and only asking 5 questions, as well a changinge the language
+# Run a demo test, skipping the training phase, and only asking 5 questions,
+# as well a changinge the language
 MSA_demo(num_items = 5, language = "de")
 ```
 
@@ -110,8 +109,8 @@ or voice (the target), followed by a 1-sec gap of silence, and a 2-sec clip
 with multiple instruments (mixture) – each varying in terms of (1) the choice
 of the target instrument (lead voice, guitar, bass, or piano), (2) the acoustic
 complexity (three instruments vs. six instruments in the mixture), and (3) the
-energy level-ratio of the target in comparison with the mixture
-(0, -5, -10, -15 dB). 
+level-ratio of the target in comparison with the mixture (0, -5, -10, -15 dB).
+
 In order to investigate potential candidates for the test excerpts, instruments
 in the database were first categorized as lead vocals, backing vocals, bass,
 drums, guitars, keys, piano, percussion, strings, winds and others. Secondly,
@@ -132,16 +131,20 @@ In half of the mixes, the target instrument was not part of the
 mixture - in this case, excerpts with four or seven instruments were chosen
 (to ensure three and six instrument signals in the mixture, respectively).
 
-More information about the stimuli used can be found in the github repository  (https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv).
+More information about the stimuli used can be found in the github repository 
+(https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv).
 
 ## Usage notes
 
 - The MSA runs in your web browser.
-- By default, image files are hosted online on our servers 
-  (http://testing.musikpsychologie.de/dots_home/).
-  The test therefore requires internet connectivity.
-  An offline alternative would be to download the entire 
-  repository to your local computer. 
+- By default, image files are hosted online on our servers, provided 
+  by the Deutsche Gesellschaft für Musikpsychologie e.V.(http://www.music-psychology.de/)
+  via "http://testing.musikpsychologie.de/dots_home/".
+  __The test therefore requires internet connectivity__.
+- An offline alternative would be to download the entire 
+  repository and stimuli set to your local computer 
+  (Stimset via: https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing)
+  and manually change the directory for the items in the package. 
   
 ## Citations
 
