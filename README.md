@@ -1,4 +1,3 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # MSA
 
@@ -52,7 +51,8 @@ library(MSA)
 # Run a demo test, with feedback as you progress through the test,
 # and not saving your data
 MSA_demo()
-# Run a demo test, skipping the training phase, and only asking 5 questions, as well a changinge the language
+# Run a demo test, skipping the training phase, and only asking 5 questions,
+# as well a changinge the language
 MSA_demo(num_items = 5, language = "de")
 ```
 
@@ -103,23 +103,25 @@ single instrument or voice (the target), followed by a 1-sec gap of
 silence, and a 2-sec clip with multiple instruments (mixture) – each
 varying in terms of (1) the choice of the target instrument (lead voice,
 guitar, bass, or piano), (2) the acoustic complexity (three instruments
-vs. six instruments in the mixture), and (3) the energy level-ratio of
-the target in comparison with the mixture (0, -5, -10, -15 dB). In order
-to investigate potential candidates for the test excerpts, instruments
-in the database were first categorized as lead vocals, backing vocals,
-bass, drums, guitars, keys, piano, percussion, strings, winds and
-others. Secondly, sound levels were analysed and calculated based on the
-root-mean-square average over 500ms long time windows for the full
-duration of the song. If one instrument in the target category and two
-to six additional instruments had sound levels above -20 dB relative to
-the instrument’s maximum sound level, they qualified as potential
-candidate. To avoid click artefacts caused by the extraction at random
-timepoints, a logarithmic fade-in and fade-out with a duration of 200 ms
-was applied to the beginning and end of the signals. Furthermore, the
-mixes has been readjusted by a professional musician. Signals from the
-candidate list were extracted pseudo-randomly, using the same song as
-infrequently as possible, with the target instruments (1) lead vocal,
-(2) guitar, (3) bass and (4) piano being evenly balanced.
+vs. six instruments in the mixture), and (3) the level-ratio of the
+target in comparison with the mixture (0, -5, -10, -15 dB).
+
+In order to investigate potential candidates for the test excerpts,
+instruments in the database were first categorized as lead vocals,
+backing vocals, bass, drums, guitars, keys, piano, percussion, strings,
+winds and others. Secondly, sound levels were analysed and calculated
+based on the root-mean-square average over 500ms long time windows for
+the full duration of the song. If one instrument in the target category
+and two to six additional instruments had sound levels above -20 dB
+relative to the instrument’s maximum sound level, they qualified as
+potential candidate. To avoid click artefacts caused by the extraction
+at random timepoints, a logarithmic fade-in and fade-out with a duration
+of 200 ms was applied to the beginning and end of the signals.
+Furthermore, the mixes has been readjusted by a professional musician.
+Signals from the candidate list were extracted pseudo-randomly, using
+the same song as infrequently as possible, with the target instruments
+(1) lead vocal, (2) guitar, (3) bass and (4) piano being evenly
+balanced.
 
 In total, 160 excerpts were generated based on 98 different base tracks
 (songs). In half of the mixes, the target instrument was not part of the
@@ -134,10 +136,15 @@ repository
 ## Usage notes
 
 -   The MSA runs in your web browser.
--   By default, image files are hosted online on our servers
-    (<http://testing.musikpsychologie.de/dots_home/>). The test
-    therefore requires internet connectivity. An offline alternative
-    would be to download the entire repository to your local computer.
+-   By default, image files are hosted online on our servers, provided
+    by the Deutsche Gesellschaft für Musikpsychologie
+    e.V.(<http://www.music-psychology.de/>) via
+    “<http://testing.musikpsychologie.de/dots_home/>”. **The test
+    therefore requires internet connectivity**.
+-   An offline alternative would be to download the entire repository
+    and stimuli set to your local computer (Stimset via:
+    <https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing>)
+    and manually change the directory for the items in the package.
 
 ## Citations
 
