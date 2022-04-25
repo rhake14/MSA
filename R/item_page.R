@@ -1,4 +1,3 @@
-
 media_js <- list(
   media_not_played = "var media_played = false;",
   media_played = "media_played = true;",
@@ -94,7 +93,7 @@ audio_NAFC_page_flex <- function(label,
                                  choices,
                                  audio_url,
                                  correct_answer,
-                                 # adaptive = adaptive,
+                                 adaptive = adaptive,
                                  save_answer = TRUE,
                                  get_answer = NULL,
                                  on_complete = NULL,
@@ -118,20 +117,40 @@ audio_NAFC_page_flex <- function(label,
       id = "response_ui"
     )
   )
+
+  # new adaptive stuff
+  if (adaptive){
+
+    if(is.null(get_answer)){
+
+      get_answer <- function(input, ...) {
+
+        as.numeric(gsub("answer", "", input$last_btn_pressed))
+
+      }
+      validate <- function(answer, ...) !is.null(answer)
+    }
+  }
+  else {
+
   get_answer <- function(state, input, ...) {
+
     i_row <- psychTestR::get_local(key = "i_row", state = state)
+
     if(!is.null(i_row)){
       psychTestR::set_local(key = "i_row", value = i_row + 1L , state = state)
       # messagef("Set item number: %d", i_row + 1L)
     }
-    # browser()
+
     answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
     correct <- MSA::MSA_item_bank[MSA::MSA_item_bank$item_number == label,]$correct == answer
     tibble(answer = answer,
            label = label,
            correct = correct)
   }
-  validate <- function(answer, ...) !is.null(answer)
+   validate <- function(answer, ...) !is.null(answer)
+} # not sure maybe somewhere else
+
 
   psychTestR::page(ui = ui,
                    label = label,
@@ -145,15 +164,15 @@ audio_NAFC_page_flex <- function(label,
 
 
 MSA_item <- function(label = "",
-                      audio_file,
-                      correct_answer,
-                      prompt = "",
-                      audio_dir = "",
-                      # adaptive = adaptive,
-                      save_answer = TRUE,
-                      on_complete = NULL,
-                      get_answer = NULL,
-                      instruction_page = FALSE
+                     audio_file,
+                     correct_answer,
+                     prompt = "",
+                     audio_dir = "",
+                     adaptive = adaptive,
+                     save_answer = TRUE,
+                     on_complete = NULL,
+                     get_answer = NULL,
+                     instruction_page = FALSE
 ){
   page_prompt <- shiny::div(prompt)
   # printf("MSA called for item: %s", label) # print what item is called into the item pool
@@ -168,7 +187,7 @@ MSA_item <- function(label = "",
                        save_answer = save_answer,
                        get_answer = get_answer,
                        on_complete = on_complete,
-                       # adaptive = adaptive
+                       adaptive = adaptive
                        )
 }
 

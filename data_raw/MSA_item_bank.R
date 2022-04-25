@@ -5,7 +5,6 @@ usethis::use_data(MSA_item_bank, overwrite = TRUE)
 
 # adaptive stuff
 # maybe unnecessary
-# MSA2_item_bank <- read.csv("data_raw/MSA2_item_bank.csv", stringsAsFactors = F)
-
+MSA2_item_bank <- read.csv("data_raw/MSA2_item_bank.csv", stringsAsFactors = F)
 # might be necessarry
-# usethis::use_data(MSA2_item_bank, overwrite = TRUE)
+usethis::use_data(MSA2_item_bank, overwrite = TRUE)

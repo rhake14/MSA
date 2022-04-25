@@ -51,3 +51,6 @@ NULL
 
 #' @importFrom digest "sha1"
 NULL
+
+#' @importFrom scales "percent"
+NULL

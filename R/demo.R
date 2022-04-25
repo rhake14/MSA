@@ -16,6 +16,8 @@
 #' @param language The language you want to run your demo in.
 #' Possible languages include English (\code{"en"}), German (\code{"de"})).
 #' The first language is selected by default
+#' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA2 (TRUE)
+#' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
 #' @param ... Further arguments to be passed to \code{\link{MSA}()}.
 #' @export
 #'
@@ -25,6 +27,7 @@ MSA_demo <- function(num_items = 4L,
                      researcher_email = "example@e-mail.com",
                      dict = MSA::MSA_dict,
                      language = "en",
+                     adaptive = TRUE,
                      ...) {
   elts <- psychTestR::join(
     MSA_welcome_page(dict = dict),
@@ -32,6 +35,7 @@ MSA_demo <- function(num_items = 4L,
              with_welcome = FALSE,
              feedback = feedback,
              dict = dict,
+             adaptive = adaptive,
              ...),
       MSA_final_page(dict = dict)
   )

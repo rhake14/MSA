@@ -2,7 +2,6 @@
 options(shiny.error = browser)
 debug_locally <- !grepl("shiny-server", getwd())
 
-
 #' Standalone MSA
 #'
 #' This function launches a standalone testing session for the MSA.
@@ -31,6 +30,8 @@ debug_locally <- !grepl("shiny-server", getwd())
 #' "level": the level-ratio between target and the mixture; balancing = equal proportion of items with '0', '-5', '-10', '-15' level-ratios.
 #' Default is a fully balanced design: c("target_instrument", "complexity", "level").
 #' Note: By default, there is always an equal proportion of "with target instrument" and "without target" items in the pool.
+#' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA2 (TRUE)
+#' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
 #' @param ... Further arguments to be passed to \code{\link{MSA}()}.
 #' @export
 
@@ -39,6 +40,9 @@ MSA_standalone  <- function(title = NULL,
                            num_items = 18L,
                            with_id = TRUE,
                            with_feedback = TRUE,
+                           # feedback = MSA::MSA_feedback_with_graph(),
+                           # feedback_type = "graph",
+                           # feedback = "graph",
                            with_welcome = TRUE,
                            take_training = FALSE,
                            admin_password = "password",
@@ -47,14 +51,28 @@ MSA_standalone  <- function(title = NULL,
                            dict = MSA::MSA_dict,
                            validate_id = "auto",
                            balance_over = c("target_instrument", "complexity", "level"),
+                           adaptive = TRUE,
                            ...) {
   feedback <- NULL
+
   # key <- NULL
   if (with_feedback) {
-    # feedback <- MSA::MSA_feedback_with_graph()
-    feedback <- MSA::MSA_feedback_with_score()
-    # feedback <- MSA::MSA_feedback_graph_normal_curve()
+    # feedback
+    # browser()
+    feedback <- MSA::MSA_feedback_with_graph()
+    # # fix this
+    # if (feedback == "graph") {
+    #   feedback <-  MSA::MSA_feedback_with_graph()
+    # } else {
+    #   feedback <-  MSA::MSA_feedback_with_score()
+    # }
+
+
   }
+
+    # feedback <- MSA::MSA_feedback_with_graph()
+    # feedback <- MSA::MSA_feedback_with_score()
+
   elts <- psychTestR::join(
     if (with_id)
       psychTestR::new_timeline(
@@ -71,7 +89,7 @@ MSA_standalone  <- function(title = NULL,
                with_feedback = with_feedback,
                take_training = TRUE,
                balance_over = balance_over,
-               # adaptive = adaptive, ## future proof
+               adaptive = adaptive, ## future proof
                ...)
     else
       # if(with_welcome) MSA_welcome_page(dict = dict),
@@ -84,6 +102,7 @@ MSA_standalone  <- function(title = NULL,
         dict = dict,
         take_training = FALSE,
         balance_over = balance_over,
+        adaptive = adaptive,
         ...
       ),
     psychTestR::elt_save_results_to_disk(complete = TRUE),

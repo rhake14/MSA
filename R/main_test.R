@@ -17,46 +17,52 @@ scoring <- function(){
     })
   }
 
-## for the adaptive test (will be added in future)
-# get_eligible_first_items_MSA <- function(){
-#   lower_sd <- mean(MSA::MSAa_item_bank$difficulty) - stats::sd(MSA::MSAa_item_bank$difficulty)
-#   upper_sd <- mean(MSA::MSAa_item_bank$difficulty) + stats::sd(MSA::MSAa_item_bank$difficulty)
-#   which(MSA::MSAa_item_bank$difficulty >= lower_sd  &
-#           MSA::MSAa_item_bank$difficulty <= upper_sd)
-# }
+# for the adaptive test
+get_eligible_first_items_MSA <- function(){
+  lower_sd <- mean(MSA::MSA2_item_bank$difficulty) - stats::sd(MSA::MSA2_item_bank$difficulty)
+  upper_sd <- mean(MSA::MSA2_item_bank$difficulty) + stats::sd(MSA::MSA2_item_bank$difficulty)
+  which(MSA::MSA2_item_bank$difficulty >= lower_sd  &
+          MSA::MSA2_item_bank$difficulty <= upper_sd)
+}
 
 main_test <- function(label,
                       num_items,
                       audio_dir,
                       balance_over = balance_over,
-                      # balance_over,
-                      dict = MSA::MSA_dict
+                      dict = MSA::MSA_dict,
                       # adaptive stuff
-                      # next_item.criterion,
-                      # next_item.estimator,
-                      # next_item.prior_dist = next_item.prior_dist,
-                      # next_item.prior_par = next_item.prior_par,
-                      # final_ability.estimator,
-                      # constrain_answers
+                      adaptive = TRUE,
+                      next_item.criterion,
+                      next_item.estimator,
+                      next_item.prior_dist,
+                      next_item.prior_par,
+                      final_ability.estimator,
+                      constrain_answers,
+                      ...
                       ) {
   ### load whole item bank and exclude practice items
-  item_bank <- MSA::MSA_item_bank
+# browser()
 
-  # if (adapt = TRUE) {
-  #   psychTestRCAT::adapt_test(
-  #     label = label,
-  #     item_bank = item_bank,
-  #     show_item = show_item(audio_dir),
-  #     stopping_rule = psychTestRCAT::stopping_rule.num_items(n = num_items),
-  #     opt = mpt.options(next_item.criterion = next_item.criterion,
-  #                       next_item.estimator = next_item.estimator,
-  #                       next_item.prior_dist = next_item.prior_dist,
-  #                       next_item.prior_par = next_item.prior_par,
-  #                       final_ability.estimator = final_ability.estimator,
-  #                       constrain_answers = constrain_answers,
-  #                       item_bank = item_bank)
-  #   )
-  # }
+  if (adaptive) {
+    item_bank <- MSA::MSA2_item_bank
+
+    psychTestRCAT::adapt_test(
+      label = label,
+      item_bank = item_bank,
+      show_item = show_item(audio_dir),
+      stopping_rule = psychTestRCAT::stopping_rule.num_items(n = num_items),
+      opt = MSA_options(next_item.criterion = next_item.criterion,
+                        next_item.estimator = next_item.estimator,
+                        next_item.prior_dist = next_item.prior_dist,
+                        next_item.prior_par = next_item.prior_par,
+                        final_ability.estimator = final_ability.estimator,
+                        constrain_answers = constrain_answers,
+                        eligible_first_items = get_eligible_first_items_MSA(),
+                        item_bank = item_bank)
+    )
+  }
+  else {
+  item_bank <- MSA::MSA_item_bank
 
   tmp_item_bank <- item_bank %>%
     dplyr::filter(practice_item == "no") %>%
@@ -290,6 +296,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
                audio_file = item_bank$audio_file[item_sequence[i_row]],
                audio_dir = audio_dir,
                save_answer = TRUE,
+               adaptive = adaptive
                #item_number
                )
     })
@@ -297,8 +304,10 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
   }
   elts
   # elts <- psychTestR::join(elts, SRS_scoring(label) # vllt das hier
-}
+  }
+} # not sure
 
+# is this function used somewhere?
 item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MSA_dict) {
   item <- MSA::MSA_item_bank %>% filter(item_number == item_id) %>% as.data.frame()
   # browser()
@@ -308,7 +317,6 @@ item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MS
            audio_file = item$audio_file[1],
            audio_dir = audio_dir,
            save_answer = TRUE)
-  # browser()
   }
 
 get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {
@@ -365,14 +373,20 @@ MSA_final_page <- function(dict = MSA::MSA_dict){
 show_item <- function(audio_dir) {
   function(item, ...) {
     #stopifnot(is(item, "item"), nrow(item) == 1L)
+    # browser()
     item_number <- psychTestRCAT::get_item_number(item)
     num_items <- psychTestRCAT::get_num_items_in_test(item)
-    messagef("Showing item %s", item_number)
+    # messagef("Showing item Nr. %s", item_number)
+    # paste(item$item_number)
+    # print(item$item_number)
+    # cat(item$item_number)
+    cat("Showing item Nr: ", item_number, "=", item$item_number, "\n")
     MSA_item(
-      label = paste0("q", item_number),
+      label = paste0("q", item_number,"_", item$item_number),
       audio_file = item$audio_file,
-      correct_answer = item$answer,
-      # adaptive = TRUE,
+      # correct_answer = item$answer, # old1
+      correct_answer = item$correct,
+      adaptive = TRUE,
       prompt = get_prompt(item_number, num_items),
       audio_dir = audio_dir,
       save_answer = TRUE,

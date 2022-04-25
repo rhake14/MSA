@@ -26,6 +26,7 @@ sample_data <- list(
 
 
 ask_repeat <- function(prompt) {
+  # browser()
   psychTestR::NAFC_page(
     label = "ask_repeat",
     prompt = prompt,
@@ -37,19 +38,23 @@ ask_repeat <- function(prompt) {
       psychTestR::set_local("do_intro", identical(answer, "go_back"), state)
     }
   )
+  # browser()
 }
 
 make_practice_page <- function(page_no, audio_dir) {
   psychTestR::reactive_page(function(answer, ...) {
+    # browser()
     correct <- "INCORRECT"
     if (page_no > 1 && answer$correct) {
       correct <- "CORRECT"}
     feedback <- psychTestR::i18n(correct)
     get_practice_page(page_no, feedback, audio_dir)
+    # browser()
   })
 }
 
 get_practice_page <- function(page_no, feedback, audio_dir) {
+  # browser()
   key <- sprintf("PRACTICE%d", page_no)
    if (page_no == 5) {
     key <- "TRANSITION"
@@ -60,6 +65,7 @@ get_practice_page <- function(page_no, feedback, audio_dir) {
     page <- ask_repeat(prompt)
   }
   else{
+    # browser()
     page <- MSA_item(
       # label = sprintf("training%s", page_no),
       label = sample_data$label[[page_no]],
@@ -67,11 +73,14 @@ get_practice_page <- function(page_no, feedback, audio_dir) {
       prompt = prompt,
       audio_dir = audio_dir,
       audio_file = sample_data$sample_audios[[page_no]],
+      adaptive = FALSE,
+      # adaptive = TRUE,
       save_answer = FALSE,
       instruction_page = FALSE
-      # adaptive = TRUE
     )
+
   }
+  # browser()
   page
 }
 

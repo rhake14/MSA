@@ -12,3 +12,9 @@ NULL
 #' @docType data
 NULL
 
+#' MSA2 (adaptive) item bank
+#'
+#' The MSA2's item bank
+#' @name MSA2_item_bank
+#' @docType data
+NULL

@@ -17,6 +17,7 @@ MSA_standalone(
   dict = MSA::MSA_dict,
   validate_id = "auto",
   balance_over = c("target_instrument", "complexity", "level"),
+  adaptive = TRUE,
   ...
 )
 }
@@ -56,6 +57,9 @@ Possible parameters are
 "level": the level-ratio between target and the mixture; balancing = equal proportion of items with '0', '-5', '-10', '-15' level-ratios.
 Default is a fully balanced design: c("target_instrument", "complexity", "level").
 Note: By default, there is always an equal proportion of "with target instrument" and "without target" items in the pool.}
+
+\item{adaptive}{(Scalar boolean) Indicates whether you want to use the adaptive MSA2 (TRUE)
+or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.}
 
 \item{...}{Further arguments to be passed to \code{\link{MSA}()}.}
 }
