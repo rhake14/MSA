@@ -1,7 +1,7 @@
 Package: MSA
 Type: Package
 Title: Musical Scene Analysis Test (MSA)
-Version: 2.0
+Version: 2.0.1
 Author: Robin Hake, Michel Bürgel, Daniel Müllensiefen, Klaus Frieler, Kai Siedenburg
 Maintainer: Robin Hake <robin.hake@uni-oldenburg.de>
 Description: Implementation of an adaptive musical scene anylsis (MSA) test.
@@ -25,7 +25,6 @@ Imports:
     ggplot2,
     plotly,
     digest,
-    ggokabeito,
     scales
 Suggests:
     codetools,

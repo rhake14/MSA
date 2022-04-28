@@ -111,12 +111,12 @@ MSA_feedback_graph_normal_curve <- function(perc_correct, x_min = 40, x_max = 16
           yend=0.0268),
       linetype = "dotted") +
     # cool themes
-    theme_clean() +
-    ggokabeito::scale_fill_okabe_ito() +
-    ggokabeito::scale_color_okabe_ito()
+    theme_clean()
+    # ggokabeito::scale_fill_okabe_ito() + # super nice colours, but not necessary
+    # ggokabeito::scale_color_okabe_ito()
 
   plotly::ggplotly(plot, width = 900, height = 600)
-  # browser()
+  browser()
 
   # potential adaptations:
     # ggplot2::theme_bw() +
