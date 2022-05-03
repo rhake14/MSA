@@ -53,13 +53,24 @@ make_practice_page <- function(page_no, audio_dir) {
   })
 }
 
+# shiny::div(
+#   shiny::div(psychTestR::i18n("SAMPLE1b"),
+#              style = "text-align: justify; margin-left:20%;
+#                margin-right:20%; margin-bottom:20px; display:block"),
+#   shiny::p(audio)
+# )
+
+
 get_practice_page <- function(page_no, feedback, audio_dir) {
   # browser()
   key <- sprintf("PRACTICE%d", page_no)
    if (page_no == 5) {
+     # browser()
     key <- "TRANSITION"
     }
-     prompt <- psychTestR::i18n(key, html = T, sub = list(feedback = feedback))
+     prompt <- shiny::div(
+       psychTestR::i18n(key, html = T, sub = list(feedback = feedback)),
+       style = "text-align: justify; margin-left:20%;margin-right:20%; margin-bottom:20px; display:block")
 
   if (page_no == 5) {
     page <- ask_repeat(prompt)

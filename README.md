@@ -1,6 +1,4 @@
 
-# MSA
-
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -10,21 +8,27 @@ The Musical Scene Analysis Test (MSA) is an adaptive instrument for
 assessing auditory scene analysis (ASA) abilities in the context of
 music in individuals with very diverse ability levels. The test has been
 calibrated among 525 normal-hearing (NH) participants with ages ranging
-from 18 - 74 years
+from 18 - 72 years
 (![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
-= 27 years) and 71 hearing-impaired (HI) participants with ages ranging
+= 27 years) and 125 hearing-impaired (HI) participants with ages ranging
 from 23 - 82 years
 (![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
 = 60.5 years). Regardless of the sound level representation (medium
-level at \~70-80 dB is recommended), the MSA is suitable for measuring
-ASA abilities in young and musically trained NH as well as old HI
+level at \~70 dB is recommended), the MSA is suitable for measuring ASA
+abilities in young (and musically trained) NH as well as old HI
 individuals with up to severe non-aided hearing impairments (i.e., the
 MSA is not suitable for profound HI individuals). There is also an
 non-adaptive version of this instrument available in this package.
 
 ## Citation
 
-We also advise mentioning the software versions you used, in particular
+You can cite the MSA as follows:
+
+> Hake, R., Bürgel, M., Müllensiefen, D., & Siedenburg, K. (2022).
+> Development of an adaptive test of musical scene analysis ability.
+> *Unpublished Manuscript.*
+
+We also advise mentioning the software versions you used. in particular
 the versions of the `MSA` and `psychTestR` packages. You can find these
 version numbers from R by running the following commands:
 
@@ -114,9 +118,10 @@ environment MATLAB (Mathworks, 2020) and consisted of a 2-sec clip of a
 single instrument or voice (the target), followed by a 1-sec gap of
 silence, and a 2-sec clip with multiple instruments (mixture) – each
 varying in terms of (1) the choice of the target instrument (lead voice,
-guitar, bass, or piano), (2) the acoustic complexity (three instruments
-vs. six instruments in the mixture), and (3) the level-ratio of the
-target in comparison with the mixture (0, -5, -10, -15 dB).
+guitar, bass, or piano), (2) the musical complexity, that is the number
+of instruments in the mixture (three instruments vs. six instruments in
+the mixture), and (3) the level-ratio of the target in comparison with
+the mixture (0, -5, -10, -15 dB).
 
 In order to investigate potential candidates for the test excerpts,
 instruments in the database were first categorized as lead vocals,
@@ -143,7 +148,10 @@ respectively).
 
 More information about the stimuli used can be found in the github
 repository
-(<https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv>).
+(<https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv>)
+or
+(<https://github.com/rhake14/MSA/blob/main/data_raw/MSA2_item_bank.csv>)
+for the adaptive version.
 
 ## Usage notes
 

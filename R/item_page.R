@@ -111,7 +111,9 @@ audio_NAFC_page_flex <- function(label,
     psychTestR::make_ui_NAFC(
       choices,
       # labels = choices,
-      labels = c("Yes","No"),
+      # labels = c("Yes","No"),
+      # browser(),
+      labels = c(psychTestR::i18n("BUTTON_YES"),psychTestR::i18n("BUTTON_NO")),
       hide = TRUE,
       arrange_vertically = FALSE,
       id = "response_ui"

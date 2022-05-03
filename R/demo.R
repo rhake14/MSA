@@ -20,7 +20,7 @@
 #' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
 #' @param ... Further arguments to be passed to \code{\link{MSA}()}.
 #' @export
-#'
+
 MSA_demo <- function(num_items = 4L,
                      feedback = MSA::MSA_feedback_with_score(),
                      admin_password = "password",

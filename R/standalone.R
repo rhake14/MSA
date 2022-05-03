@@ -4,14 +4,33 @@ debug_locally <- !grepl("shiny-server", getwd())
 
 #' Standalone MSA
 #'
-#' This function launches a standalone testing session for the MSA.
+#' This function launches a standalone testing session for the MSA (for test batteries please use the "MSA()" function).
 #' This can be used for data collection, either in the laboratory or online.
+
 #' @param title (Scalar character) Title to display during testing.
-#' @param num_items (Scalar integer) Number of items to be adminstered.
+#' @param num_items (Scalar integer) Number of items to be administered. We recommend 25 items (default)
+#'  for the adaptive MSA and at least 40 for the non-adaptive version.
+#' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
+#' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
+#' @param balance_over (Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
+#' Please note that this option is only available for the non-adaptive Version of the MSA (adaptive = FALSE).
+#' "target_instrument": the target instrument; balancing = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass').
+#' "complexity": the musical complexity, i.e. number of instruments within the mixture; balancing = equal proportion of items with 'three' and 'six' instruments.
+#' "level": the level-ratio between target and the mixture; balancing = equal proportion of items with '0', '-5', '-10', '-15' level-ratios.
+#' Default is a fully balanced design: c("target_instrument", "complexity", "level").
+#' Note: By default, there is always an equal proportion of "with target instrument" and "without target" items in the pool.
+
+#' @param take_training (Scalar boolean) Enable practice session before the actual session. Defaults to TRUE
+#' @param with_picture (Scalar boolean) Includes a demonstrative picture in addition to the default text description,
+#'  to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to FALSE
+#'  Note: Correct display depends on the playback device. We recommend the use of Google Chrome.
+#' @param with_video (Scalar boolean) Includes a demonstrative video in addition to the default text description,
+#'  to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to TRUE
+#'  Note: Correct display depends on the playback device. We recommend the use of Google Chrome.
+
 #' @param with_id (Scalar boolean) Indicates, if ID should be asked for. Defaults to TRUE
 #' @param with_feedback (Scalar boolean) Indicates if performance feedback will be given at the end of the test. Defaults to  FALSE
 #' @param with_welcome (Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE
-#' @param take_training (Scalar boolean) Enable practice session before the actual session. Defaults to FALSE
 #' @param admin_password (Scalar character) Password for accessing the admin panel.
 #' @param researcher_email (Scalar character)
 #' If not \code{NULL}, this researcher's email address is displayed
@@ -20,46 +39,39 @@ debug_locally <- !grepl("shiny-server", getwd())
 #' Determines the languages available to participants.
 #' Possible languages include English (\code{"en"}) and German (\code{"de"}).
 #' The first language is selected by default
-#' @param dict The psychTestR dictionary used for internationalisation.
+
 #' @param validate_id (Character scalar or closure) Function for validating IDs or string "auto" for default validation
 #' which means ID should consist only of  alphanumeric characters.
-#' @param balance_over (Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
-#' Possible parameters are
-#' "target_instrument": the target instrument; balancing = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass').
-#' "complexity": the musical complexity, i.e. number of instruments within the mixture; balancing = equal proportion of items with 'three' and 'six' instruments playing in the mixture.
-#' "level": the level-ratio between target and the mixture; balancing = equal proportion of items with '0', '-5', '-10', '-15' level-ratios.
-#' Default is a fully balanced design: c("target_instrument", "complexity", "level").
-#' Note: By default, there is always an equal proportion of "with target instrument" and "without target" items in the pool.
-#' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA2 (TRUE)
-#' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
+#' @param dict The psychTestR dictionary used for internationalisation.
 #' @param ... Further arguments to be passed to \code{\link{MSA}()}.
 #' @export
 
 
 MSA_standalone  <- function(title = NULL,
-                           num_items = 18L,
-                           with_id = TRUE,
-                           with_feedback = TRUE,
-                           # feedback = MSA::MSA_feedback_with_graph(),
-                           # feedback_type = "graph",
-                           # feedback = "graph",
-                           with_welcome = TRUE,
-                           take_training = FALSE,
-                           admin_password = "password",
-                           researcher_email = "put.your.email-adress@here",
-                           languages = c("en", "de"),
-                           dict = MSA::MSA_dict,
-                           validate_id = "auto",
-                           balance_over = c("target_instrument", "complexity", "level"),
-                           adaptive = TRUE,
-                           ...) {
-  feedback <- NULL
+                            num_items = 25L,
+                            adaptive = TRUE,
+                            balance_over = c("target_instrument", "complexity", "level"),
+                            # training stuff
+                            take_training = TRUE,
+                            with_video = TRUE,
+                            with_picture = FALSE,
+                            # settings
+                            with_id = TRUE,
+                            with_feedback = TRUE,
+                            with_welcome = TRUE,
+                            admin_password = "password",
+                            researcher_email = "put.your.email-adress@here",
+                            languages = c("en", "de"),
+                            validate_id = "auto",
+                            dict = MSA::MSA_dict,
+                            ...) {
 
-  # key <- NULL
+
+  feedback <- NULL
   if (with_feedback) {
-    # feedback
-    # browser()
+
     feedback <- MSA::MSA_feedback_with_graph()
+
     # # fix this
     # if (feedback == "graph") {
     #   feedback <-  MSA::MSA_feedback_with_graph()
@@ -69,9 +81,6 @@ MSA_standalone  <- function(title = NULL,
 
 
   }
-
-    # feedback <- MSA::MSA_feedback_with_graph()
-    # feedback <- MSA::MSA_feedback_with_score()
 
   elts <- psychTestR::join(
     if (with_id)
@@ -87,24 +96,30 @@ MSA_standalone  <- function(title = NULL,
                feedback = feedback,
                dict = dict,
                with_feedback = with_feedback,
+               with_video = with_video,
+               with_picture = with_picture,
                take_training = TRUE,
                balance_over = balance_over,
                adaptive = adaptive, ## future proof
                ...)
     else
-      # if(with_welcome) MSA_welcome_page(dict = dict),
-      MSA::MSA(
-        num_items = num_items,
-        with_welcome =  with_welcome,
-        with_finish = FALSE,
-        feedback = feedback,
-        with_feedback = with_feedback,
-        dict = dict,
-        take_training = FALSE,
-        balance_over = balance_over,
-        adaptive = adaptive,
-        ...
-      ),
+      # this is to make sure that at least one instruction of the task is included
+      # into the experiment
+        MSA::MSA(
+          num_items = num_items,
+          with_welcome =  TRUE,
+          with_finish = FALSE,
+          feedback = feedback,
+          with_feedback = with_feedback,
+          dict = dict,
+          take_training = FALSE,
+          balance_over = balance_over,
+          adaptive = adaptive,
+          ...
+        ),
+
+
+
     psychTestR::elt_save_results_to_disk(complete = TRUE),
     MSA_final_page(dict = dict)
   )

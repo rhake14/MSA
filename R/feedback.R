@@ -78,8 +78,11 @@ MSA_feedback_graph_normal_curve <- function(perc_correct, x_min = 40, x_max = 16
   fake_IQ <- (x_max - x_min) * perc_correct + x_min
   fake_percentage <- round(1 - pnorm(fake_IQ, mean = x_mean, sd = x_sd, lower.tail = FALSE),
                            digits = 3) * 100
-  x_axis_lab <- sprintf("%s %s %s", psychTestR::i18n("FEEDBACK_X1"), fake_percentage, psychTestR::i18n("FEEDBACK_X2"))
-  main_title <- sprintf("%s - %s %s", psychTestR::i18n("TESTNAME"), psychTestR::i18n("VALUE"), psychTestR::i18n("FEEDBACK_TITLE1"))
+  x_axis_lab <- sprintf("%s %s %s %s", psychTestR::i18n("FEEDBACK_X1"), "\n", fake_percentage, psychTestR::i18n("FEEDBACK_X2"))
+  main_title <- sprintf("%s - %s %s",
+                                   psychTestR::i18n("TESTNAME"),
+                                   psychTestR::i18n("VALUE"),
+                                   psychTestR::i18n("FEEDBACK_TITLE1"))
   label_score <- sprintf("%s %s", psychTestR::i18n("SCORE_TEMPLATE"), round(fake_IQ, digits = 0))
 
   plot <-
@@ -112,11 +115,12 @@ MSA_feedback_graph_normal_curve <- function(perc_correct, x_min = 40, x_max = 16
       linetype = "dotted") +
     # cool themes
     theme_clean()
-    # ggokabeito::scale_fill_okabe_ito() + # super nice colours, but not necessary
+    # ggokabeito::scale_fill_okabe_ito() + # super nice colours for colour-blind, but not essential
     # ggokabeito::scale_color_okabe_ito()
 
-  plotly::ggplotly(plot, width = 900, height = 600)
-  browser()
+  shiny::div(plotly::ggplotly(plot, width = 600, height = 400),
+             style = "margin-left:auto; margin-rigth:auto")
+  # browser()
 
   # potential adaptations:
     # ggplot2::theme_bw() +

@@ -9,35 +9,49 @@ library(psychTestRCAT)
 #' Use this function if you want to include the MSA in a
 #' battery of other tests, or if you want to add custom psychTestR
 #' pages to your test timeline.
-#' The MSA is an non-adaptive instrument to test musical scene analysis
-#' abilities among very diverse populations. An adaptive version of this
-#' instrument is currently in development (expected early 2022).
+#' The MSA is an adaptive instrument to test musical scene analysis
+#' abilities among very diverse populations. An non-adaptive version is also available.
 #' The test is based on a two-alternative-forced-choice task - for a more
-#' detailed description take a look into the README file.
+#' detailed description take a look at the Readme file on GITHUB (https://github.com/rhake14/MSA/tree/main#readme)
 #'
 #' For demoing the MSA, consider using \code{\link{MSA_demo}()}.
 #' For a standalone implementation of the MSA,
 #' consider using \code{\link{MSA_standalone}()}.
 #' This can be used for data collection, either in the laboratory or online.
 
-#' @param num_items (Scalar integer) Number of items to be administered.
-#' @param with_welcome (Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE
-#' @param take_training (Scalar boolean) Enable practice session before the actual session. Defaults to FALSE
-#' @param with_finish (Scalar boolean) Indicates, if a finish (not final!) page shall be displayed. Defaults to TRUE
 #' @param label (Scalar character) Label to give the MSA results in the output file.
-#' @param feedback (Function) Defines the feedback to give the participant at the end of the test.
+#' @param num_items (Scalar integer) Number of items to be administered. We recommend 25 items (default)
+#' for the adaptive MSA and at least 40 for the non-adaptive version.
+#' @param with_welcome (Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE
+#' @param with_finish (Scalar boolean) Indicates, if a finish, i.e. a completion (not final!) page shall be displayed. Defaults to TRUE
+
+#' @param take_training (Scalar boolean) Enable practice session before the actual session. Defaults to TRUE
+#' @param with_picture (Scalar boolean) Includes a demonstrative picture in addition to the default text description,
+#'  to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to FALSE
+#'  Note: Correct display depends on the playback device. We recommend the use of Google Chrome.
+#' @param with_video (Scalar boolean) Includes a demonstrative video in addition to the default text description,
+#'  to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to TRUE
+#'  Note: Correct display depends on the playback device. We recommend the use of Google Chrome.
+
 #' @param with_feedback (Scalar boolean) Defines whether the test person receives feedback at the end of the task.
-#' @param dict The psychTestR dictionary used for internationalisation.
+#' @param feedback (Function) Defines the feedback to give the participant at the end of the test.
+#' Options are "MSA::MSA_feedback_with_graph()" (Default) and "MSA::MSA_feedback_with_score()" for showing only the number of correctly detected items.
+
 #' @param balance_over (Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
-#' Possible parameters are
+#' Please note that this option is only available for the non-adaptive Version of the MSA (adaptive = FALSE).
 #' "target_instrument": the target instrument; balancing = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass').
 #' "complexity": the musical complexity, i.e. number of instruments within the mixture; balancing = equal proportion of items with 'three' and 'six' instruments.
 #' "level": the level-ratio between target and the mixture; balancing = equal proportion of items with '0', '-5', '-10', '-15' level-ratios.
 #' Default is a fully balanced design: c("target_instrument", "complexity", "level").
 #' Note: By default, there is always an equal proportion of "with target instrument" and "without target" items in the pool.
-#' @param dict The psychTestR dictionary used for internationalisation.
-#' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA2 (TRUE)
+#' @param dict The psychTestR (package) dictionary used for internationalisation.
+
+#' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
 #' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
+#' @param constrain_answers (Logical scalar)
+#' If \code{TRUE}, then item selection will be constrained so that the
+#' correct answers are distributed as evenly as possible over the course of the test.
+#' We recommend leaving this option disabled.
 #' @param next_item.criterion (Character scalar)
 #' Criterion for selecting successive items in the adaptive test.
 #' See the \code{criterion} argument in \code{\link[catR]{nextItem}} for possible values.
@@ -46,7 +60,7 @@ library(psychTestRCAT)
 #' Ability estimation method used for selecting successive items in the adaptive test.
 #' See the \code{method} argument in \code{\link[catR]{thetaEst}} for possible values.
 #' \code{"BM"}, Bayes modal,
-#' corresponds to the setting used in the original MPT paper.
+#' corresponds to the setting used (will be further explained in the to be published MSA paper).
 #' \code{"WL"}, weighted likelihood,
 #' corresponds to the default setting used in versions <= 0.2.0 of this package.
 #' @param next_item.prior_dist (Character scalar)
@@ -66,23 +80,21 @@ library(psychTestRCAT)
 #' The default is \code{"WL"}, weighted likelihood.
 #' #' If a Bayesian method is chosen, its prior distribution will be defined
 #' by the \code{next_item.prior_dist} and \code{next_item.prior_par} arguments.
-#' @param constrain_answers (Logical scalar)
-#' If \code{TRUE}, then item selection will be constrained so that the
-#' correct answers are distributed as evenly as possible over the course of the test.
-#' We recommend leaving this option disabled.
+
 #' @export
 
 
-MSA <- function(num_items = 18L,
+MSA <- function(label = "MSA_results",
+                num_items = 25L,
                 with_welcome = TRUE,
-                take_training = FALSE,
                 with_finish = TRUE,
-                label = "MSA_results",
+                take_training = TRUE,
+                with_video = TRUE,
+                with_picture = FALSE,
                 with_feedback = TRUE,
-                # feedback = "graph", # fix this
                 feedback = MSA::MSA_feedback_with_graph(),
-                dict = MSA::MSA_dict,
                 balance_over = c("target_instrument", "complexity", "level"),
+                dict = MSA::MSA_dict,
                 # adaptive stuff
                 adaptive = TRUE,
                 next_item.criterion = "bOpt",
@@ -92,9 +104,10 @@ MSA <- function(num_items = 18L,
                 final_ability.estimator = "WL",
                 constrain_answers = FALSE
                 ) {
+  # browser()
 
   audio_dir <- "https://media.gold-msi.org/test_materials/MSAT"
-  # audio_dir <- "https://media.gold-msi.org/MSAT"
+
   stopifnot(purrr::is_scalar_character(label),
             purrr::is_scalar_integer(num_items) || purrr::is_scalar_double(num_items),
             purrr::is_scalar_character(audio_dir),
@@ -107,12 +120,17 @@ MSA <- function(num_items = 18L,
 
   psychTestR::join(
     psychTestR::begin_module(label),
-    if (take_training) psychTestR::new_timeline(instructions(audio_dir),
-                                                dict = dict),
+    if (take_training) {
+      psychTestR::new_timeline(instructions(audio_dir,
+                                            with_picture,
+                                            with_video),
+                               dict = dict)
+    },
 
-    if (with_welcome) MSA_welcome_page(),
+    if (take_training == F) {MSA_welcome_page()},
 
     psychTestR::new_timeline({
+      # browser()
       main_test(label = label,
                 num_items = num_items,
                 audio_dir = audio_dir,
@@ -134,8 +152,6 @@ MSA <- function(num_items = 18L,
     psychTestR::elt_save_results_to_disk(complete = TRUE),
 
     if (with_feedback) feedback,
-
-      # feedback <- MSA::MSA_feedback_with_graph()
 
       # Fix this
       # if (feedback == "graph") {

@@ -19,10 +19,14 @@ scoring <- function(){
 
 # for the adaptive test
 get_eligible_first_items_MSA <- function(){
-  lower_sd <- mean(MSA::MSA2_item_bank$difficulty) - stats::sd(MSA::MSA2_item_bank$difficulty)
-  upper_sd <- mean(MSA::MSA2_item_bank$difficulty) + stats::sd(MSA::MSA2_item_bank$difficulty)
-  which(MSA::MSA2_item_bank$difficulty >= lower_sd  &
-          MSA::MSA2_item_bank$difficulty <= upper_sd)
+  # browser()
+  # exclude the non valid items for the adaptive version
+  valid_items <- MSA::MSA2_item_bank %>% dplyr::filter(flagged_item == "no")
+  lower_sd <- mean(valid_items$difficulty) - stats::sd(valid_items$difficulty)
+  upper_sd <- mean(valid_items$difficulty) + stats::sd(valid_items$difficulty)
+  sample(which(valid_items$difficulty >= lower_sd  &
+          valid_items$difficulty <= upper_sd),
+         size = 5) # sample to randomize vector
 }
 
 main_test <- function(label,
@@ -41,11 +45,15 @@ main_test <- function(label,
                       ...
                       ) {
   ### load whole item bank and exclude practice items
-# browser()
 
   if (adaptive) {
     item_bank <- MSA::MSA2_item_bank
 
+    # In the course of the calibration phase,
+    # several items had to be excluded as they were found to perform poor.
+    # exclude them now:
+    item_bank <- item_bank %>% dplyr::filter(flagged_item == "no")
+    # browser()
     psychTestRCAT::adapt_test(
       label = label,
       item_bank = item_bank,
@@ -60,8 +68,10 @@ main_test <- function(label,
                         eligible_first_items = get_eligible_first_items_MSA(),
                         item_bank = item_bank)
     )
+    # browser()
   }
   else {
+  # FIX THIS: the non-adaptive MSA still uses the full item set (poor performers are not yet excluded)
   item_bank <- MSA::MSA_item_bank
 
   tmp_item_bank <- item_bank %>%
@@ -141,7 +151,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
         # browser()
         for (i in 1:100) {
 
-          # # FIX THIS!!! Still is not working properly
+          # # FIX THIS!!! Still is not working with 100% accuracy
           item_sequence_wit <- tmp_item_bank %>%
             dplyr::filter(with_target_in_mix == "yes") %>%
             dplyr::ungroup() %>%
@@ -154,7 +164,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
             dplyr::ungroup() %>%
             dplyr::slice_sample(n = (num_items / 2))
 
-          # # FIX THIS!!! Still is not working properly
+          # # FIX THIS!!!: find another approach
           # item_sequence_wit <- tmp_item_bank %>%
           #   dplyr::filter(with_target_in_mix == "yes") %>%
           #   dplyr::group_by(item_nr) %>%
@@ -201,16 +211,8 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
               dif_song_nr = dif_song_nr,
               dif_overall_sum = dif_overall_sum
             )
-
-          # magicalize stuff:
-          # put(
-          #   item_sequence_wit,
-          #   dif_song_nr,
-          #   dif_item_nr,
-          #   dif_overall_sum,
-          #   dif_max_per_cond
-          # )
         }
+
         # browser()
         ### extract the output from the loop
         item_sequence_wit <- tibble::as_tibble(do.call(rbind, item_sequence_list))
@@ -227,8 +229,9 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
         ### get item sequence
         item_sequence_wit <- item_sequence_wit$item_sequence_wit[[1]]
         # browser()
+        #
         ### WoT: item_sequence target is not in the mix
-        ### FIX THIS: there is still no equal proportion between conditions
+        ### FIX THIS: there is still only an approximation of equal proportion between conditions
         ### maybe while loop to fish conditions successively
         item_sequence_wot <- tmp_item_bank %>%
           dplyr::filter(with_target_in_mix == "no") %>%
@@ -288,7 +291,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
       item_sequence <- psychTestR::get_local("item_sequence", state)
       i_row <- psychTestR::get_local("i_row", state)
       # item_number <- item_sequence[i_row]
-      # browser()
+      browser()
       # messagef("Called reactive page, i_row %d, item_number: %d", i_row, item_sequence[i_row])
       MSA_item(label = item_bank$item_number[item_sequence[i_row]],
                correct_answer = item_bank$correct[item_sequence[i_row]],
@@ -305,9 +308,9 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
   elts
   # elts <- psychTestR::join(elts, SRS_scoring(label) # vllt das hier
   }
-} # not sure
+}
 
-# is this function used somewhere?
+# FIX THIS: is this function used somewhere?
 item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MSA_dict) {
   item <- MSA::MSA_item_bank %>% filter(item_number == item_id) %>% as.data.frame()
   # browser()
@@ -332,7 +335,9 @@ get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {
     ),
     shiny::p(
       psychTestR::i18n("ITEM_INSTRUCTION",),
-      style = "margin-left:20%;margin-right:20%;text-align:justify")
+      style = "margin-left:20%;margin-right:20%;text-align:justify;display:block"
+      # style = "margin-left:0%;display:block"
+      )
     )
 }
 
@@ -342,7 +347,7 @@ MSA_welcome_page <- function(dict = MSA::MSA_dict){
     body = shiny::div(
       shiny::h4(psychTestR::i18n("WELCOME")),
       shiny::div(psychTestR::i18n("INTRO_TEXT"),
-               style = "margin-left:0%;display:block")
+               style = "text-align: justify; margin-left:20%; margin-right:20%;display:block")
     ),
     button_text = psychTestR::i18n("CONTINUE")
   ), dict = dict)
@@ -354,7 +359,7 @@ MSA_finished_page <- function(dict = MSA::MSA_dict){
       body =  shiny::div(
         shiny::h4(psychTestR::i18n("THANKS")),
         psychTestR::i18n("SUCCESS"),
-                         style = "margin-left:0%;display:block"),
+                         style = "text-align: justify; margin-left:20%; margin-right:20%;display:block"),
       button_text = psychTestR::i18n("CONTINUE")
     ), dict = dict)
 }
@@ -364,7 +369,7 @@ MSA_final_page <- function(dict = MSA::MSA_dict){
       body = shiny::div(
         shiny::h4(psychTestR::i18n("THANKS")),
         shiny::div(psychTestR::i18n("FINAL_P"),
-                   style = "margin-left:0%;display:block"),
+                   style = "text-align: justify; margin-left:20%; margin-right:20%;display:block"),
         button_text = psychTestR::i18n("CONTINUE")
       )
     ), dict = dict)
@@ -376,15 +381,13 @@ show_item <- function(audio_dir) {
     # browser()
     item_number <- psychTestRCAT::get_item_number(item)
     num_items <- psychTestRCAT::get_num_items_in_test(item)
-    # messagef("Showing item Nr. %s", item_number)
-    # paste(item$item_number)
-    # print(item$item_number)
-    # cat(item$item_number)
-    cat("Showing item Nr: ", item_number, "=", item$item_number, "\n")
+    # psychTestRCAT::get_current_ability_estimate()
+    ### for debugging
+    # browser()
+    # cat("Showing item Nr: ", item_number, "=", item$item_number, "\n")
     MSA_item(
-      label = paste0("q", item_number,"_", item$item_number),
+      label = paste0("sequence_order.", item_number,"_item_nr.", item$item_nr),
       audio_file = item$audio_file,
-      # correct_answer = item$answer, # old1
       correct_answer = item$correct,
       adaptive = TRUE,
       prompt = get_prompt(item_number, num_items),

@@ -5,15 +5,17 @@
 \title{MSA}
 \usage{
 MSA(
-  num_items = 18L,
-  with_welcome = TRUE,
-  take_training = FALSE,
-  with_finish = TRUE,
   label = "MSA_results",
+  num_items = 25L,
+  with_welcome = TRUE,
+  with_finish = TRUE,
+  take_training = TRUE,
+  with_video = FALSE,
+  with_picture = TRUE,
   with_feedback = TRUE,
   feedback = MSA::MSA_feedback_with_graph(),
-  dict = MSA::MSA_dict,
   balance_over = c("target_instrument", "complexity", "level"),
+  dict = MSA::MSA_dict,
   adaptive = TRUE,
   next_item.criterion = "bOpt",
   next_item.estimator = "BM",
@@ -24,31 +26,41 @@ MSA(
 )
 }
 \arguments{
-\item{num_items}{(Scalar integer) Number of items to be administered.}
+\item{label}{(Scalar character) Label to give the MSA results in the output file.}
+
+\item{num_items}{(Scalar integer) Number of items to be administered. We recommend 25 items (default)
+for the adaptive MSA and at least 40 for the non-adaptive version.}
 
 \item{with_welcome}{(Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE}
 
-\item{take_training}{(Scalar boolean) Enable practice session before the actual session. Defaults to FALSE}
+\item{with_finish}{(Scalar boolean) Indicates, if a finish, i.e. a completion (not final!) page shall be displayed. Defaults to TRUE}
 
-\item{with_finish}{(Scalar boolean) Indicates, if a finish (not final!) page shall be displayed. Defaults to TRUE}
+\item{take_training}{(Scalar boolean) Enable practice session before the actual session. Defaults to TRUE}
 
-\item{label}{(Scalar character) Label to give the MSA results in the output file.}
+\item{with_video}{(Scalar boolean) Includes a demonstrative video in addition to the default text description,
+to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to TRUE
+Note: Correct display depends on the playback device. We recommend the use of Google Chrome.}
+
+\item{with_picture}{(Scalar boolean) Includes a demonstrative picture in addition to the default text description,
+to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to FALSE
+Note: Correct display depends on the playback device. We recommend the use of Google Chrome.}
 
 \item{with_feedback}{(Scalar boolean) Defines whether the test person receives feedback at the end of the task.}
 
-\item{feedback}{(Function) Defines the feedback to give the participant at the end of the test.}
-
-\item{dict}{The psychTestR dictionary used for internationalisation.}
+\item{feedback}{(Function) Defines the feedback to give the participant at the end of the test.
+Options are "MSA::MSA_feedback_with_graph()" (Default) and "MSA::MSA_feedback_with_score()" for showing only the number of correctly detected items.}
 
 \item{balance_over}{(Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
-Possible parameters are
+Please note that this option is only available for the non-adaptive Version of the MSA (adaptive = FALSE).
 "target_instrument": the target instrument; balancing = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass').
 "complexity": the musical complexity, i.e. number of instruments within the mixture; balancing = equal proportion of items with 'three' and 'six' instruments.
 "level": the level-ratio between target and the mixture; balancing = equal proportion of items with '0', '-5', '-10', '-15' level-ratios.
 Default is a fully balanced design: c("target_instrument", "complexity", "level").
 Note: By default, there is always an equal proportion of "with target instrument" and "without target" items in the pool.}
 
-\item{adaptive}{(Scalar boolean) Indicates whether you want to use the adaptive MSA2 (TRUE)
+\item{dict}{The psychTestR (package) dictionary used for internationalisation.}
+
+\item{adaptive}{(Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
 or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.}
 
 \item{next_item.criterion}{(Character scalar)
@@ -60,7 +72,7 @@ Defaults to \code{"bOpt"}.}
 Ability estimation method used for selecting successive items in the adaptive test.
 See the \code{method} argument in \code{\link[catR]{thetaEst}} for possible values.
 \code{"BM"}, Bayes modal,
-corresponds to the setting used in the original MPT paper.
+corresponds to the setting used (will be further explained in the to be published MSA paper).
 \code{"WL"}, weighted likelihood,
 corresponds to the default setting used in versions <= 0.2.0 of this package.}
 
@@ -94,11 +106,10 @@ psychTestR timeline.
 Use this function if you want to include the MSA in a
 battery of other tests, or if you want to add custom psychTestR
 pages to your test timeline.
-The MSA is an non-adaptive instrument to test musical scene analysis
-abilities among very diverse populations. An adaptive version of this
-instrument is currently in development (expected early 2022).
+The MSA is an adaptive instrument to test musical scene analysis
+abilities among very diverse populations. An non-adaptive version is also available.
 The test is based on a two-alternative-forced-choice task - for a more
-detailed description take a look into the README file.
+detailed description take a look at the Readme file on GITHUB (https://github.com/rhake14/MSA/tree/main#readme)
 }
 \details{
 For demoing the MSA, consider using \code{\link{MSA_demo}()}.
