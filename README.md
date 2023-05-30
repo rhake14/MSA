@@ -8,27 +8,25 @@ The Musical Scene Analysis Test (MSA) is an adaptive instrument for
 assessing auditory scene analysis (ASA) abilities in the context of
 music in individuals with very diverse ability levels. The test has been
 calibrated among 525 normal-hearing (NH) participants with ages ranging
-from 18 - 72 years
-(![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
-= 27 years) and 125 hearing-impaired (HI) participants with ages ranging
-from 23 - 82 years
-(![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
-= 60.5 years). Regardless of the sound level representation (medium
-level at \~70 dB is recommended), the MSA is suitable for measuring ASA
-abilities in young (and musically trained) NH as well as old HI
-individuals with up to severe non-aided hearing impairments (i.e., the
-MSA is not suitable for profound HI individuals). There is also an
-non-adaptive version of this instrument available in this package.
+from 18 - 72 years ($\mu$ = 28 years; SD = 11.02; 274 female) and 131
+hearing-impaired (HI) participants with ages ranging from 23 - 82 years
+($\mu$ = 40.5 years; SD = 20.6; 67 female). The MSA is suitable for
+measuring ASA abilities in young (and musically trained) NH as well as
+old HI individuals with up to severe non-aided hearing impairments
+(i.e., the MSA is not suitable for profound HI individuals). There is
+also an non-adaptive version of this instrument available in this
+package.
 
 ## Citation
 
 You can cite the MSA as follows:
 
-> Hake, R., Bürgel, M., Müllensiefen, D., & Siedenburg, K. (2022).
-> Development of an adaptive test of musical scene analysis ability.
-> *Unpublished Manuscript.*
+> Hake, R., Bürgel, M., Nguyen, N.K., Greasley, A., Müllensiefen, D., &
+> Siedenburg, K. (2023). Development of an adaptive test of musical
+> scene analysis abilities for normal-hearing and hearing-impaired
+> listeners. *Unpublished Manuscript.*
 
-We also advise mentioning the software versions you used. in particular
+We also advise mentioning the software versions you used. In particular
 the versions of the `MSA` and `psychTestR` packages. You can find these
 version numbers from R by running the following commands:
 
@@ -155,16 +153,16 @@ for the adaptive version.
 
 ## Usage notes
 
--   The MSA runs in your web browser.
--   By default, image files are hosted online on our servers, provided
-    by the Deutsche Gesellschaft für Musikpsychologie
-    e.V.(<http://www.music-psychology.de/>) via
-    “<http://testing.musikpsychologie.de/dots_home/>”. **The test
-    therefore requires internet connectivity**.
--   An offline alternative would be to download the entire repository
-    and stimuli set to your local computer (Stimset via:
-    <https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing>)
-    and manually change the directory for the items in the package.
+- The MSA runs in your web browser.
+- By default, image files are hosted online on our servers, provided by
+  the Deutsche Gesellschaft für Musikpsychologie
+  e.V.(<http://www.music-psychology.de/>) via
+  “<http://testing.musikpsychologie.de/dots_home/>”. **The test
+  therefore requires internet connectivity**.
+- An offline alternative would be to download the entire repository and
+  stimuli set to your local computer (Stimset via:
+  <https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing>)
+  and manually change the directory for the items in the package.
 
 ## Citations
 
