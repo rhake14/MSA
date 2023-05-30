@@ -97,11 +97,29 @@ interface, see <http://psychtestr.com/>.
 
 The MSA currently supports English (en), German (de) - more languages
 follow soon. You can select one of these languages by passing a language
-code as an argument to `MSA_standalone()`,
-e.g. `MSA_standalone(languages = "en")`, or alternatively by passing it
-as a URL parameter to the test browser, eg.
+code as an argument to `MSA_standalone()`, e.g.
+`MSA_standalone(languages = "en")`, or alternatively by passing it as a
+URL parameter to the test browser, eg.
 <http://127.0.0.1:4412/?language=DE> (note that the `p_id` argument must
 be empty).
+
+### Get the results
+
+If you are just interested in the participants’ final scores, the
+easiest solution is usually to download the results in CSV format from
+the admin panel. If you are interested in trial-by-trial results, you
+can run the command MSA_compile_trial_by_trial_results() from the R
+console (having loaded the MSA package using library(MSA)). Type
+?MSA_compile_trial_by_trial_results() for more details.
+
+If you want still more detail, you can examine the individual RDS output
+files using readRDS(). Detailed results are stored as the ‘metadata’
+attribute for the ability field. You can access it something like this:
+
+``` r
+x <- readRDS("output/results/id=1&p_id=german_test&save_id=1&pilot=false&complete=true.rds")
+attr(x$MSA$ability, "metadata")
+```
 
 ## Item / Stimuli construction
 
@@ -146,10 +164,7 @@ respectively).
 
 More information about the stimuli used can be found in the github
 repository
-(<https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv>)
-or
-(<https://github.com/rhake14/MSA/blob/main/data_raw/MSA2_item_bank.csv>)
-for the adaptive version.
+(<https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv>).
 
 ## Usage notes
 
@@ -174,3 +189,122 @@ Retrieval Conference, Taipei, Taiwan.
 Bittner, R., Wilkins, J., Yip, H., & Bello, J. (2016). MedleyDB 2.0: New
 Data and a System for Sustainable Data Collection. International
 Conference on Music Information Retrieval (ISMIR-16), New York, NY, USA.
+
+### Script: example experiment
+
+``` r
+# prepare experiment ------------------------------------------------------
+
+# install required packages
+if (!require(devtools)) install.packages("devtools")
+if (!require(tidyverse)) install.packages("tidyverse")
+if (!require(tidyr)) install.packages("tidyr") # etc..
+
+# download MSA from github: 
+devtools::install_github('rhake14/MSA')
+
+# Load the MSA package
+library(MSA) # ?MSA_standalone #more information on the function
+
+# run experiment ----------------------------------------------------------
+
+# Run the test as if for a participant, using default settings,
+# saving data, and with a custom admin password
+# including advanced specifications
+MSA_standalone(
+  title = "Musical Scene Analysis Experiment #1",
+  num_items = 40,
+  adaptive = TRUE,
+  admin_password = "password",
+  researcher_email = "abc@gmail.de",
+  languages = c("EN")
+)
+
+# analyse the data --------------------------------------------------------
+# load packages
+library(tidyverse)
+pacman::p_load(dplyr, tibble, ggplot2, devtools, readxl, data.table, Hmisc, MSA,
+)
+
+# set working directory
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+wd <- print(getwd())
+
+# ** get results from file -------------------------------------------------------------
+### result files for the main experiment 
+results_list <- list.files(path = paste0(wd,"/output/results"),
+                                 pattern = ".rds", full.names = TRUE)
+# read the RDS file
+results_list <- results_list %>%
+  lapply(readRDS)
+
+# convert to a data frame
+results_dataframe <- tibble::as_tibble(do.call(rbind, results_list)) 
+results_dataframe <- tibble::as_tibble(do.call(rbind, results_dataframe)) 
+
+# & unnest
+results_dataframe <- plyr::ldply(results_dataframe, data.frame)
+
+# select only relevant coloumns
+results_dataframe <- results_dataframe %>% 
+  dplyr::select(p_id, complete, time_started, current_time, ability, ability_sem, num_items)
+
+# give me trial_by_trial results of the MSA
+# ?MSA_compile_trial_by_trial_results  # for more information
+
+# **  get individual MSA data  --------------------------------------------
+results_per_item <- MSA::MSA_compile_trial_by_trial_results(
+  in_dir = "output/results",
+  label = "MSA_results",
+  combine = TRUE
+) 
+
+# select only relevant rows
+results_per_item <- results_per_item %>%  
+  dplyr::select(p_id, num, item_id, difficulty, # = item difficulty
+                score, ability_WL, ability_WL_sem) %>% 
+  dplyr::rename(ability = ability_WL, # for weighted likelihood ability estimate
+                ability_sem = ability_WL_sem)
+
+# quick inspection --------------------------------------------------------------
+results_per_item %>% 
+  dplyr::rename(MSA = ability) %>% 
+  ggplot2::ggplot(aes(num, MSA)) +
+  ggplot2::geom_line(aes(fill = p_id)) +
+  ggplot2::geom_point(
+    aes(fill = p_id),
+    size = 3, 
+    pch = 21, # Type of point that allows us to have both color (border) and fill.
+    color = "white", 
+    stroke = 1 # The width of the border, i.e. stroke.
+  )   +
+  ggplot2::xlab("Item sequence number") +
+  ggplot2::ylab("MSA ability score") +
+  ggplot2::theme_bw(base_size = 15)
+
+# quick inspection 
+results_per_item %>% ggplot2::ggplot(aes(score, difficulty)) +
+  ggplot2::geom_point(
+    aes(fill = p_id),
+    size = 3, 
+    pch = 21, # Type of point that allows us to have both color (border) and fill.
+    color = "white", 
+    stroke = 1 # The width of the border, i.e. stroke.
+  ) 
+
+# inspect per participant
+loop_p_ID <- NULL
+for(loop_p_ID in 1:length(unique(results_per_item$p_id))) {
+  tmp.print <- results_per_item %>% 
+    filter(p_id == unique(results_per_item$p_id)[loop_p_ID]) %>% 
+    ggplot2::ggplot(aes(score, difficulty)) +
+    ggplot2::geom_point(
+      aes(fill = p_id),
+      size = 3, 
+      pch = 21, # Type of point that allows us to have both color (border) and fill.
+      color = "white", 
+      stroke = 1 # The width of the border, i.e. stroke.
+    ) 
+  print(tmp.print) 
+}
+```

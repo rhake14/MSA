@@ -30,7 +30,7 @@ library(psychTestRCAT)
 #'  to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to FALSE
 #'  Note: Correct display depends on the playback device. We recommend the use of Google Chrome.
 #' @param with_video (Scalar boolean) Includes a demonstrative video in addition to the default text description,
-#'  to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to TRUE
+#'  to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to FALSE
 #'  Note: Correct display depends on the playback device. We recommend the use of Google Chrome.
 
 #' @param with_feedback (Scalar boolean) Defines whether the test person receives feedback at the end of the task.

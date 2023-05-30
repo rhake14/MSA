@@ -11,7 +11,7 @@ MSA(
   with_finish = TRUE,
   take_training = TRUE,
   with_video = FALSE,
-  with_picture = TRUE,
+  with_picture = FALSE,
   with_feedback = TRUE,
   feedback = MSA::MSA_feedback_with_graph(),
   balance_over = c("target_instrument", "complexity", "level"),
@@ -38,7 +38,7 @@ for the adaptive MSA and at least 40 for the non-adaptive version.}
 \item{take_training}{(Scalar boolean) Enable practice session before the actual session. Defaults to TRUE}
 
 \item{with_video}{(Scalar boolean) Includes a demonstrative video in addition to the default text description,
-to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to TRUE
+to be used as an explanation for the practice session (take_training needs to be TRUE). Defaults to FALSE
 Note: Correct display depends on the playback device. We recommend the use of Google Chrome.}
 
 \item{with_picture}{(Scalar boolean) Includes a demonstrative picture in addition to the default text description,

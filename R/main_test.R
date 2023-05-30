@@ -21,7 +21,7 @@ scoring <- function(){
 get_eligible_first_items_MSA <- function(){
   # browser()
   # exclude the non valid items for the adaptive version
-  valid_items <- MSA::MSA2_item_bank %>% dplyr::filter(flagged_item == "no")
+  valid_items <- MSA::MSA_item_bank %>% dplyr::filter(flagged_item == "no")
   lower_sd <- mean(valid_items$difficulty) - stats::sd(valid_items$difficulty)
   upper_sd <- mean(valid_items$difficulty) + stats::sd(valid_items$difficulty)
   sample(which(valid_items$difficulty >= lower_sd  &
@@ -47,7 +47,7 @@ main_test <- function(label,
   ### load whole item bank and exclude practice items
 
   if (adaptive) {
-    item_bank <- MSA::MSA2_item_bank
+    item_bank <- MSA::MSA_item_bank
 
     # In the course of the calibration phase,
     # several items had to be excluded as they were found to perform poor.

@@ -53,7 +53,7 @@ MSA_standalone  <- function(title = NULL,
                             balance_over = c("target_instrument", "complexity", "level"),
                             # training stuff
                             take_training = TRUE,
-                            with_video = TRUE,
+                            with_video = FALSE,
                             with_picture = FALSE,
                             # settings
                             with_id = TRUE,

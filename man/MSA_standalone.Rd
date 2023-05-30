@@ -10,7 +10,7 @@ MSA_standalone(
   adaptive = TRUE,
   balance_over = c("target_instrument", "complexity", "level"),
   take_training = TRUE,
-  with_video = TRUE,
+  with_video = FALSE,
   with_picture = FALSE,
   with_id = TRUE,
   with_feedback = TRUE,
