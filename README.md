@@ -103,7 +103,7 @@ URL parameter to the test browser, eg.
 <http://127.0.0.1:4412/?language=DE> (note that the `p_id` argument must
 be empty).
 
-### Get the results
+### Get results
 
 If you are just interested in the participants’ final scores, the
 easiest solution is usually to download the results in CSV format from
@@ -114,7 +114,8 @@ console (having loaded the MSA package using library(MSA)). Type
 
 If you want still more detail, you can examine the individual RDS output
 files using readRDS(). Detailed results are stored as the ‘metadata’
-attribute for the ability field. You can access it something like this:
+attribute for the ability field. You can access it something like this
+(see also example code at the end of the documentation):
 
 ``` r
 x <- readRDS("output/results/id=1&p_id=german_test&save_id=1&pilot=false&complete=true.rds")
@@ -190,7 +191,7 @@ Bittner, R., Wilkins, J., Yip, H., & Bello, J. (2016). MedleyDB 2.0: New
 Data and a System for Sustainable Data Collection. International
 Conference on Music Information Retrieval (ISMIR-16), New York, NY, USA.
 
-### Script: example experiment
+## Script: Example Experiment
 
 ``` r
 # prepare experiment ------------------------------------------------------
