@@ -17,6 +17,7 @@ MSA(
   balance_over = c("target_instrument", "complexity", "level"),
   dict = MSA::MSA_dict,
   adaptive = TRUE,
+  long_version = FALSE,
   next_item.criterion = "bOpt",
   next_item.estimator = "BM",
   next_item.prior_dist = "norm",
@@ -62,6 +63,13 @@ Note: By default, there is always an equal proportion of "with target instrument
 
 \item{adaptive}{(Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
 or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.}
+
+\item{long_version}{(Scalar boolean) Indicates whether you want to use the musical excerpts that include 8 seconds of music prior to the task (TRUE):
+If (TRUE), each trail has the following procedure:
+Part 1: the initial music segment (8s);
+Part 2: after 1s pause, a single instrument (lead voice, bass, guitar, or piano) plays;
+Part 3: after 1s pause, a mix of instruments plays, possibly including the target instrument.
+If (FALSE), Part 1 is skipped (the original version; Default).}
 
 \item{next_item.criterion}{(Character scalar)
 Criterion for selecting successive items in the adaptive test.

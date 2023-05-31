@@ -48,6 +48,13 @@ library(psychTestRCAT)
 
 #' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
 #' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
+#' @param long_version (Scalar boolean) Indicates whether you want to use the musical excerpts that include 8 seconds of music prior to the task (TRUE):
+#' If (TRUE), each trail has the following procedure:
+#' Part 1: the initial music segment (8s);
+#' Part 2: after 1s pause, a single instrument (lead voice, bass, guitar, or piano) plays;
+#' Part 3: after 1s pause, a mix of instruments plays, possibly including the target instrument.
+#' If (FALSE), Part 1 is skipped (the original version; Default).
+
 #' @param constrain_answers (Logical scalar)
 #' If \code{TRUE}, then item selection will be constrained so that the
 #' correct answers are distributed as evenly as possible over the course of the test.
@@ -97,6 +104,7 @@ MSA <- function(label = "MSA_results",
                 dict = MSA::MSA_dict,
                 # adaptive stuff
                 adaptive = TRUE,
+                long_version = FALSE,
                 next_item.criterion = "bOpt",
                 next_item.estimator = "BM",
                 next_item.prior_dist = "norm",
@@ -122,6 +130,7 @@ MSA <- function(label = "MSA_results",
     psychTestR::begin_module(label),
     if (take_training) {
       psychTestR::new_timeline(instructions(audio_dir,
+                                            long_version,
                                             with_picture,
                                             with_video),
                                dict = dict)
@@ -143,6 +152,7 @@ MSA <- function(label = "MSA_results",
                 next_item.prior_par = next_item.prior_par,
                 final_ability.estimator = final_ability.estimator,
                 constrain_answers = constrain_answers,
+                long_version = long_version,
                 adaptive = adaptive
                 )
     }, dict = dict),

@@ -58,7 +58,7 @@ show_tutorial_page <- function(audio_dir){
 }
 
 
-instructions <- function(audio_dir, with_picture, with_video) {
+instructions <- function(audio_dir, long_version, with_picture, with_video) {
 
   ### strange workaround to get the pictures included correctly
   # picture 1 has 720p
@@ -67,8 +67,19 @@ instructions <- function(audio_dir, with_picture, with_video) {
   picture <- sub(".*href=\"", "", picture)
   # picture 2 has 1080p
   picture2 <- psychTestR::i18n("INSTRUCTIONS_PIC2", html = FALSE)
-  picture2 <- sub("\\\">.*", "", picture)
-  picture2 <- sub(".*href=\"", "", picture)
+  picture2 <- sub("\\\">.*", "", picture2)
+  picture2 <- sub(".*href=\"", "", picture2)
+
+  picture_long <- psychTestR::i18n("INSTRUCTIONS_PIC_LONG", html = FALSE)
+  picture_long <- sub("\\\">.*", "", picture_long)
+  picture_long <- sub(".*href=\"", "", picture_long)
+  # picture 2 has 1080p
+  picture_short <- psychTestR::i18n("INSTRUCTIONS_PIC_SHORT", html = FALSE)
+  picture_short <- sub("\\\">.*", "", picture_short)
+  picture_short <- sub(".*href=\"", "", picture_short)
+
+
+
   # prepate video import
   video1 <- psychTestR::i18n("INSTRUCTIONS_VIDEO", html = FALSE)
   video1 <- sub("\\\">.*", "", picture)
@@ -79,7 +90,11 @@ instructions <- function(audio_dir, with_picture, with_video) {
     psychTestR::code_block(function(state, ...) {
       psychTestR::set_local("do_intro", TRUE, state)
     }),
-    info_page("INSTRUCTIONS"),
+
+    if (long_version == F) {
+    info_page("INSTRUCTIONS")
+    }else {info_page("INSTRUCTIONS_LONG")}
+    ,
     # browser(),
     # psychTestR::one_button_page(
     #   shiny::div(shiny::tags$img(src = picture),
@@ -88,19 +103,34 @@ instructions <- function(audio_dir, with_picture, with_video) {
     # ),
 
     ### presenting just a picture
+    ### # provide in english and german is nessesarry
     if (with_picture == TRUE) {
-
-      psychTestR::one_button_page(
-        shiny::div(
-          shiny::tags$img(
-            src = picture2,
-            height = "80%",
-            width = "80%"
+      if (long_version == F) {
+        psychTestR::one_button_page(
+          shiny::div(
+            shiny::tags$img(
+              src = picture_short,
+              height = "80%",
+              width = "80%"
+            ),
+            style = "text-align:center;margin-left:auto;margin-right:auto"
           ),
-          style = "text-align:center;margin-left:auto;margin-right:auto"
-        ),
-        button_text = psychTestR::i18n("CONTINUE"),
-      )
+          button_text = psychTestR::i18n("CONTINUE"),
+        )
+      }else {
+        psychTestR::one_button_page(
+          shiny::div(
+            shiny::tags$img(
+              src = picture_long,
+              height = "80%",
+              width = "80%"
+            ),
+            style = "text-align:center;margin-left:auto;margin-right:auto"
+          ),
+          button_text = psychTestR::i18n("CONTINUE"),
+        )
+        }
+
     }
     ,
 

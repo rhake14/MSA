@@ -18,6 +18,12 @@
 #' The first language is selected by default
 #' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA2 (TRUE)
 #' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
+#' @param long_version (Scalar boolean) Indicates whether you want to use the musical excerpts that include 8 seconds of music prior to the task (TRUE):
+#' If (TRUE), each trail has the following procedure:
+#' Part 1: the initial music segment (8s);
+#' Part 2: after 1s pause, a single instrument (lead voice, bass, guitar, or piano) plays;
+#' Part 3: after 1s pause, a mix of instruments plays, possibly including the target instrument.
+#' If (FALSE), Part 1 is skipped (the original version; Default).
 #' @param ... Further arguments to be passed to \code{\link{MSA}()}.
 #' @export
 
@@ -28,6 +34,7 @@ MSA_demo <- function(num_items = 4L,
                      dict = MSA::MSA_dict,
                      language = "en",
                      adaptive = TRUE,
+                     long_version = FALSE,
                      ...) {
   elts <- psychTestR::join(
     MSA_welcome_page(dict = dict),
@@ -35,6 +42,7 @@ MSA_demo <- function(num_items = 4L,
              with_welcome = FALSE,
              feedback = feedback,
              dict = dict,
+             long_version = long_version,
              adaptive = adaptive,
              ...),
       MSA_final_page(dict = dict)

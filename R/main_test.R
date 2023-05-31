@@ -21,7 +21,9 @@ scoring <- function(){
 get_eligible_first_items_MSA <- function(){
   # browser()
   # exclude the non valid items for the adaptive version
-  valid_items <- MSA::MSA_item_bank %>% dplyr::filter(flagged_item == "no")
+  valid_items <- MSA::MSA_item_bank %>%
+    dplyr::filter(flagged_item == "no") %>%
+    dplyr::filter(long_version_available == "yes")
   lower_sd <- mean(valid_items$difficulty) - stats::sd(valid_items$difficulty)
   upper_sd <- mean(valid_items$difficulty) + stats::sd(valid_items$difficulty)
   sample(which(valid_items$difficulty >= lower_sd  &
@@ -36,6 +38,7 @@ main_test <- function(label,
                       dict = MSA::MSA_dict,
                       # adaptive stuff
                       adaptive = TRUE,
+                      long_version = FALSE,
                       next_item.criterion,
                       next_item.estimator,
                       next_item.prior_dist,
@@ -47,8 +50,15 @@ main_test <- function(label,
   ### load whole item bank and exclude practice items
 
   if (adaptive) {
-    item_bank <- MSA::MSA_item_bank
+    if (!long_version) {item_bank <- MSA::MSA_item_bank}
 
+    if (long_version) {
+      item_bank <- MSA::MSA_item_bank %>%
+        dplyr::select(-audio_file,-item_number) %>%
+        dplyr::rename(audio_file = long_audio_file,
+                      item_number = long_item_number) %>%
+        dplyr::filter(long_version_available == "yes")
+    }
     # In the course of the calibration phase,
     # several items had to be excluded as they were found to perform poor.
     # exclude them now:
@@ -69,10 +79,20 @@ main_test <- function(label,
                         item_bank = item_bank)
     )
     # browser()
+
+
   }
   else {
   # FIX THIS: the non-adaptive MSA still uses the full item set (poor performers are not yet excluded)
-  item_bank <- MSA::MSA_item_bank
+    if (!long_version) {item_bank <- MSA::MSA_item_bank}
+
+    if (long_version) {
+      item_bank <- MSA::MSA_item_bank %>%
+        dplyr::select(-audio_file,-item_number) %>%
+        dplyr::rename(audio_file = long_audio_file,
+                      item_number = long_item_number) %>%
+        dplyr::filter(long_version_available == "yes")
+    }
 
   tmp_item_bank <- item_bank %>%
     dplyr::filter(practice_item == "no") %>%

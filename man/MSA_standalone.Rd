@@ -30,7 +30,13 @@ MSA_standalone(
 for the adaptive MSA and at least 40 for the non-adaptive version.}
 
 \item{adaptive}{(Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
-or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.}
+or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
+#' @param long_version (Scalar boolean) Indicates whether you want to use the musical excerpts that include 8 seconds of music prior to the task (TRUE):
+If (TRUE), each trail has the following procedure:
+Part 1: the initial music segment (8s);
+Part 2: after 1s pause, a single instrument (lead voice, bass, guitar, or piano) plays;
+Part 3: after 1s pause, a mix of instruments plays, possibly including the target instrument.
+If (FALSE), Part 1 is skipped (the original version; Default).}
 
 \item{balance_over}{(Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
 Please note that this option is only available for the non-adaptive Version of the MSA (adaptive = FALSE).

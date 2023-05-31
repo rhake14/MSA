@@ -12,6 +12,12 @@ debug_locally <- !grepl("shiny-server", getwd())
 #'  for the adaptive MSA and at least 40 for the non-adaptive version.
 #' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
 #' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
+#' @param long_version (Scalar boolean) Indicates whether you want to use the musical excerpts that include 8 seconds of music prior to the task (TRUE):
+#' If (TRUE), each trail has the following procedure:
+#' Part 1: the initial music segment (8s);
+#' Part 2: after 1s pause, a single instrument (lead voice, bass, guitar, or piano) plays;
+#' Part 3: after 1s pause, a mix of instruments plays, possibly including the target instrument.
+#' If (FALSE), Part 1 is skipped (the original version; Default).
 #' @param balance_over (Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
 #' Please note that this option is only available for the non-adaptive Version of the MSA (adaptive = FALSE).
 #' "target_instrument": the target instrument; balancing = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass').
@@ -50,6 +56,7 @@ debug_locally <- !grepl("shiny-server", getwd())
 MSA_standalone  <- function(title = NULL,
                             num_items = 25L,
                             adaptive = TRUE,
+                            long_version = FALSE,
                             balance_over = c("target_instrument", "complexity", "level"),
                             # training stuff
                             take_training = TRUE,
@@ -100,6 +107,7 @@ MSA_standalone  <- function(title = NULL,
                with_picture = with_picture,
                take_training = TRUE,
                balance_over = balance_over,
+               long_version = long_version,
                adaptive = adaptive, ## future proof
                ...)
     else
@@ -114,11 +122,10 @@ MSA_standalone  <- function(title = NULL,
           dict = dict,
           take_training = FALSE,
           balance_over = balance_over,
+          long_version = long_version,
           adaptive = adaptive,
           ...
         ),
-
-
 
     psychTestR::elt_save_results_to_disk(complete = TRUE),
     MSA_final_page(dict = dict)
