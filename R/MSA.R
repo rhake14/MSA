@@ -20,7 +20,7 @@ library(psychTestRCAT)
 #' This can be used for data collection, either in the laboratory or online.
 
 #' @param label (Scalar character) Label to give the MSA results in the output file.
-#' @param num_items (Scalar integer) Number of items to be administered. We recommend 25 items (default)
+#' @param num_items (Scalar integer) Number of items to be administered. We recommend to use at least 30 items (default)
 #' for the adaptive MSA and at least 40 for the non-adaptive version.
 #' @param with_welcome (Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE
 #' @param with_finish (Scalar boolean) Indicates, if a finish, i.e. a completion (not final!) page shall be displayed. Defaults to TRUE
@@ -92,7 +92,7 @@ library(psychTestRCAT)
 
 
 MSA <- function(label = "MSA_results",
-                num_items = 25L,
+                num_items = 30L,
                 with_welcome = TRUE,
                 with_finish = TRUE,
                 take_training = TRUE,
@@ -127,7 +127,10 @@ MSA <- function(label = "MSA_results",
   audio_dir <- gsub("/$", "", audio_dir)
 
   psychTestR::join(
-    psychTestR::begin_module(label),
+    # psychTestR::begin_module(label), # original version
+    psychTestR::begin_module(paste0(label,"_", stringi::stri_rand_strings(1, 3, '[A-Z]'))),
+
+
     if (take_training) {
       psychTestR::new_timeline(instructions(audio_dir,
                                             long_version,
@@ -136,7 +139,20 @@ MSA <- function(label = "MSA_results",
                                dict = dict)
     },
 
-    if (take_training == F) {MSA_welcome_page()},
+    if (take_training == F) {
+      psychTestR::new_timeline(instructions(audio_dir,
+                                            long_version,
+                                            with_picture,
+                                            with_video),
+                               dict = dict)
+    },
+
+
+    if (take_training == F) {
+
+      if (long_version == F) {MSA_welcome_page()}
+      if (long_version == T) {MSA_welcome_page_long()}
+      },
 
     psychTestR::new_timeline({
       # browser()

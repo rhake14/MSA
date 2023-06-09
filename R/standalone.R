@@ -8,7 +8,7 @@ debug_locally <- !grepl("shiny-server", getwd())
 #' This can be used for data collection, either in the laboratory or online.
 
 #' @param title (Scalar character) Title to display during testing.
-#' @param num_items (Scalar integer) Number of items to be administered. We recommend 25 items (default)
+#' @param num_items (Scalar integer) Number of items to be administered. We recommend to use at least 30 items (default)
 #'  for the adaptive MSA and at least 40 for the non-adaptive version.
 #' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
 #' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
@@ -54,7 +54,7 @@ debug_locally <- !grepl("shiny-server", getwd())
 
 
 MSA_standalone  <- function(title = NULL,
-                            num_items = 25L,
+                            num_items = 30L,
                             adaptive = TRUE,
                             long_version = FALSE,
                             balance_over = c("target_instrument", "complexity", "level"),

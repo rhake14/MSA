@@ -79,11 +79,10 @@ instructions <- function(audio_dir, long_version, with_picture, with_video) {
   picture_short <- sub(".*href=\"", "", picture_short)
 
 
-
-  # prepate video import
+  # prepare video import
   video1 <- psychTestR::i18n("INSTRUCTIONS_VIDEO", html = FALSE)
-  video1 <- sub("\\\">.*", "", picture)
-  video1 <- sub(".*href=\"", "", picture)
+  video1 <- sub("\\\">.*", "", video1)
+  video1 <- sub(".*href=\"", "", video1)
 
   # include codeblock
   c(

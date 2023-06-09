@@ -373,6 +373,32 @@ MSA_welcome_page <- function(dict = MSA::MSA_dict){
   ), dict = dict)
 }
 
+MSA_picture_page_short <- function(dict = MSA::MSA_dict){
+  psychTestR::new_timeline(
+    psychTestR::one_button_page(
+      body = shiny::div(
+        shiny::h4(psychTestR::i18n("WELCOME")),
+        shiny::div(psychTestR::i18n("INTRO_TEXT"),
+                   style = "text-align: justify; margin-left:20%; margin-right:20%;display:block")
+      ),
+      button_text = psychTestR::i18n("CONTINUE")
+    ), dict = dict)
+}
+
+
+
+MSA_welcome_page_long <- function(dict = MSA::MSA_dict){
+  psychTestR::new_timeline(
+    psychTestR::one_button_page(
+      body = shiny::div(
+        shiny::h4(psychTestR::i18n("WELCOME_LONG")),
+        shiny::div(psychTestR::i18n("INSTRUCTIONS_LONG"),
+                   style = "text-align: justify; margin-left:20%; margin-right:20%;display:block")
+      ),
+      button_text = psychTestR::i18n("CONTINUE")
+    ), dict = dict)
+}
+
 MSA_finished_page <- function(dict = MSA::MSA_dict){
   psychTestR::new_timeline(
     psychTestR::one_button_page(
