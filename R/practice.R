@@ -45,6 +45,10 @@ make_practice_page <- function(page_no, audio_dir) {
   psychTestR::reactive_page(function(answer, ...) {
     # browser()
     correct <- "INCORRECT"
+    if (length(answer) > 2) {
+      answer = answer[-1,] # Fix this: gets "NA" otherswise...
+    }
+
     if (page_no > 1 && answer$correct) {
       correct <- "CORRECT"}
     feedback <- psychTestR::i18n(correct)
@@ -64,13 +68,13 @@ make_practice_page <- function(page_no, audio_dir) {
 get_practice_page <- function(page_no, feedback, audio_dir) {
   # browser()
   key <- sprintf("PRACTICE%d", page_no)
-   if (page_no == 5) {
-     # browser()
+  if (page_no == 5) {
+    # browser()
     key <- "TRANSITION"
-    }
-     prompt <- shiny::div(
-       psychTestR::i18n(key, html = T, sub = list(feedback = feedback)),
-       style = "text-align: justify; margin-left:20%;margin-right:20%; margin-bottom:20px; display:block")
+  }
+  prompt <- shiny::div(
+    psychTestR::i18n(key, html = T, sub = list(feedback = feedback)),
+    style = "text-align: justify; margin-left:20%;margin-right:20%; margin-bottom:20px; display:block")
 
   if (page_no == 5) {
     page <- ask_repeat(prompt)
@@ -99,9 +103,83 @@ practice <- function(audio_dir) {
   lapply(1:5, make_practice_page, audio_dir) %>% unlist()
 }
 
-###### Version 2 --------------------------------------------------------------
-# item_bank <- MSA::MSA_item_bank # load whole item bank
-# tmp_item_bank_practice <- item_bank %>% dplyr::filter(practice_item == "yes") # include only practice items
-# tmp_item_bank_practice <- tmp_item_bank_practice %>% dplyr::slice_sample(n = 3) # choose 3 items randomly
-# item_sequence <- charmatch(tmp_item_bank_practice$item_number, item_bank$item_number) # get item indexes
-# item_sequence <- item_sequence[sample(1:length(tmp_item_bank_practice$item_number))] # randomize order
+
+###### Version Long --------------------------------------------------------------
+
+## example stimuli for practice/training session
+sample_data_long <- list(
+  label =
+    c(
+      "bass_long_wit_level(-10)_complexity(3)_time(18)_songnr(80)",
+      "lead_long_wit_level(0)_complexity(3)_time(122)_songnr(20)",
+      "bass_long_wit_level(0)_complexity(6)_time(180)_songnr(37)",
+      "lead_long_wit_level(0)_complexity(3)_time(52)_songnr(93)",
+      "lead_long_wit_level(-10)_complexity(6)_time(102)_songnr(49)",
+      "bass_long_wit_level(0)_complexity(6)_time(138)_songnr(49)"
+    ),
+  sample_audios =
+    c(
+      "bass_long_wit_level(-10)_complexity(3)_time(18)_songnr(80).wav",
+      "lead_long_wit_level(0)_complexity(3)_time(122)_songnr(20).wav",
+      "bass_long_wit_level(0)_complexity(6)_time(180)_songnr(37).wav",
+      "lead_long_wit_level(0)_complexity(3)_time(52)_songnr(93).wav",
+      "lead_long_wit_level(-10)_complexity(6)_time(102)_songnr(49).wav",
+      "bass_long_wit_level(0)_complexity(6)_time(138)_songnr(49).wav"
+    ),
+  sample_audios_answers = c(1, 1, 1, 1, 1, 1)
+) %>% as_tibble() %>% dplyr::slice_sample(n = 6) %>%
+  as.list() # randomize list
+
+
+
+
+get_practice_page_long <- function(page_no, feedback, audio_dir) {
+  # browser()
+  key <- sprintf("PRACTICE%d", page_no)
+  if (page_no == 5) {
+    # browser()
+    key <- "TRANSITION"
+  }
+  prompt <- shiny::div(
+    psychTestR::i18n(key, html = T, sub = list(feedback = feedback)),
+    style = "text-align: justify; margin-left:20%;margin-right:20%; margin-bottom:20px; display:block")
+
+  if (page_no == 5) {
+    page <- ask_repeat(prompt)
+  }
+  else{
+    # browser()
+    page <- MSA_item(
+      # label = sprintf("training%s", page_no),
+      label = sample_data_long$label[[page_no]],
+      correct_answer = sample_data_long$sample_audios_answers[page_no],
+      prompt = prompt,
+      audio_dir = audio_dir,
+      audio_file = sample_data_long$sample_audios[[page_no]],
+      adaptive = FALSE,
+      # adaptive = TRUE,
+      save_answer = FALSE,
+      instruction_page = FALSE
+    )
+
+  }
+  # browser()
+  page
+}
+
+make_practice_page_long <- function(page_no, audio_dir) {
+  psychTestR::reactive_page(function(answer, ...) {
+    # browser()
+    correct <- "INCORRECT"
+    # answer = answer[-1,] # Fix this: gets "NA" otherswise...
+    if (page_no > 1 && answer$correct) {
+      correct <- "CORRECT"}
+    feedback <- psychTestR::i18n(correct)
+    get_practice_page_long(page_no, feedback, audio_dir)
+    # browser()
+  })
+}
+
+practice_long <- function(audio_dir) {
+  lapply(1:5, make_practice_page_long, audio_dir) %>% unlist()
+}

@@ -6,7 +6,7 @@
 \usage{
 MSA(
   label = "MSA_results",
-  num_items = 25L,
+  num_items = 30L,
   with_welcome = TRUE,
   with_finish = TRUE,
   take_training = TRUE,
@@ -29,7 +29,7 @@ MSA(
 \arguments{
 \item{label}{(Scalar character) Label to give the MSA results in the output file.}
 
-\item{num_items}{(Scalar integer) Number of items to be administered. We recommend 25 items (default)
+\item{num_items}{(Scalar integer) Number of items to be administered. We recommend to use at least 30 items (default)
 for the adaptive MSA and at least 40 for the non-adaptive version.}
 
 \item{with_welcome}{(Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE}

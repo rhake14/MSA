@@ -6,8 +6,9 @@
 \usage{
 MSA_standalone(
   title = NULL,
-  num_items = 25L,
+  num_items = 30L,
   adaptive = TRUE,
+  long_version = FALSE,
   balance_over = c("target_instrument", "complexity", "level"),
   take_training = TRUE,
   with_video = FALSE,
@@ -26,12 +27,13 @@ MSA_standalone(
 \arguments{
 \item{title}{(Scalar character) Title to display during testing.}
 
-\item{num_items}{(Scalar integer) Number of items to be administered. We recommend 25 items (default)
+\item{num_items}{(Scalar integer) Number of items to be administered. We recommend to use at least 30 items (default)
 for the adaptive MSA and at least 40 for the non-adaptive version.}
 
 \item{adaptive}{(Scalar boolean) Indicates whether you want to use the adaptive MSA (TRUE)
-or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.
-#' @param long_version (Scalar boolean) Indicates whether you want to use the musical excerpts that include 8 seconds of music prior to the task (TRUE):
+or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.}
+
+\item{long_version}{(Scalar boolean) Indicates whether you want to use the musical excerpts that include 8 seconds of music prior to the task (TRUE):
 If (TRUE), each trail has the following procedure:
 Part 1: the initial music segment (8s);
 Part 2: after 1s pause, a single instrument (lead voice, bass, guitar, or piano) plays;

@@ -125,34 +125,40 @@ MSA <- function(label = "MSA_results",
               is.null(feedback))
 
   audio_dir <- gsub("/$", "", audio_dir)
+  label <- paste0(label,"_", stringi::stri_rand_strings(1, 3, '[A-Z]'))
 
   psychTestR::join(
-    # psychTestR::begin_module(label), # original version
-    psychTestR::begin_module(paste0(label,"_", stringi::stri_rand_strings(1, 3, '[A-Z]'))),
-
+    psychTestR::begin_module(label), # original version
 
     if (take_training) {
+      # browser()
       psychTestR::new_timeline(instructions(audio_dir,
                                             long_version,
                                             with_picture,
-                                            with_video),
+                                            with_video,
+                                            take_training),
                                dict = dict)
+      # if (long_version == T) {psychTestR::new_timeline(instructions_long(audio_dir,
+      #                                                                long_version,
+      #                                                                with_picture,
+      #                                                                with_video),
+      #                                                   dict = dict)}
+
+
     },
 
-    if (take_training == F) {
-      psychTestR::new_timeline(instructions(audio_dir,
-                                            long_version,
-                                            with_picture,
-                                            with_video),
-                               dict = dict)
-    },
+    # if (take_training == F) {
+    #   psychTestR::new_timeline(instructions_no_training(audio_dir,
+    #                                         long_version,
+    #                                         with_picture,
+    #                                         with_video),
+    #                            dict = dict)
+    # },
 
 
-    if (take_training == F) {
+    if (take_training == F && long_version == F) MSA_welcome_page(),
+    if (take_training == F && long_version == T) MSA_welcome_page_long(),
 
-      if (long_version == F) {MSA_welcome_page()}
-      if (long_version == T) {MSA_welcome_page_long()}
-      },
 
     psychTestR::new_timeline({
       # browser()

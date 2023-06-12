@@ -311,7 +311,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
       item_sequence <- psychTestR::get_local("item_sequence", state)
       i_row <- psychTestR::get_local("i_row", state)
       # item_number <- item_sequence[i_row]
-      browser()
+      # browser()
       # messagef("Called reactive page, i_row %d, item_number: %d", i_row, item_sequence[i_row])
       MSA_item(label = item_bank$item_number[item_sequence[i_row]],
                correct_answer = item_bank$correct[item_sequence[i_row]],
@@ -391,7 +391,7 @@ MSA_welcome_page_long <- function(dict = MSA::MSA_dict){
   psychTestR::new_timeline(
     psychTestR::one_button_page(
       body = shiny::div(
-        shiny::h4(psychTestR::i18n("WELCOME_LONG")),
+        # shiny::h4(psychTestR::i18n("WELCOME_LONG")),
         shiny::div(psychTestR::i18n("INSTRUCTIONS_LONG"),
                    style = "text-align: justify; margin-left:20%; margin-right:20%;display:block")
       ),

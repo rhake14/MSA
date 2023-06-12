@@ -146,13 +146,18 @@ audio_NAFC_page_flex <- function(label,
     }
 
     answer <- as.numeric(gsub("answer", "", input$last_btn_pressed))
+    # browser()
     correct <- MSA::MSA_item_bank[MSA::MSA_item_bank$item_number == label,]$correct == answer
+    # browser()
+
+    # use this, because "item_number" works only for the short version, not for the long version
+    if (grepl("long", label)) {correct <- MSA::MSA_item_bank[MSA::MSA_item_bank$long_item_number == label,]$correct == answer}
     tibble(answer = answer,
            label = label,
            correct = correct)
   }
    validate <- function(answer, ...) !is.null(answer)
-} # not sure maybe somewhere else
+}
 
 
   psychTestR::page(ui = ui,
