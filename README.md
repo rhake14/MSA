@@ -13,9 +13,13 @@ hearing-impaired (HI) participants with ages ranging from 23 - 82 years
 ($\mu$ = 40.5 years; SD = 20.6; 67 female). The MSA is suitable for
 measuring ASA abilities in young (and musically trained) NH as well as
 old HI individuals with up to severe non-aided hearing impairments
-(i.e., the MSA is not suitable for profound HI individuals). There is
-also an non-adaptive version of this instrument available in this
-package.
+(i.e., the MSA is not suitable for profound HI individuals).Alongside
+the standard MSA, an alternative non-adaptive version of the instrument
+is also available as part of this package. To better cater to
+individuals using hearing aids or cochlear implants, we’ve developed a
+specialized version of the test. This includes extended musical
+excerpts, which prove beneficial during the device’s internal fitting
+procedures.
 
 ## Citation
 

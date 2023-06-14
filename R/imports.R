@@ -54,3 +54,8 @@ NULL
 
 #' @importFrom scales "percent"
 NULL
+
+#' @importFrom stringi "stri_rand_strings"
+NULL
+
+
