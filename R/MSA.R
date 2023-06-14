@@ -125,7 +125,11 @@ MSA <- function(label = "MSA_results",
               is.null(feedback))
 
   audio_dir <- gsub("/$", "", audio_dir)
-  label <- paste0(label,"_", stringi::stri_rand_strings(1, 3, '[A-Z]'))
+  # label <- paste0(label,"_", stringi::stri_rand_strings(1, 3, '[A-Z]'))
+  if (long_version) {
+    label <- paste0(label,"_","long_", stringi::stri_rand_strings(1, 3, '[A-Z]'))
+  } else {label <- paste0(label,"_","short_", stringi::stri_rand_strings(1, 3, '[A-Z]'))}
+
 
   psychTestR::join(
     psychTestR::begin_module(label), # original version
@@ -138,23 +142,10 @@ MSA <- function(label = "MSA_results",
                                             with_video,
                                             take_training),
                                dict = dict)
-      # if (long_version == T) {psychTestR::new_timeline(instructions_long(audio_dir,
-      #                                                                long_version,
-      #                                                                with_picture,
-      #                                                                with_video),
-      #                                                   dict = dict)}
+
 
 
     },
-
-    # if (take_training == F) {
-    #   psychTestR::new_timeline(instructions_no_training(audio_dir,
-    #                                         long_version,
-    #                                         with_picture,
-    #                                         with_video),
-    #                            dict = dict)
-    # },
-
 
     if (take_training == F && long_version == F) MSA_welcome_page(),
     if (take_training == F && long_version == T) MSA_welcome_page_long(),
