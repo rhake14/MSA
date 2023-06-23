@@ -14,7 +14,7 @@
 #' the email address of this package's developer.
 #' @param dict The psychTestR dictionary used for internationalisation.
 #' @param language The language you want to run your demo in.
-#' Possible languages include English (\code{"en"}), German (\code{"de"})).
+#' Possible languages include English (\code{"en"}), German (\code{"de"}), formal German (\code{"de"}), and French (\code{"fr"})).
 #' The first language is selected by default
 #' @param adaptive (Scalar boolean) Indicates whether you want to use the adaptive MSA2 (TRUE)
 #' or the non-adaptive MSA (FASLE). Default is adaptive = TRUE.

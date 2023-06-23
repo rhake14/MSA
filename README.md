@@ -99,11 +99,11 @@ entering the admin panel using your admin password, and downloading your
 data (.rds file is recommended). For more details on the psychTestR
 interface, see <http://psychtestr.com/>.
 
-The MSA currently supports English (en), German (de) - more languages
-follow soon. You can select one of these languages by passing a language
-code as an argument to `MSA_standalone()`, e.g.
-`MSA_standalone(languages = "en")`, or alternatively by passing it as a
-URL parameter to the test browser, eg.
+The MSA currently supports English (en), German (de), fomral German
+(de_f), and French (fr) - more languages follow soon. You can select one
+of these languages by passing a language code as an argument to
+`MSA_standalone()`, e.g. `MSA_standalone(languages = "en")`, or
+alternatively by passing it as a URL parameter to the test browser, eg.
 <http://127.0.0.1:4412/?language=DE> (note that the `p_id` argument must
 be empty).
 

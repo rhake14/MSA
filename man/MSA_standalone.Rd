@@ -18,7 +18,7 @@ MSA_standalone(
   with_welcome = TRUE,
   admin_password = "password",
   researcher_email = "put.your.email-adress@here",
-  languages = c("en", "de"),
+  languages = c("en", "de", "de_f", "fr"),
   validate_id = "auto",
   dict = MSA::MSA_dict,
   ...

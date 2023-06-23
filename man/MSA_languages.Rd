@@ -7,5 +7,5 @@
 MSA_languages()
 }
 \description{
-Lists the languages available for MSAT implementations.
+Lists the languages available for MSA implementations.
 }
