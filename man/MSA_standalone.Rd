@@ -72,7 +72,7 @@ at the bottom of the screen so that online participants can ask for help.}
 
 \item{languages}{(Character vector)
 Determines the languages available to participants.
-Possible languages include English (\code{"en"}) and German (\code{"de"}).
+Possible languages include English (\code{"en"}), German (\code{"de"}); formal German (\code{"de"}), and French (\code{"fr"}).
 The first language is selected by default}
 
 \item{validate_id}{(Character scalar or closure) Function for validating IDs or string "auto" for default validation

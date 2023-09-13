@@ -7,28 +7,52 @@
 The Musical Scene Analysis Test (MSA) is an adaptive instrument for
 assessing auditory scene analysis (ASA) abilities in the context of
 music in individuals with very diverse ability levels. The test has been
-calibrated among 525 normal-hearing (NH) participants with ages ranging
-from 18 - 72 years ($\mu$ = 28 years; SD = 11.02; 274 female) and 131
-hearing-impaired (HI) participants with ages ranging from 23 - 82 years
-($\mu$ = 40.5 years; SD = 20.6; 67 female). The MSA is suitable for
-measuring ASA abilities in young (and musically trained) NH as well as
-old HI individuals with up to severe non-aided hearing impairments
-(i.e., the MSA is not suitable for profound HI individuals).Alongside
-the standard MSA, an alternative non-adaptive version of the instrument
-is also available as part of this package. To better cater to
-individuals using hearing aids or cochlear implants, we’ve developed a
-specialized version of the test. This includes extended musical
-excerpts, which prove beneficial during the device’s internal fitting
-procedures.
+calibrated an online experiment among 525 normal-hearing (NH)
+participants with ages ranging from 18 - 72 years ($\mu$ = 28 years; SD
+= 11.02; 274 female) and 131 hearing-impaired (HI) participants with
+ages ranging from 23 - 82 years ($\mu$ = 40.5 years; SD = 20.6; 67
+female). The MSA is suitable for measuring ASA abilities in young (and
+musically trained) NH as well as old HI individuals with up to severe
+non-aided hearing impairments (i.e., the MSA is not suitable for
+profound HI individuals). In a subsequent in-lab validation experiment
+with 74 listeners (20 HI), MSA scores showed acceptable test-retest
+reliability and moderate correlations with other music-related tests,
+pure-tone-average audiograms, age, musical sophistication, and working
+memory capacities. Alongside the standard MSA, an alternative
+non-adaptive version of the instrument is also available as part of this
+package. To better cater to individuals using hearing aids or cochlear
+implants, we’ve also developed a specialized version of the test. This
+includes extended musical excerpts, which prove beneficial during the
+device’s internal fitting procedures. Currently, the test is available
+in German (formal and informal), English, and French language. More
+languages can be quickly implemented on request.
+
+### Quick online Demo
+
+A running demo version of the MSA can be accessed via:
+<https://shiny.gold-msi.org/longgold_demo/?test=MSA>
+
+### Special requests
+
+The current item bank comprises 160 excerpts featuring target
+instruments such as lead vocals, piano, guitar, and bass, as well as
+mixtures containing either 3 or 6 instruments (see ‘Stimuli
+construction’ below). If different or specific configurations are
+require, we are able to generate new items from a pool of over 12,000
+available candidate excerpts. Depending on your particular conditions,
+an adaptive version of the test may still be feasible by applying the
+Bayesian model that was used to estimate item difficulty. For questions
+and special requests, please contact us directly (via
+<robin.hake@uni-oldenburg.de> or <robinhake93@googlemail.com>).
 
 ## Citation
 
 You can cite the MSA as follows:
 
-> Hake, R., Bürgel, M., Nguyen, N.K., Greasley, A., Müllensiefen, D., &
+> Hake, R., Bürgel, M., Nguyen, N. K., Greasley, A., Müllensiefen, D. &
 > Siedenburg, K. (2023). Development of an adaptive test of musical
 > scene analysis abilities for normal-hearing and hearing-impaired
-> listeners. *Unpublished Manuscript.*
+> listeners. PsyArXiv. <https://doi.org/10.31234/osf.io/udq6p>
 
 We also advise mentioning the software versions you used. In particular
 the versions of the `MSA` and `psychTestR` packages. You can find these
@@ -59,7 +83,7 @@ x$packages[x$packages$package %in% c("MSA", "psychTestR"), ]
 
 ## Usage
 
-### Quick demo
+### Quick local demo
 
 You can demo the MSA at the R console, as follows:
 
@@ -110,16 +134,17 @@ be empty).
 ### Get results
 
 If you are just interested in the participants’ final scores, the
-easiest solution is usually to download the results in CSV format from
-the admin panel. If you are interested in trial-by-trial results, you
-can run the command MSA_compile_trial_by_trial_results() from the R
-console (having loaded the MSA package using library(MSA)). Type
+easiest solution is usually to download the results in .RDS format from
+the admin panel \[use function readRDS()\]. If you need only a few
+detail, you can examine the individual CSV output. If you are interested
+in trial-by-trial results, you can run the command
+MSA_compile_trial_by_trial_results() from the R console (having loaded
+the MSA package using library(MSA)). Type
 ?MSA_compile_trial_by_trial_results() for more details.
 
-If you want still more detail, you can examine the individual RDS output
-files using readRDS(). Detailed results are stored as the ‘metadata’
-attribute for the ability field. You can access it something like this
-(see also example code at the end of the documentation):
+Detailed results are stored as the ‘metadata’ attribute for the ability
+field. You can access it something like this (see also example code at
+the end of the documentation):
 
 ``` r
 x <- readRDS("output/results/id=1&p_id=german_test&save_id=1&pilot=false&complete=true.rds")
@@ -165,11 +190,14 @@ In total, 160 excerpts were generated based on 98 different base tracks
 (songs). In half of the mixes, the target instrument was not part of the
 mixture - in this case, excerpts with four or seven instruments were
 chosen (to ensure three and six instrument signals in the mixture,
-respectively).
+respectively). For more information on the test construction have a look
+at our manuscript pre-print at PsyArXiv (<https://psyarxiv.com/udq6p/>).
 
 More information about the stimuli used can be found in the github
 repository
 (<https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv>).
+There detailed configurations on instruments used within each excerpt
+can be found.
 
 ## Usage notes
 
@@ -180,9 +208,19 @@ repository
   “<http://testing.musikpsychologie.de/dots_home/>”. **The test
   therefore requires internet connectivity**.
 - An offline alternative would be to download the entire repository and
-  stimuli set to your local computer (Stimset via:
-  <https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing>)
+  stimuli set to your local computer (original/short stimset via:
+  <https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing>;
+  prolonged stimset via:
+  <https://drive.google.com/drive/folders/10wyuDK1xF2zJF6oCBGGqf43T_jDRhQQN>)
   and manually change the directory for the items in the package.
+
+## Acknowledgements
+
+Special acknowledgement is extended to Klaus Frieler for his invaluable
+assistance with the implementation of the MSA as an R package and for
+his general technical support. Additionally, we express our gratitude to
+Christian Lespioniges for his significant contribution in translating
+the MSA into the French language.
 
 ## Citations
 
@@ -260,9 +298,14 @@ results_dataframe <- results_dataframe %>%
 # **  get individual MSA data  --------------------------------------------
 results_per_item <- MSA::MSA_compile_trial_by_trial_results(
   in_dir = "output/results",
-  label = "MSA_results",
+  label = "MSA_results", # depending on the MSA version/setup you are using,
+                         # the label might be different (e.g., "MSA_results_XYZ")
+                         # you can check by looking at the "results_dataframe"
+                         # or the within each .rds file 
+  )
   combine = TRUE
 ) 
+
 
 # select only relevant rows
 results_per_item <- results_per_item %>%  
