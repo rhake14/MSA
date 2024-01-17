@@ -30,13 +30,15 @@ media_mobile_play_button <- shiny::tags$p(
                      style = "visibility: hidden",
                      onclick = media_js$play_media)
 )
+# print(url)
+# browser()
 get_audio_ui <- function(url,
                          type = tools::file_ext(url),
                          autoplay = TRUE,
                          width = 0,
                          wait = TRUE,
                          loop = FALSE) {
-  #print(url)
+  print(url)
   stopifnot(purrr::is_scalar_character(url),
             purrr::is_scalar_character(type),
             purrr::is_scalar_logical(wait),

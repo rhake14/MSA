@@ -55,9 +55,9 @@ main_test <- function(label,
     if (long_version) {
       item_bank <- MSA::MSA_item_bank %>%
         dplyr::select(-audio_file,-item_number) %>%
-        dplyr::rename(audio_file = long_audio_file,
+        dplyr::rename(audio_file = long_audio_file, # just simpler than renaming everything
                       item_number = long_item_number) %>%
-        dplyr::filter(long_version_available == "yes")
+        dplyr::filter(long_version_available == "yes") # some items are not available in the long format
     }
     # In the course of the calibration phase,
     # several items had to be excluded as they were found to perform poor.
@@ -67,7 +67,7 @@ main_test <- function(label,
     psychTestRCAT::adapt_test(
       label = label,
       item_bank = item_bank,
-      show_item = show_item(audio_dir),
+      show_item = show_item(audio_dir, long_version),
       stopping_rule = psychTestRCAT::stopping_rule.num_items(n = num_items),
       opt = MSA_options(next_item.criterion = next_item.criterion,
                         next_item.estimator = next_item.estimator,
@@ -315,7 +315,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
       # messagef("Called reactive page, i_row %d, item_number: %d", i_row, item_sequence[i_row])
       MSA_item(label = item_bank$item_number[item_sequence[i_row]],
                correct_answer = item_bank$correct[item_sequence[i_row]],
-               prompt = get_prompt(i_row, num_items),
+               prompt = get_prompt(i_row, num_items,long_version),
                audio_file = item_bank$audio_file[item_sequence[i_row]],
                audio_dir = audio_dir,
                save_answer = TRUE,
@@ -341,9 +341,49 @@ item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MS
            audio_dir = audio_dir,
            save_answer = TRUE)
   }
+# original
+# get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {
+#   shiny::div(
+#     shiny::h4(
+#       psychTestR::i18n(
+#         "PROGRESS_TEXT",
+#         sub = list(num_question = item_number,
+#                    test_length = if (is.null(num_items))
+#                      "?" else
+#                        num_items)),
+#       style  = "text_align:left"
+#     ),
+#     shiny::p(
+#       psychTestR::i18n("ITEM_INSTRUCTION",),
+#       style = "margin-left:20%;margin-right:20%;text-align:justify;display:block"
+#       # style = "margin-left:0%;display:block"
+#       )
+#     )
+# }
 
-get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {
+
+get_prompt <- function(item_number, num_items, long_version, dict = MSA::MSA_dict) {
+
+  if (long_version == T ) {
+    # video_url <- "http://127.0.0.1:4321/MSA_long_visual_480p.mp4" # here i need an online version
+    video_url <- "https://media.gold-msi.org/test_materials/MSAT/MSA_long_visual_480p.mp4"
+  }
+  if (long_version == F ) {
+    # video_url <- "http://127.0.0.1:4321/MSA_visual_480p.mp4" # here i need an online version
+    video_url <- "https://media.gold-msi.org/test_materials/MSAT/MSA_visual_480p.mp4" # here i need an online version
+  }
+
+
   shiny::div(
+    shiny::tags$video(
+          src = video_url,
+          type = "video/mp4",
+          width = "640px",
+          height = "360px",
+          controls = "controls",
+          autoplay = "autoplay"
+        ),
+
     shiny::h4(
       psychTestR::i18n(
         "PROGRESS_TEXT",
@@ -359,7 +399,21 @@ get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {
       # style = "margin-left:0%;display:block"
       )
     )
+
+
 }
+
+# shiny::div(
+#   shiny::tags$video(
+#     src = "https://www.testable.org/experiment/4346/515133/stimuli/MSA_tutorial_video_720.mp4",
+#     type = "video/mp4",
+#     width = "900px",
+#     height = "600px",
+#     controls = "controls"
+#   ),
+#   style = "text-align:center; margin-left:auto;margin-right:auto"
+# )
+
 
 MSA_welcome_page <- function(dict = MSA::MSA_dict){
   psychTestR::new_timeline(
@@ -421,7 +475,7 @@ MSA_final_page <- function(dict = MSA::MSA_dict){
     ), dict = dict)
 }
 
-show_item <- function(audio_dir) {
+show_item <- function(audio_dir, long_version) {
   function(item, ...) {
     #stopifnot(is(item, "item"), nrow(item) == 1L)
     # browser()
@@ -436,7 +490,7 @@ show_item <- function(audio_dir) {
       audio_file = item$audio_file,
       correct_answer = item$correct,
       adaptive = TRUE,
-      prompt = get_prompt(item_number, num_items),
+      prompt = get_prompt(item_number, num_items, long_version),
       audio_dir = audio_dir,
       save_answer = TRUE,
       get_answer = NULL,

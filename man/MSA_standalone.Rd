@@ -16,6 +16,7 @@ MSA_standalone(
   with_id = TRUE,
   with_feedback = TRUE,
   with_welcome = TRUE,
+  location_stim = "https://media.gold-msi.org/test_materials/MSAT",
   admin_password = "password",
   researcher_email = "put.your.email-adress@here",
   languages = c("en", "de", "de_f", "fr"),
@@ -63,6 +64,15 @@ Note: Correct display depends on the playback device. We recommend the use of Go
 \item{with_feedback}{(Scalar boolean) Indicates if performance feedback will be given at the end of the test. Defaults to  FALSE}
 
 \item{with_welcome}{(Scalar boolean) Indicates, if a welcome page shall be displayed. Defaults to TRUE}
+
+\item{location_stim}{(Scalar character) Specify the location of the stimuli.
+Default is the location on the DOTS servers from the "Deutsche Gesellschaft für Musikpsychologie "https://media.gold-msi.org/test_materials/MSAT".
+To start the test locally (without internet connection), one have to download all stimuli from the provided drives:
+Stimuli long version (https://drive.google.com/drive/folders/1OI2Ii2C8yUGu8M9BzyV3HVEiKv1YFXLf?usp=sharing)
+Stimuli short version (https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing)
+Videos, which should belong into the same folder as the stimuli (https://drive.google.com/drive/folders/1_za6FNNnXWREk6NRAewvXhQsn9IG3TY8?usp=sharing)
+Then, create a local host server using e.g.,"servr" package (servr::httd("C://Users//PC NAME//Stimuli folder path")) and then provide the
+new URL, e.g., location_stim = "http://127.0.0.1:4321".}
 
 \item{admin_password}{(Scalar character) Password for accessing the admin panel.}
 
