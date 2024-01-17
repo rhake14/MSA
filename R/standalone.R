@@ -18,6 +18,14 @@ debug_locally <- !grepl("shiny-server", getwd())
 #' Part 2: after 1s pause, a single instrument (lead voice, bass, guitar, or piano) plays;
 #' Part 3: after 1s pause, a mix of instruments plays, possibly including the target instrument.
 #' If (FALSE), Part 1 is skipped (the original version; Default).
+#' @param location_stim (Scalar character) Specify the location of the stimuli.
+#' Default is the location on the DOTS servers from the "Deutsche Gesellschaft für Musikpsychologie "https://media.gold-msi.org/test_materials/MSAT".
+#' To start the test locally (without internet connection), one have to download all stimuli from the provided drives:
+#' Stimuli long version (https://drive.google.com/drive/folders/1OI2Ii2C8yUGu8M9BzyV3HVEiKv1YFXLf?usp=sharing)
+#' Stimuli short version (https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing)
+#' Videos, which should belong into the same folder as the stimuli (https://drive.google.com/drive/folders/1_za6FNNnXWREk6NRAewvXhQsn9IG3TY8?usp=sharing)
+#' Then, create a local host server using e.g.,"servr" package (servr::httd("C://Users//PC NAME//Stimuli folder path")) and then provide the
+#' new URL, e.g., location_stim = "http://127.0.0.1:4321".
 #' @param balance_over (Character vector) Indicates how items are selected from the item pool. Balance means that the proportion of items for each parameter is equal.
 #' Please note that this option is only available for the non-adaptive Version of the MSA (adaptive = FALSE).
 #' "target_instrument": the target instrument; balancing = equal proportion of the four different instruments ('Lead Voice', 'Piano', 'Guitar', 'Bass').
@@ -66,6 +74,7 @@ MSA_standalone  <- function(title = NULL,
                             with_id = TRUE,
                             with_feedback = TRUE,
                             with_welcome = TRUE,
+                            location_stim = "https://media.gold-msi.org/test_materials/MSAT",
                             admin_password = "password",
                             researcher_email = "put.your.email-adress@here",
                             languages = c("en", "de","de_f","fr"),
@@ -108,6 +117,7 @@ MSA_standalone  <- function(title = NULL,
                take_training = TRUE,
                balance_over = balance_over,
                long_version = long_version,
+               location_stim = location_stim,
                adaptive = adaptive, ## future proof
                ...)
     else
@@ -123,6 +133,7 @@ MSA_standalone  <- function(title = NULL,
           take_training = FALSE,
           balance_over = balance_over,
           long_version = long_version,
+          location_stim = location_stim,
           adaptive = adaptive,
           ...
         ),

@@ -18,6 +18,7 @@ MSA(
   dict = MSA::MSA_dict,
   adaptive = TRUE,
   long_version = FALSE,
+  location_stim = "https://media.gold-msi.org/test_materials/MSAT",
   next_item.criterion = "bOpt",
   next_item.estimator = "BM",
   next_item.prior_dist = "norm",
@@ -70,6 +71,15 @@ Part 1: the initial music segment (8s);
 Part 2: after 1s pause, a single instrument (lead voice, bass, guitar, or piano) plays;
 Part 3: after 1s pause, a mix of instruments plays, possibly including the target instrument.
 If (FALSE), Part 1 is skipped (the original version; Default).}
+
+\item{location_stim}{(Scalar character) Specify the location of the stimuli.
+Default is the location on the DOTS servers from the "Deutsche Gesellschaft für Musikpsychologie "https://media.gold-msi.org/test_materials/MSAT".
+To start the test locally (without internet connection), one have to download all stimuli from the provided drives:
+Stimuli long version (https://drive.google.com/drive/folders/1OI2Ii2C8yUGu8M9BzyV3HVEiKv1YFXLf?usp=sharing)
+Stimuli short version (https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing)
+Videos, which should belong into the same folder as the stimuli (https://drive.google.com/drive/folders/1_za6FNNnXWREk6NRAewvXhQsn9IG3TY8?usp=sharing)
+Then, create a local host server using e.g.,"servr" package (servr::httd("C://Users//PC NAME//Stimuli folder path")) and then provide the
+new URL, e.g., location_stim = "http://127.0.0.1:4321".}
 
 \item{next_item.criterion}{(Character scalar)
 Criterion for selecting successive items in the adaptive test.

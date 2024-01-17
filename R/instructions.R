@@ -14,9 +14,9 @@ demo_sample2 <- "voc_Item3403_set877_wot_lvl0_comp4_t62_song94.wav"
 get_video_element <- function(url,
                               type = tools::file_ext(url),
                               wait = F,
-                              autoplay = FALSE,
-                              width = 900,
-                              height = 600,
+                              autoplay = T, # False is original
+                              width = 600,
+                              height = 400,
                               id = "media") {
   # print(url)
   stopifnot(purrr::is_scalar_character(url),

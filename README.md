@@ -25,7 +25,9 @@ implants, we’ve also developed a specialized version of the test. This
 includes extended musical excerpts, which prove beneficial during the
 device’s internal fitting procedures. Currently, the test is available
 in German (formal and informal), English, and French language. More
-languages can be quickly implemented on request.
+languages can be quickly implemented on request. For more information
+see Hake et al. (2023; Behavioural Research Methods;
+<https://link.springer.com/article/10.3758/s13428-023-02279-y>)
 
 ### Quick online Demo
 
@@ -49,10 +51,11 @@ and special requests, please contact us directly (via
 
 You can cite the MSA as follows:
 
-> Hake, R., Bürgel, M., Nguyen, N. K., Greasley, A., Müllensiefen, D. &
+> Hake, R., Bürgel, M., Nguyen, N.K., Greasley, A., Müllensiefen, D. &
 > Siedenburg, K. (2023). Development of an adaptive test of musical
 > scene analysis abilities for normal-hearing and hearing-impaired
-> listeners. PsyArXiv. <https://doi.org/10.31234/osf.io/udq6p>
+> listeners. Behavioural Research Methods (2023).
+> <https://doi.org/10.3758/s13428-023-02279-y>
 
 We also advise mentioning the software versions you used. In particular
 the versions of the `MSA` and `psychTestR` packages. You can find these
@@ -211,8 +214,9 @@ can be found.
   stimuli set to your local computer (original/short stimset via:
   <https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing>;
   prolonged stimset via:
-  <https://drive.google.com/drive/folders/10wyuDK1xF2zJF6oCBGGqf43T_jDRhQQN>)
-  and manually change the directory for the items in the package.
+  <https://drive.google.com/drive/folders/1OI2Ii2C8yUGu8M9BzyV3HVEiKv1YFXLf?usp=sharing>)
+  and manually change the directory for the items in the package
+  (“location_stim”.
 
 ## Acknowledgements
 
@@ -296,16 +300,67 @@ results_dataframe <- results_dataframe %>%
 # ?MSA_compile_trial_by_trial_results  # for more information
 
 # **  get individual MSA data  --------------------------------------------
-results_per_item <- MSA::MSA_compile_trial_by_trial_results(
-  in_dir = "output/results",
-  label = "MSA_results", # depending on the MSA version/setup you are using,
-                         # the label might be different (e.g., "MSA_results_XYZ")
-                         # you can check by looking at the "results_dataframe"
-                         # or the within each .rds file 
-  )
-  combine = TRUE
-) 
+tmp.results <- list.files(path = paste0(wd,"/output/results"),
+              pattern = ".rds", full.names = TRUE)
 
+
+tmp.MSA_results <- NULL
+results_per_item <- NULL
+# i <- NULL #debug
+# i <- 1
+
+for (i in 1:length(tmp.results)) {
+  paste(i)
+  # load rds
+  # i4 = 2
+  tmp.load <- readRDS(tmp.results[[i]])
+  
+  # extract p_id from the loaded file
+  tmp.p_id <- qdapRegex::ex_between(
+    tmp.results[[i]],
+    left = "p_id=",
+    right = "&save_id",
+    include.markers = FALSE) %>% as.character()
+  
+  # sanity check
+  tmp.p_id
+  
+  # duration 
+  tmp.duration <- abs(as.numeric(tmp.load$session$time_started - tmp.load$session$current_time))
+  
+  # because its the long version we need to fetch the MSA_results names
+  MSA3_indices <- grep("^MSA_long", names(tmp.load))
+  MSA3_names <- names(tmp.load)[MSA3_indices]
+  
+  # check if MSA_results exists, else just say incomplete & NA
+  if (length(MSA3_indices) == 1) {
+    
+    MSA3 <- as.numeric(tmp.load[[MSA3_names]]$ability[1]) 
+    MSA3_sem <- as.numeric(tmp.load[[MSA3_names]]$ability_sem[1])
+    
+    if(is.null(MSA3) || is.na(MSA3)) {MSA3_complete <- "incomplete"} else {MSA3_complete = "complete"}
+  } else  {MSA3 <- NA
+  MSA3_complete <- "incomplete"}
+  
+  if (length(MSA3_indices) == 1) {
+    tmp.MSA_results <- tmp.load[[MSA3_names]]$ability
+    tmp.MSA_results <- attributes(tmp.MSA_results)$metadata$results %>%
+      dplyr::select(num, # = order of the item
+                    item_id, # = item_id; see https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv
+                    difficulty, # = item difficulty
+                    answer, # the answer provided by the participant
+                    correct_answer, # the correct answer
+                    score, # TRUE = the anwser was correct
+                    ability_WL, # the estimated ability score 
+                    ability_WL_sem # the estimated standard error of the ability estimate
+                    ) %>%
+      dplyr::rename(ability = ability_WL, # WL = for weighted likelihood ability estimate
+                    ability_sem = ability_WL_sem) %>%
+      mutate(p_id = tmp.p_id) # participants ID
+    
+    results_per_item <- rbind(results_per_item, tmp.MSA_results)
+  }
+}
 
 # select only relevant rows
 results_per_item <- results_per_item %>%  
@@ -314,23 +369,23 @@ results_per_item <- results_per_item %>%
   dplyr::rename(ability = ability_WL, # for weighted likelihood ability estimate
                 ability_sem = ability_WL_sem)
 
-# quick inspection --------------------------------------------------------------
-results_per_item %>% 
-  dplyr::rename(MSA = ability) %>% 
+# quick plot  --------------------------------------------------------------
+results_per_item %>%
+  dplyr::rename(MSA = ability) %>%
   ggplot2::ggplot(aes(num, MSA)) +
   ggplot2::geom_line(aes(fill = p_id)) +
   ggplot2::geom_point(
     aes(fill = p_id),
-    size = 3, 
+    size = 3,
     pch = 21, # Type of point that allows us to have both color (border) and fill.
-    color = "white", 
+    color = "white",
     stroke = 1 # The width of the border, i.e. stroke.
   )   +
   ggplot2::xlab("Item sequence number") +
   ggplot2::ylab("MSA ability score") +
   ggplot2::theme_bw(base_size = 15)
 
-# quick inspection 
+# quick inspection  --------------------------------------------------------------
 results_per_item %>% ggplot2::ggplot(aes(score, difficulty)) +
   ggplot2::geom_point(
     aes(fill = p_id),
