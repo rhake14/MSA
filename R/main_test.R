@@ -365,7 +365,6 @@ item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MS
 get_prompt <- function(item_number, num_items, long_version, dict = MSA::MSA_dict) {
 
   if (long_version == T ) {
-<<<<<<< HEAD
     # video_url <- "http://127.0.0.1:4321/MSA_long_visual_480p.mp4" # here i need an online version
     video_url <- "https://media.gold-msi.org/test_materials/MSAT/MSA_long_visual_480p.mp4"
   }
@@ -373,14 +372,6 @@ get_prompt <- function(item_number, num_items, long_version, dict = MSA::MSA_dic
     # video_url <- "http://127.0.0.1:4321/MSA_visual_480p.mp4" # here i need an online version
     video_url <- "https://media.gold-msi.org/test_materials/MSAT/MSA_visual_480p.mp4" # here i need an online version
   }
-
-=======
-    video_url <- "http://127.0.0.1:4321/MSA_long_visual_480p.mp4" # here i need an online version
-  }
-  if (long_version == F ) {
-    video_url <- "http://127.0.0.1:4321/MSA_visual_480p.mp4" # here i need an online version
-  }
->>>>>>> c5ecf66ba3d2cc115eac7910eabbefa4b22ac9cb
 
   shiny::div(
     shiny::tags$video(
