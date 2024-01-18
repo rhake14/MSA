@@ -315,7 +315,7 @@ Nevertheless, items are selected as evenly as possible with respect to the selec
       # messagef("Called reactive page, i_row %d, item_number: %d", i_row, item_sequence[i_row])
       MSA_item(label = item_bank$item_number[item_sequence[i_row]],
                correct_answer = item_bank$correct[item_sequence[i_row]],
-               prompt = get_prompt(i_row, num_items,long_version),
+               prompt = get_prompt(i_row, num_items,long_version, audio_dir),
                audio_file = item_bank$audio_file[item_sequence[i_row]],
                audio_dir = audio_dir,
                save_answer = TRUE,
@@ -341,9 +341,32 @@ item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MS
            audio_dir = audio_dir,
            save_answer = TRUE)
   }
-# original
-# get_prompt <- function(item_number, num_items, dict = MSA::MSA_dict) {
+
+
+
+# get_prompt <- function(item_number, num_items, long_version, audio_dir, dict = MSA::MSA_dict) {
+#
+#   if (long_version == T ) {
+#     # video_url <- "http://127.0.0.1:4321/MSA_long_visual_480p.mp4"  # example offline version
+#     # video_url <- "https://media.gold-msi.org/test_materials/MSAT/MSA_long_visual_480p.mp4" # example online version3
+#     video_url <- paste0(audio_dir,"/MSA_long_visual_480p.mp4")
+#   }
+#   if (long_version == F ) {
+#     # video_url <- "http://127.0.0.1:4321/MSA_visual_480p.mp4" # example offline version
+#     # video_url <- "https://media.gold-msi.org/test_materials/MSAT/MSA_visual_480p.mp4" # example online version3
+#     video_url <- paste0(audio_dir,"/MSA_visual_480p.mp4")
+#   }
+#
 #   shiny::div(
+#     shiny::tags$video(
+#       src = video_url,
+#       type = "video/mp4",
+#       width = "640px",
+#       height = "360px",
+#       controls = "controls",
+#       autoplay = "autoplay"
+#     ),
+#
 #     shiny::h4(
 #       psychTestR::i18n(
 #         "PROGRESS_TEXT",
@@ -357,61 +380,56 @@ item_page <- function(item_number, item_id, num_items, audio_dir, dict = MSA::MS
 #       psychTestR::i18n("ITEM_INSTRUCTION",),
 #       style = "margin-left:20%;margin-right:20%;text-align:justify;display:block"
 #       # style = "margin-left:0%;display:block"
-#       )
 #     )
+#   )
 # }
 
 
-get_prompt <- function(item_number, num_items, long_version, dict = MSA::MSA_dict) {
 
-  if (long_version == T ) {
-    # video_url <- "http://127.0.0.1:4321/MSA_long_visual_480p.mp4" # here i need an online version
-    video_url <- "https://media.gold-msi.org/test_materials/MSAT/MSA_long_visual_480p.mp4"
-  }
-  if (long_version == F ) {
-    # video_url <- "http://127.0.0.1:4321/MSA_visual_480p.mp4" # here i need an online version
-    video_url <- "https://media.gold-msi.org/test_materials/MSAT/MSA_visual_480p.mp4" # here i need an online version
+# lets try synchronisation
+get_prompt <- function(item_number, num_items, long_version, audio_dir, dict = MSA::MSA_dict) {
+  if (long_version == TRUE) {
+    video_url <- paste0(audio_dir, "/MSA_long_visual_480p.mp4")
+    video_id <- "MSA_long_visual_480p"
+  } else {
+    video_url <- paste0(audio_dir, "/MSA_visual_480p.mp4")
+    video_id <- "MSA_visual_480p"
   }
 
   shiny::div(
     shiny::tags$video(
-          src = video_url,
-          type = "video/mp4",
-          width = "640px",
-          height = "360px",
-          controls = "controls",
-          autoplay = "autoplay"
-        ),
-
+      id = video_id,
+      src = video_url,
+      type = "video/mp4",
+      width = "640px",
+      height = "360px",
+      controls = "controls"
+      # Removed autoplay and insert a delay
+    ),
+    shiny::tags$script(
+      shiny::HTML(
+        sprintf("setTimeout(function() {
+                    var videoElement = document.getElementById('%s');
+                    videoElement.play();
+                  }, 1000);", video_id) #include 1 sec of delay before playing, so that video and audio have time to load and play synchron
+      ) # see also get_audio_ui if you want to change this value
+    ),
     shiny::h4(
       psychTestR::i18n(
         "PROGRESS_TEXT",
         sub = list(num_question = item_number,
-                   test_length = if (is.null(num_items))
-                     "?" else
-                       num_items)),
+                   test_length = if (is.null(num_items)) "?" else num_items)),
       style  = "text_align:left"
     ),
     shiny::p(
-      psychTestR::i18n("ITEM_INSTRUCTION",),
+      psychTestR::i18n("ITEM_INSTRUCTION"),
       style = "margin-left:20%;margin-right:20%;text-align:justify;display:block"
-      # style = "margin-left:0%;display:block"
-      )
     )
-
-
+  )
 }
 
-# shiny::div(
-#   shiny::tags$video(
-#     src = "https://www.testable.org/experiment/4346/515133/stimuli/MSA_tutorial_video_720.mp4",
-#     type = "video/mp4",
-#     width = "900px",
-#     height = "600px",
-#     controls = "controls"
-#   ),
-#   style = "text-align:center; margin-left:auto;margin-right:auto"
-# )
+
+
 
 
 MSA_welcome_page <- function(dict = MSA::MSA_dict){
@@ -489,7 +507,7 @@ show_item <- function(audio_dir, long_version) {
       audio_file = item$audio_file,
       correct_answer = item$correct,
       adaptive = TRUE,
-      prompt = get_prompt(item_number, num_items, long_version),
+      prompt = get_prompt(item_number, num_items, long_version, audio_dir),
       audio_dir = audio_dir,
       save_answer = TRUE,
       get_answer = NULL,

@@ -121,11 +121,9 @@ MSA <- function(label = "MSA_results",
                 final_ability.estimator = "WL",
                 constrain_answers = FALSE
                 ) {
-  # browser()
   # audio_dir <- "https://media.gold-msi.org/test_materials/MSAT" # original
   # audio_dir <- "http://127.0.0.1:4321" # example local version
   audio_dir <- location_stim
-
   stopifnot(purrr::is_scalar_character(label),
             purrr::is_scalar_integer(num_items) || purrr::is_scalar_double(num_items),
             purrr::is_scalar_character(audio_dir),
@@ -135,6 +133,7 @@ MSA <- function(label = "MSA_results",
               is.null(feedback))
 
   audio_dir <- gsub("/$", "", audio_dir)
+  print(audio_dir)
   # label <- paste0(label,"_", stringi::stri_rand_strings(1, 3, '[A-Z]'))
   if (long_version) {
     label <- paste0(label,"_","long_", stringi::stri_rand_strings(1, 3, '[A-Z]'))
