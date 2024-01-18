@@ -93,7 +93,7 @@ get_audio_ui <- function(url,
     "setTimeout(function() {
       var mediaElement = document.getElementById('media');
       mediaElement.play();
-    }, 1000);" #include 1 sec of delay before playing, so that video and audio have time to load and play synchron
+    }, 500);" #include 1 sec of delay before playing, so that video and audio have time to load and play synchron
   ))
   shiny::tags$div(audio, delay_script, media_mobile_play_button)
 }

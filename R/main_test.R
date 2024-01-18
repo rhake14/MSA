@@ -401,8 +401,8 @@ get_prompt <- function(item_number, num_items, long_version, audio_dir, dict = M
       id = video_id,
       src = video_url,
       type = "video/mp4",
-      width = "640px",
-      height = "360px",
+      width = "560px",
+      height = "240px",
       controls = "controls"
       # Removed autoplay and insert a delay
     ),
@@ -411,7 +411,7 @@ get_prompt <- function(item_number, num_items, long_version, audio_dir, dict = M
         sprintf("setTimeout(function() {
                     var videoElement = document.getElementById('%s');
                     videoElement.play();
-                  }, 1000);", video_id) #include 1 sec of delay before playing, so that video and audio have time to load and play synchron
+                  }, 500);", video_id) #include 1 sec of delay before playing, so that video and audio have time to load and play synchron
       ) # see also get_audio_ui if you want to change this value
     ),
     shiny::h4(
