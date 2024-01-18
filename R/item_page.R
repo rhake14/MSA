@@ -32,6 +32,38 @@ media_mobile_play_button <- shiny::tags$p(
 )
 # print(url)
 # browser()
+
+# get_audio_ui <- function(url,
+#                          type = tools::file_ext(url),
+#                          autoplay = TRUE,
+#                          width = 0,
+#                          wait = TRUE,
+#                          loop = FALSE) {
+#   print(url)
+#   stopifnot(purrr::is_scalar_character(url),
+#             purrr::is_scalar_character(type),
+#             purrr::is_scalar_logical(wait),
+#             purrr::is_scalar_logical(loop))
+#   src    <- shiny::tags$source(src = url, type = paste0("audio/", type))
+#   script <- shiny::tags$script(shiny::HTML(media_js$media_not_played))
+#   audio  <- shiny::tags$audio(
+#     script,
+#     src,
+#     id = "media",
+#     preload = "auto",
+#     autoplay = if(autoplay) "autoplay",
+#     width = width,
+#     loop = if (loop) "loop",
+#     oncanplaythrough = media_js$show_media_btn,
+#     onplay = paste0(media_js$media_played, media_js$hide_media_btn),
+#     #onended = if (wait) paste0(media_js$show_responses, media_js$hide_media) else "null",
+#     onended = if (wait) media_js$show_responses else "null"
+#   )
+#   shiny::tags$div(audio, media_mobile_play_button)
+# }
+
+
+# include a delay of 2 sec
 get_audio_ui <- function(url,
                          type = tools::file_ext(url),
                          autoplay = TRUE,
@@ -50,16 +82,30 @@ get_audio_ui <- function(url,
     src,
     id = "media",
     preload = "auto",
-    autoplay = if(autoplay) "autoplay",
+    # Removed autoplay attribute
     width = width,
     loop = if (loop) "loop",
     oncanplaythrough = media_js$show_media_btn,
     onplay = paste0(media_js$media_played, media_js$hide_media_btn),
-    #onended = if (wait) paste0(media_js$show_responses, media_js$hide_media) else "null",
     onended = if (wait) media_js$show_responses else "null"
   )
-  shiny::tags$div(audio, media_mobile_play_button)
+  delay_script <- shiny::tags$script(shiny::HTML(
+    "setTimeout(function() {
+      var mediaElement = document.getElementById('media');
+      mediaElement.play();
+    }, 1000);" #include 1 sec of delay before playing, so that video and audio have time to load and play synchron
+  ))
+  shiny::tags$div(audio, delay_script, media_mobile_play_button)
 }
+
+
+
+
+
+
+
+
+
 
 get_audio_element <- function(url,
                               type = tools::file_ext(url),
