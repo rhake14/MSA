@@ -216,7 +216,7 @@ can be found.
   prolonged stimset via:
   <https://drive.google.com/drive/folders/1OI2Ii2C8yUGu8M9BzyV3HVEiKv1YFXLf?usp=sharing>)
   and manually change the directory for the items in the package
-  (“location_stim”.
+  (“location_stim”).
 
 ## Acknowledgements
 

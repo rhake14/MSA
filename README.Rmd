@@ -231,7 +231,7 @@ can be found.
   stimuli set to your local computer (original/short stimset via:
   <https://drive.google.com/drive/folders/1cxPEOyAaipXFtWNEBaBOyFkImftlEOSz?usp=sharing>;
   prolonged stimset via: <https://drive.google.com/drive/folders/1OI2Ii2C8yUGu8M9BzyV3HVEiKv1YFXLf?usp=sharing>)
-  and manually change the directory for the items in the package ("location_stim".
+  and manually change the directory for the items in the package ("location_stim").
 
 ## Acknowledgements
 
