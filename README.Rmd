@@ -210,13 +210,13 @@ In total, 160 excerpts were generated based on 98 different base tracks
 mixture - in this case, excerpts with four or seven instruments were
 chosen (to ensure three and six instrument signals in the mixture,
 respectively). For more information on the test construction have a look 
-at our manuscript pre-print at PsyArXiv (https://psyarxiv.com/udq6p/).
+at the publication. 
 
 More information about the stimuli used can be found in the github
 repository
 (<https://github.com/rhake14/MSA/blob/main/data_raw/MSA_item_bank.csv>).
 There detailed configurations on instruments used within each excerpt
-can be found. 
+can be found (see also "MSA_item_bank_explanation.txt").
 
 
 ## Usage notes
