@@ -1,0 +1,39 @@
+Package: MSA
+Type: Package
+Title: Musical Scene Analysis Test (MSA)
+Version: 2.8.3
+Author: Robin Hake, Michel Bürgel, Ninh K. Nguyen, Alinka Greasley, Daniel Müllensiefen, Klaus Frieler, Kai Siedenburg
+Maintainer: Robin Hake <robin.hake@uni-oldenburg.de>
+Description: Implementation of an adaptive musical scene anylsis (MSA) test.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    R (>= 3.5.0),
+Imports:
+    psychTestR (>= 2.21.2),
+    psychTestRCAT (>= 1.6.2),
+    shiny (>= 1.2.0),
+    methods,
+    htmltools (>= 0.3.6),
+    tidyverse (>= 1.2.1),
+    tidyr,
+    stringi,
+    plyr,
+    dplyr,
+    purrr,
+    tibble,
+    ggplot2,
+    plotly,
+    digest,
+    scales
+Suggests:
+    codetools,
+    devtools (>= 1.13.6),
+    knitr,
+    rmarkdown
+Remotes: 
+    pmcharrison/psychTestR,
+    pmcharrison/psychTestRCAT
+RoxygenNote: 7.3.1
+VignetteBuilder: knitr

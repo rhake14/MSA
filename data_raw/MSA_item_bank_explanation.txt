@@ -1,0 +1,43 @@
+target_instrument 	= the target instrument that needs to be detected within the mixture
+level			= the ammount of dB attenuantion of the target instrument compared to the mixture
+complexity		= the number of instruments within the mixture
+with_target_in_mix 	= specifies wheather the target was presented in the mixture (yes) or not (no)
+song_nr			= song number wthin the "Medley" Database, see also "Song
+song_name 		= name of the song that was used for the excerpt / item
+time_song 		= starting point within the song_name
+item_nr			= to identify the item
+set_nr			= to ifentify the seed in which the item was constructed
+answer			= which anwser would be correct
+correct			= same as answer
+condition		= the overall true difficulty of the respective condition 
+			(based on with target in mix: 4 (level) * 2(complexity) * 4(target_instrument) 
+			+ without target in mix 2(complexity) * 4(target_instrument) = 40 conditions
+condition_theoretical   = the theoretical difficulty based on assumptions from the literature
+practice_item		= yes means item is used for the training session
+discrimination		= parameter based on the Bayesian IRT (mixed effects) model
+guessing		= parameter based on the Bayesian IRT (mixed effects) model
+inattention		= parameter based on the Bayesian IRT (mixed effects) model
+difficulty		= parameter based on the Bayesian IRT (mixed effects) model
+item_difficulty		= same as "difficulty"
+condition_difficulty	= see condition
+number_of_datapoints_per_cond 	= number of datapoints per condition that were used for the IRT model
+number_of_datapoints_per_item	= number of datapoints per item that were used for the IRT model
+used_in_160er		= item was used in the calibration experiment among the sample that used 160 items 
+used_in_32er		= item was used in the calibration experiment among the sample that used 32 items 
+used_in_package		= could be used in the package
+flagged_item		= the IRT flagged the item as inappropriate
+long_version_available	= long version of the stimuli is available (for CI and hearing aid user)
+TimeStartHz		= beginning of the excerpt within the original full song mixture (sampling rate of 44100)
+TimeEndHz		= ending of the excerpt within the original full song mixture (sampling rate of 44100)
+TimeStartSec		= same as TimeStartHz but in seconds
+TimeEndSec		= same as TimeEndtHz but in seconds
+InsLead			= Lead-vocals were included in the mixture
+InsGuitar		= Guitar(s) were included in the mixture
+etc.
+original_file_name	= original file name (used for construction)
+original_item_nr	= original item number (used for construction)
+etc.
+audio_file 		= name of the audiofile that is stored on the "DOTS"-Server (Deutsche Gesellschaft für Musikpsychologie)
+item_number 		= similiar to "audio_file" but without ".wav"
+long_audio_file 	= name of the audiofile of the long version (see description page of the MSA)
+long_item_number 	= similiar to "long_audio_file" but without ".wav"
