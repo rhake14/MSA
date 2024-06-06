@@ -200,6 +200,9 @@ audio_NAFC_page_flex <- function(label,
 
     # use this, because "item_number" works only for the short version, not for the long version
     if (grepl("long", label)) {correct <- MSA::MSA_item_bank[MSA::MSA_item_bank$long_item_number == label,]$correct == answer}
+
+    if(length(correct) == 0) {correct <- MSA::MSA_itembank_training_only[MSA::MSA_itembank_training_only$label == label,]$sample_audios_answers == answer}
+
     tibble(answer = answer,
            label = label,
            correct = correct)
