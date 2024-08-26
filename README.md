@@ -211,7 +211,7 @@ can be found (see also “MSA_item_bank_explanation.txt”).
   “<http://testing.musikpsychologie.de/dots_home/>”. **The test
   therefore requires internet connectivity**.
 - An offline alternative would be to download the entire repository and
-  stimuli set to your local computer
+  stimuli set (folder: MSA - all in one) to your local computer
   (<https://drive.google.com/drive/folders/1arLGKe-tqeHLBFoj0LNc8UMmSppBP2pP?usp=sharing>
   and manually change the directory for the items in the package (using
   “location_stim” within the function “MSA_standalone()” / “MSA()”; see

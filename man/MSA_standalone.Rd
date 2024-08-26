@@ -19,7 +19,7 @@ MSA_standalone(
   location_stim = "https://media.gold-msi.org/test_materials/MSAT",
   admin_password = "password",
   researcher_email = "put.your.email-adress@here",
-  languages = c("en", "de", "de_f", "fr"),
+  languages = c("en", "de", "de_inf", "de_f", "fr"),
   validate_id = "auto",
   dict = MSA::MSA_dict,
   ...
@@ -82,7 +82,7 @@ at the bottom of the screen so that online participants can ask for help.}
 
 \item{languages}{(Character vector)
 Determines the languages available to participants.
-Possible languages include English (\code{"en"}), German (\code{"de"}); formal German (\code{"de"}), and French (\code{"fr"}).
+Possible languages include English (\code{"en"}), German (\code{"de"}); informal German (\code{"de_inf"}), formal German (\code{"de"}), and French (\code{"fr"}).
 The first language is selected by default}
 
 \item{validate_id}{(Character scalar or closure) Function for validating IDs or string "auto" for default validation
